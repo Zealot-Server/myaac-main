@@ -69,21 +69,28 @@ class CreateCharacter
     {
         $this->checkName($name, $errors);
 
+        $rookgaardMode = config('character_creation_mode') === 'rookgaard';
+
         if (empty($sex) && $sex != "0") {
             $errors['sex'] = 'Please select the sex for your character!';
         }
 
-        if (count(config('character_samples')) > 1) {
+        if ($rookgaardMode) {
+            // Do not trust client-provided vocation or town values. Zealot starts
+            // every new character in Rookgaard; the player chooses a vocation in-game.
+            $vocation = 0;
+            $town = config('character_towns')[0] ?? null;
+        } elseif (count(config('character_samples')) > 1) {
             if (!isset($vocation))
                 $errors['vocation'] = 'Please select a vocation for your character.';
         } else
             $vocation = config('character_samples')[0];
 
-        if (count(config('character_towns')) > 1) {
+        if (!$rookgaardMode && count(config('character_towns')) > 1) {
             if (!isset($town)) {
                 $errors['town'] = 'Please select a town for your character.';
             }
-        } else {
+        } elseif (!$rookgaardMode) {
             $town = config('character_towns')[0];
         }
 
@@ -92,7 +99,10 @@ class CreateCharacter
                 $errors['sex'] = 'Sex is invalid.';
             if (!in_array($town, config('character_towns'), false))
                 $errors['town'] = 'Please select valid town.';
-            if (count(config('character_samples')) > 1) {
+            if ($rookgaardMode) {
+                if (!array_key_exists(0, config('character_samples')))
+                    $errors['vocation'] = 'Rookgaard character configuration is missing.';
+            } elseif (count(config('character_samples')) > 1) {
                 $newchar_vocation_check = false;
                 foreach ((array)config('character_samples') as $char_vocation_key => $sample_char)
                     if ($vocation === $char_vocation_key)

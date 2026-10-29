@@ -95,7 +95,7 @@ $config = array(
 	'account_login_by_email' => true, // use email instead of Account Name like in latest Tibia
 	'account_login_by_email_fallback' => false, // allow also additionally login by Account Name/Number (for users that might forget their email)
 	'account_create_auto_login' => false, // auto login after creating account?
-	'account_create_character_create' => true, // allow directly to create character on create account page?
+	'account_create_character_create' => false, // create the account first; characters are created from Account Management
 	'account_mail_verify' => false, // force users to confirm their email addresses when registering account
   'account_verified_only' => false, // force users to confirm their email to login in game
   'account_mail_confirmed_reward' => [ // reward users for confirming their E-Mails
@@ -176,13 +176,10 @@ $config = array(
 		8 => 'Elite Knight',
 	),
 
-	// new character config
-	'character_samples' => array( // vocations, format: ID_of_vocation => 'Name of Character to copy'
-		//0 => 'Rook Sample',
-		1 => 'Sorcerer Sample',
-		2 => 'Druid Sample',
-		3 => 'Paladin Sample',
-		4 => 'Knight Sample'
+	// New Zealot characters always begin in Rookgaard. The vocation is chosen in-game.
+	'character_creation_mode' => 'rookgaard',
+	'character_samples' => array( // vocation ID => character to copy
+		0 => 'Rook Sample',
 	),
 
     'use_character_sample_skills' => false,

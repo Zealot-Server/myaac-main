@@ -289,7 +289,7 @@ if ($save) {
                 echo ' Now you can login and create your first character.';
             }
 
-            echo ' See you in Tibia!<br/><br/>';
+            echo ' See you in ' . configLua('serverName') . '!<br/><br/>';
             $twig->display('success.html.twig', array(
                 'title' => 'Account Created',
                 'description' => 'Your account ' . $account_type . ' is <b>' . $tmp_account . '</b><br/>You will need the account ' . $account_type . ' and your password to play on ' . configLua('serverName') . '.
