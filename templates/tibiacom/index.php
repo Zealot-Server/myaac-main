@@ -19,11 +19,6 @@ if (isset($config['boxes']))
     <script type="text/javascript" src="tools/basic.js"></script>
     <script type="text/javascript" src="<?= $template_path; ?>/ticker.js"></script>
     <script id="twitter-wjs" src="<?= $template_path; ?>/js/twitter.js"></script>
-    <script id="facebook-jssdk" async src="https://connect.facebook.net/en_US/all.js"></script>
-
-    <link href="<?= $template_path; ?>/css/facebook.css" rel="stylesheet" type="text/css">
-
-    <link rel="stylesheet" href="tools/fonts/fontawesome/all.css">
 
     <script src="admin/bootstrap/jquery-3.6.0.min.js"></script>
     <script src="admin/bootstrap/popper.min.js"></script>
@@ -261,58 +256,6 @@ if (isset($config['boxes']))
 </head>
 <body onBeforeUnLoad="SaveMenu();" onUnload="SaveMenu();">
 <?= template_place_holder('body_start'); ?>
-<?php if (!empty($config['network_facebook'])) { ?>
-    <script type="text/javascript">
-        window.fbAsyncInit = function () {
-            FB.init({
-                appId: 497232093667125, // App ID
-                status: true,              // check login status
-                cookie: true,              // enable cookies to allow the server to access the session
-                xfbml: true               // parse XFBML
-            });
-            FB.Event.subscribe('auth.login', function () {
-                var URLHelper = "?";
-                if (window.location.search.replace("?", "").length > 0) {
-                    URLHelper = "&";
-                }
-                if (FB_TryLogin == 1) {
-                    window.location = window.location + URLHelper + "step=facebooktrylogin&wasreloaded=1";
-                } else if (FB_TryLogin == 2) {
-                    window.location = window.location + URLHelper + "page=facebooktrylogin&wasreloaded=1";
-                } else {
-                    window.location = window.location + URLHelper + "wasreloaded=1";
-                }
-            });
-            FB.Event.subscribe('auth.logout', function (a_Response) {
-                if (a_Response.status !== 'connected') {
-                    window.location.href = window.location.href;
-                } else {
-                    /* nothing to do here*/
-                }
-            });
-            FB.Event.subscribe('auth.statusChange', function (response) {
-                if (FB_ForceReload == 1 && response.status == "connected") {
-                    var URLHelper = "?";
-                    if (window.location.search.replace("?", "").length > 0) {
-                        URLHelper = "&";
-                    }
-                    window.location = window.location + URLHelper + "step=facebooktrylogin&wasreloaded=1";
-                }
-            });
-        };
-        (function (d) {
-            var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-            if (d.getElementById(id)) {
-                return;
-            }
-            js = d.createElement('script');
-            js.id = id;
-            js.async = true;
-            js.src = "//connect.facebook.net/en_US/all.js";
-            ref.parentNode.insertBefore(js, ref);
-        }(document));
-    </script>
-<?php } ?>
 <div id="top"></div>
 <div id="ArtworkHelper">
     <div id="Bodycontainer">
@@ -562,6 +505,7 @@ if (isset($config['boxes']))
                                                                                                             class="carousel-item active">
                                                                                                             <img
                                                                                                                 src="<?= $template_path ?>/images/carousel/<?= $carousel ?>"
+                                                                                                                fetchpriority="high"
                                                                                                                 style="width: 100%;">
                                                                                                         </div>
                                                                                                         <?php
@@ -571,6 +515,8 @@ if (isset($config['boxes']))
                                                                                                             class="carousel-item">
                                                                                                             <img
                                                                                                                 src="<?= $template_path ?>/images/carousel/<?= $carousel ?>"
+                                                                                                                loading="lazy"
+                                                                                                                decoding="async"
                                                                                                                 style="width: 100%;">
                                                                                                         </div>
                                                                                                         <?php

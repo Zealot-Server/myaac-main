@@ -354,7 +354,9 @@ $config = array(
 	'last_kills_limit' => 50, // max. number of deaths shown on the last kills page
 
 	// status, took automatically from config file if empty
-    'status_enabled' => true, // you can disable status checking by settings this to "false"
+    // The website gets the online count directly from players_online. The
+    // legacy protocol probe blocks every PHP request when it cannot respond.
+    'status_enabled' => false,
 	'status_ip' => '',
 	'status_port' => '',
 	'status_timeout' => 2, // how long to wait for the initial response from the server (default: 2 seconds)
