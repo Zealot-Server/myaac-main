@@ -102,18 +102,30 @@ class News
 
 	static public function getCached($type)
 	{
-		global $template_name;
-
 		$cache = Cache::getInstance();
 		if ($cache->enabled())
 		{
 			$tmp = '';
-			if ($cache->fetch('news_' . $template_name . '_' . $type, $tmp) && isset($tmp[0])) {
+			if ($cache->fetch(self::cacheKey($type), $tmp) && isset($tmp[0])) {
 				return $tmp;
 			}
 		}
 
 		return false;
+	}
+
+	static public function setCached($type, $content, $ttl)
+	{
+		$cache = Cache::getInstance();
+		if ($cache->enabled()) {
+			$cache->set(self::cacheKey($type), $content, $ttl);
+		}
+	}
+
+	static private function cacheKey($type)
+	{
+		global $template_name;
+		return 'news_' . $template_name . '_' . siteLanguage() . '_' . $type;
 	}
 
 	static public function clearCache()
@@ -125,16 +137,21 @@ class News
 
 		$tmp = '';
 		foreach (get_templates() as $template) {
-			if ($cache->fetch('news_' . $template . '_' . NEWS, $tmp)) {
-				$cache->delete('news_' . $template . '_' . NEWS);
+			foreach (['en', 'es', 'pt'] as $language) {
+				foreach ([NEWS, TICKER, ARTICLE] as $type) {
+					$key = 'news_' . $template . '_' . $language . '_' . $type;
+					if ($cache->fetch($key, $tmp)) {
+						$cache->delete($key);
+					}
+				}
 			}
 
-			if ($cache->fetch('news_' . $template . '_' . TICKER, $tmp)) {
-				$cache->delete('news_' . $template . '_' . TICKER);
-			}
-
-			if ($cache->fetch('news_' . $template . '_' . ARTICLE, $tmp)) {
-				$cache->delete('news_' . $template . '_' . ARTICLE);
+			// Remove caches created before news was language-aware.
+			foreach ([NEWS, TICKER, ARTICLE] as $type) {
+				$key = 'news_' . $template . '_' . $type;
+				if ($cache->fetch($key, $tmp)) {
+					$cache->delete($key);
+				}
 			}
 		}
 	}

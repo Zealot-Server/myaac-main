@@ -34,6 +34,32 @@ defined('MYAAC') or die('Direct access not allowed!');
 require_once LIBS . 'forum.php';
 require_once LIBS . 'news.php';
 
+function localizeAlphaNews(array $news): array
+{
+	$keys = [
+		'Welcome to Zealot Alpha' => 'news.alpha.welcome',
+		'Alpha: what to expect' => 'news.alpha.expect',
+		'How to help Zealot grow' => 'news.alpha.help',
+		'Zealot Alpha is live' => 'news.alpha.live',
+		'Alpha feedback channel' => 'news.alpha.feedback',
+		'Zealot Alpha: the journey begins' => 'news.alpha.featured',
+	];
+
+	$key = $keys[$news['title'] ?? ''] ?? null;
+	if ($key === null) {
+		return $news;
+	}
+
+	$news['title'] = t($key . '.title');
+	foreach (['body', 'article_text'] as $field) {
+		if (array_key_exists($field, $news)) {
+			$news[$field] = t($key . '.' . $field);
+		}
+	}
+
+	return $news;
+}
+
 if(isset($_GET['archive']))
 {
 	$title = 'News Archive';
@@ -58,6 +84,7 @@ if(isset($_GET['archive']))
 		if($news->rowCount() == 1)
 		{
 			$news = $news->fetch();
+			$news = localizeAlphaNews($news);
 			$author = '';
 			$query = $db->query('SELECT `name` FROM `players` WHERE id = ' . $db->quote($news['player_id']) . ' LIMIT 1;');
 			if($query->rowCount() > 0) {
@@ -100,6 +127,7 @@ if(isset($_GET['archive']))
 	$news_DB = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'news').' WHERE `type` = 1 AND `hidden` != 1 ORDER BY `date` DESC');
 	foreach($news_DB as $news)
 	{
+		$news = localizeAlphaNews($news);
 		$newses[] = array(
 			'link' => getLink('news') . '/archive/' . $news['id'],
 			'icon_id' => $categories[$news['category']]['icon_id'],
@@ -142,6 +170,7 @@ if(!$news_cached)
 	{
 		$tickers = $tickers_db->fetchAll();
 		foreach($tickers as &$ticker) {
+			$ticker = localizeAlphaNews($ticker);
 			$ticker['icon'] = $categories[$ticker['category']]['icon_id'];
 			$ticker['body_short'] = short_text(strip_tags($ticker['body']), 100);
 		}
@@ -153,12 +182,13 @@ if(!$news_cached)
 	}
 
 	if($cache->enabled() && !$canEdit)
-		$cache->set('news_' . $template_name . '_' . TICKER, $tickers_content, 60 * 60);
+		News::setCached(TICKER, $tickers_content, 60 * 60);
 
 	$featured_article_db =$db->query('SELECT `id`, `title`, `article_text`, `article_image`, `hidden` FROM `' . TABLE_PREFIX . 'news` WHERE `type` = ' . ARTICLE . ($canEdit ? '' : ' AND `hidden` != 1') .' ORDER BY `date` DESC LIMIT 1');
 	$article = '';
 	if($featured_article_db->rowCount() > 0) {
 		$article = $featured_article_db->fetch();
+		$article = localizeAlphaNews($article);
 
 		$featured_article = '';
 		if($twig->getLoader()->exists('news.featured_article.html.twig')) {
@@ -176,7 +206,7 @@ if(!$news_cached)
 		}
 
 		if($cache->enabled() && !$canEdit)
-			$cache->set('news_' . $template_name . '_' . ARTICLE, $featured_article, 60 * 60);
+			News::setCached(ARTICLE, $featured_article, 60 * 60);
 	}
 }
 else {
@@ -192,6 +222,7 @@ if(!$news_cached)
 	{
 		foreach($newses as $news)
 		{
+			$news = localizeAlphaNews($news);
 			$author = '';
 			$query = $db->query('SELECT `name` FROM `players` WHERE id = ' . $db->quote($news['player_id']) . ' LIMIT 1');
 			if($query->rowCount() > 0) {
@@ -243,7 +274,7 @@ if(!$news_cached)
 	ob_end_clean();
 
 	if($cache->enabled() && !$canEdit)
-		$cache->set('news_' . $template_name . '_' . NEWS, $tmp_content, 60 * 60);
+		News::setCached(NEWS, $tmp_content, 60 * 60);
 
 	echo $tmp_content;
 }

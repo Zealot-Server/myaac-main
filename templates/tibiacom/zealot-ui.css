@@ -25,6 +25,87 @@
   --zealot-muted: #746754;
 }
 
+/* Public, non-transactional cryptocurrency donations. */
+.zealot-donations {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 25px;
+  color: #513018;
+}
+
+.zealot-donations__hero {
+  text-align: center;
+  margin: 8px auto 25px;
+}
+
+.zealot-donations__hero > span {
+  color: #926321;
+  font-size: 9pt;
+  font-weight: bold;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.zealot-donations__hero h1 {
+  margin: 7px 0 10px;
+  font-size: 25pt;
+}
+
+.zealot-donations__hero p,
+.zealot-donations__notice p { margin: 0; }
+
+.zealot-donations__notice {
+  margin: 0 0 20px;
+  padding: 15px 18px;
+  border: 1px solid #bf7d24;
+  background: #fff1c8;
+}
+
+.zealot-donations__notice strong { color: #70410e; }
+
+.zealot-donations__notice p { margin-top: 5px; }
+
+.zealot-donations__wallets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.zealot-donations__wallet {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: 16px;
+  border: 1px solid #a77a3e;
+  background: #f9edcf;
+  box-shadow: 0 2px 0 rgba(76, 47, 19, .2);
+}
+
+.zealot-donations__wallet header { min-height: 55px; }
+.zealot-donations__wallet header span { display: block; color: #89571d; font-size: 14pt; font-weight: bold; }
+.zealot-donations__wallet header strong { font-size: 9pt; }
+.zealot-donations__address-label { margin: 14px 0 3px; font-size: 8.5pt; font-weight: bold; }
+.zealot-donations__wallet code { overflow-wrap: anywhere; color: #4f2d13; font-family: monospace; font-size: 9pt; line-height: 1.45; }
+
+.zealot-donations__copy {
+  margin-top: 16px;
+  border: 1px solid #9b6b25;
+  background: #174230;
+  color: #fff1c9;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 9px;
+}
+
+.zealot-donations__copy:hover,
+.zealot-donations__copy:focus { background: #246044; }
+.zealot-donations__footer { margin: 23px 0 0; text-align: center; }
+
+@media (max-width: 760px) {
+  .zealot-donations { padding: 14px; }
+  .zealot-donations__wallets { grid-template-columns: 1fr; }
+}
+
 html {
   min-height: 100%;
   background: #06100d url(images/header/zealot-site-background.jpg) center top / cover fixed no-repeat;
