@@ -129,7 +129,6 @@ if ($action == '') {
     $account_players = $account_logged->getPlayersList();
     $account_players->orderBy('id');
 
-    $characterDeletionGracePeriod = 30 * 24 * 60 * 60;
     $deletedCharacters = [];
     if ($db->hasColumn('players', 'deletion')) {
         foreach ($account_players as $accountPlayer) {
@@ -137,11 +136,10 @@ if ($action == '') {
                 continue;
             }
 
-            $deletedAt = (int) $accountPlayer->getCustomField('deletion');
-            $restoreUntil = $deletedAt + $characterDeletionGracePeriod;
+            $deletionDeadline = (int) $accountPlayer->getCustomField('deletion');
             $deletedCharacters[$accountPlayer->getId()] = [
-                'restorable' => $deletedAt > 1 && $restoreUntil >= time(),
-                'restore_until' => date('Y-m-d H:i', $restoreUntil),
+                'restorable' => $deletionDeadline > time(),
+                'restore_until' => date('Y-m-d H:i', $deletionDeadline),
             ];
         }
     }

@@ -4,8 +4,6 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-const CHARACTER_DELETION_GRACE_PERIOD = 30 * 24 * 60 * 60;
-
 $errors = [];
 $playerName = isset($_POST['restore_name']) ? stripslashes($_POST['restore_name']) : '';
 
@@ -26,8 +24,8 @@ if (!isset($_POST['restorecharactersave']) || $_POST['restorecharactersave'] != 
     } elseif (!$player->isDeleted()) {
         $errors[] = t('character.restore.not_deleted', 'This character is not scheduled for deletion.');
     } else {
-        $deletedAt = (int) $player->getCustomField('deletion');
-        if ($deletedAt <= 1 || time() > $deletedAt + CHARACTER_DELETION_GRACE_PERIOD) {
+        $deletionDeadline = (int) $player->getCustomField('deletion');
+        if ($deletionDeadline <= time()) {
             $errors[] = t('character.restore.expired', 'The 30-day restoration period for this character has expired.');
         } else {
             $player->setCustomField('deletion', 0);
