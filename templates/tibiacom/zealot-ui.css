@@ -72,17 +72,40 @@
 }
 
 .zealot-character-restore {
-  border: 1px solid #b58a2a;
-  background: #164634;
-  color: #f9d67b;
+  min-width: 150px;
+  border: 1px solid #8d6928;
+  border-radius: 3px;
+  background: linear-gradient(#236346, #164634);
+  box-shadow: inset 0 1px rgba(255, 255, 255, .2), 0 1px 1px rgba(56, 32, 13, .25);
+  color: #fff0bf;
   cursor: pointer;
-  font: inherit;
+  font: bold 9pt Verdana, Arial, sans-serif;
   font-weight: bold;
-  padding: 3px 8px;
+  line-height: 1.2;
+  padding: 7px 11px;
+  text-shadow: 0 1px #102a1f;
+  white-space: nowrap;
 }
 
 .zealot-character-restore:hover {
-  background: #1e6348;
+  background: linear-gradient(#2d7a58, #1d5a41);
+}
+
+.zealot-character-restore-panel {
+  display: inline-flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 160px;
+  padding: 7px 8px;
+  border: 1px solid #c8a86a;
+  background: rgba(255, 246, 222, .35);
+}
+
+.zealot-character-restore-panel small {
+  color: #66421f;
+  font: 8pt Verdana, Arial, sans-serif;
+  line-height: 1.25;
 }
 
 .zealot-donations__wallet {
@@ -2083,6 +2106,16 @@ body {
   background: #98735a;
 }
 
+.character-status--deletion {
+  border-color: #bd8129;
+  background: #f6e4bd;
+  color: #8b561b;
+}
+
+.character-status--deletion i {
+  background: #d18a27;
+}
+
 /* Character Details: give the live outfit the same framed presentation used
  * by the Zealot Market without changing the original character data. */
 .character-details-outfit-cell {
@@ -2277,13 +2310,26 @@ body {
 }
 
 .Content .account-character-status {
-  min-width: 116px;
+  min-width: 180px;
   text-align: center;
   vertical-align: middle;
 }
 
-.Content .account-character-status > img {
+.Content .account-character-status__indicators {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.Content .account-character-status img {
   margin-right: 5px;
+  vertical-align: middle;
+}
+
+.Content .account-character-actions {
+  min-width: 185px;
   vertical-align: middle;
 }
 

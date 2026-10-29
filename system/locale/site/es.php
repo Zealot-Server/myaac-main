@@ -37,6 +37,7 @@ return [
     'donations.copy_prompt' => 'Copia esta dirección de cartera:',
     'donations.footer' => '¿Necesitas confirmar una donación o tienes una pregunta? Contacta con',
     'character.restore.action' => 'Deshacer eliminación',
+    'character.deletion.pending' => 'Eliminación programada',
     'character.restore.until' => 'Restauración disponible hasta {date}.',
     'character.restore.invalid_request' => 'Solicitud de restauración de personaje no válida.',
     'character.restore.invalid_name' => 'El nombre del personaje contiene caracteres no válidos.',

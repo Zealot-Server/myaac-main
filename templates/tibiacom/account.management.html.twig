@@ -323,8 +323,8 @@
                     <tr class="LabelH">
                       <td style="width: 15px !important;"></td>
                       <td>Name</td>
-                      <td style="width: 100px !important;">Status</td>
-                      <td style="width: 100px !important;"></td>
+                      <td style="width: 190px !important;">Status</td>
+                      <td style="width: 185px !important;"></td>
                     </tr>
                     {% set i = 0 %}
                     {% for player in players %}
@@ -335,9 +335,6 @@
                           <span style="white-space: nowrap; vertical-align: middle; line-height: 12px;">
                             <span id="CharacterNameOf_0"
                                   style="font-size:13pt; font-weight: bold;">{{ player.getName() }}
-                              {% if player.isDeleted() %}
-                                <span style="color: red"><b> [ DELETED ] </b></span>
-                              {% endif %}
                               {% if player.isMain() %}
                                 <img src="{{ template_path }}/images//account/maincharacter.png"
                                      alt="(Main Character)" title="Main Character">
@@ -365,16 +362,21 @@
                           </span>
                         </td>
                         <td class="account-character-status">
-                          <img id="DailyReawardState"
-                               src="{{ template_path }}/images/global/content/icon-status-dailyreward-collected.png"
-                               alt="Daily Reward collected" title="Daily Reward collected">
-                          {% if player.isOnline() %}
-                            <span class="character-status character-status--online" title="Online"><i aria-hidden="true"></i>Online</span>
-                          {% else %}
-                            <span class="character-status character-status--offline" title="Offline"><i aria-hidden="true"></i>Offline</span>
-                          {% endif %}
+                          <div class="account-character-status__indicators">
+                            <img id="DailyReawardState"
+                                 src="{{ template_path }}/images/global/content/icon-status-dailyreward-collected.png"
+                                 alt="Daily Reward collected" title="Daily Reward collected">
+                            {% if player.isOnline() %}
+                              <span class="character-status character-status--online" title="Online"><i aria-hidden="true"></i>Online</span>
+                            {% else %}
+                              <span class="character-status character-status--offline" title="Offline"><i aria-hidden="true"></i>Offline</span>
+                            {% endif %}
+                            {% if player.isDeleted() %}
+                              <span class="character-status character-status--deletion" title="{{ t('character.deletion.pending', 'Scheduled for deletion') }}"><i aria-hidden="true"></i>{{ t('character.deletion.pending', 'Scheduled for deletion') }}</span>
+                            {% endif %}
+                          </div>
                         </td>
-                        <td align="center">
+                        <td class="account-character-actions" align="center">
                           <span id="CharacterOptionsOf_0">
                             <span style="font-weight:normal;">{% if not player.isDeleted() %}[<a
                                 href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}">Edit</a>]{% endif %}</span>
@@ -382,12 +384,14 @@
                             {% if player.isDeleted() %}
                               {% set deletion = deleted_characters[player.getId()] ?? null %}
                               {% if deletion and deletion.restorable %}
-                                <small style="display:block; margin: 3px 0;">{{ t('character.restore.until', 'Restore available until {date}.', {date: deletion.restore_until}) }}</small>
-                                <form action="{{ getLink('account/character/restore') }}" method="post" style="display:inline;">
-                                  <input type="hidden" name="restorecharactersave" value="1">
-                                  <input type="hidden" name="restore_name" value="{{ player.getName() }}">
-                                  <button type="submit" class="zealot-character-restore">{{ t('character.restore.action', 'Undo deletion') }}</button>
-                                </form>
+                                <div class="zealot-character-restore-panel">
+                                  <small>{{ t('character.restore.until', 'Restore available until {date}.', {date: deletion.restore_until}) }}</small>
+                                  <form action="{{ getLink('account/character/restore') }}" method="post">
+                                    <input type="hidden" name="restorecharactersave" value="1">
+                                    <input type="hidden" name="restore_name" value="{{ player.getName() }}">
+                                    <button type="submit" class="zealot-character-restore">{{ t('character.restore.action', 'Undo deletion') }}</button>
+                                  </form>
+                                </div>
                               {% else %}
                                 <small style="display:block; margin: 3px 0; color:#8c2b15;">{{ t('character.restore.expired', 'The 30-day restoration period for this character has expired.') }}</small>
                               {% endif %}

@@ -74,6 +74,7 @@ return [
     'donations.copy_prompt' => 'Copy this wallet address:',
     'donations.footer' => 'Need to confirm a donation or have a question? Contact',
     'character.restore.action' => 'Undo deletion',
+    'character.deletion.pending' => 'Deletion scheduled',
     'character.restore.until' => 'Restore available until {date}.',
     'character.restore.invalid_request' => 'Invalid character restoration request.',
     'character.restore.invalid_name' => 'Character name contains illegal characters.',

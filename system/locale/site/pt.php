@@ -37,6 +37,7 @@ return [
     'donations.copy_prompt' => 'Copie este endereço de carteira:',
     'donations.footer' => 'Precisa confirmar uma doação ou tem alguma dúvida? Entre em contato:',
     'character.restore.action' => 'Desfazer exclusão',
+    'character.deletion.pending' => 'Exclusão agendada',
     'character.restore.until' => 'Restauração disponível até {date}.',
     'character.restore.invalid_request' => 'Solicitação inválida para restaurar o personagem.',
     'character.restore.invalid_name' => 'O nome do personagem contém caracteres inválidos.',
