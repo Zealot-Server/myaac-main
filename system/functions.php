@@ -959,7 +959,8 @@ function template_footer()
     $ret .= '<br/>' . $config['footer'];
   }
 
-  return $ret . '<br/>' . t('footer.copyright') . ' <strong>&copy; Zealot</strong>. ' . t('footer.rights');
+  return $ret . '<br/>' . t('footer.contact') . ' <a href="mailto:server.zealot@gmail.com">server.zealot@gmail.com</a>' .
+    '<br/>' . t('footer.copyright') . ' <strong>&copy; Zealot</strong>. ' . t('footer.rights');
 }
 
 function template_ga_code()

@@ -98,6 +98,21 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Event Schedule';
 
+$alphaProgram = [
+  [
+    'title' => t('event.alpha.launch.title'),
+    'description' => t('event.alpha.launch.description'),
+  ],
+  [
+    'title' => t('event.alpha.testing.title'),
+    'description' => t('event.alpha.testing.description'),
+  ],
+  [
+    'title' => t('event.alpha.feedback.title'),
+    'description' => t('event.alpha.feedback.description'),
+  ],
+];
+
 function showWeeks(): string
 {
   $out = "";
@@ -139,17 +154,41 @@ function generateIndicator($event): string
   return $out;
 }
 
+function getCalendarEvents(): ?SimpleXMLElement
+{
+  static $events = null;
+  static $loaded = false;
+
+  if ($loaded) {
+    return $events;
+  }
+
+  $loaded = true;
+  global $config;
+  $eventsFile = $config['data_path'] . 'XML/events.xml';
+
+  if (is_readable($eventsFile)) {
+    $events = simplexml_load_file($eventsFile) ?: null;
+  }
+
+  return $events;
+}
+
 function showCalendar($month = null): string
 {
   $month = $month ?: date('m');
   $amountDays = getAmountDays(str_pad($month, 2, '0', STR_PAD_LEFT));
   $currentDay = 0;
+  $year = (int) date('Y');
+  $events = getCalendarEvents();
 
-  $dayOfWeek = jddayofweek(cal_to_jd(CAL_GREGORIAN, $month, "01", date('Y')), 0);
+  // Do not depend on PHP's optional calendar extension. The production image
+  // does not install it, while DateTime is always available.
+  $dayOfWeek = (int) (new DateTime(sprintf('%04d-%02d-01', $year, (int) $month)))->format('w');
 
   $outDays = "<tr style='text-align:center; width:120px; background-color:#5f4d41;'>" . showWeeks() . "</tr>";
 
-  for ($row = 0; $row < 5; $row++) {
+  for ($row = 0; $row < 6; $row++) {
     $outDays .= "<tr>";
     for ($column = 0; $column < 7; $column++) {
       $outDays .= "<td style='height:82px; background-clip: padding-box; overflow: hidden; vertical-align:top;' ";
@@ -169,21 +208,23 @@ function showCalendar($month = null): string
         } else {
           $outDays .= "<div class='day'><span style='vertical-align: text-bottom;'>" . ++$currentDay . " <img style='border:0;' src='https://static.tibia.com/images/global/content/icon-seasonal.png'></span></div>";
 
-          global $config;
-          $events_xml = $config['data_path'] . 'XML/events.xml';
-          $xml = simplexml_load_file($events_xml);
-
           $currentDay = str_pad($currentDay, 2, '0', STR_PAD_LEFT);
 
-          $verif_date = "$month/$currentDay/" . date('Y');
+          $verif_date = "$month/$currentDay/$year";
 
-          foreach ($xml->event as $event) {
-            $start_date = strtotime($event['startdate']);
-            $end_date = strtotime($event['enddate']);
-            $current_date = strtotime($verif_date);
+          if ($events !== null) {
+            foreach ($events->event as $event) {
+              if (!isset($event['startdate'], $event['enddate'], $event->description, $event->colors)) {
+                continue;
+              }
 
-            if ($current_date >= $start_date && $current_date <= $end_date) {
-              $outDays .= generateIndicator($event);
+              $start_date = strtotime((string) $event['startdate']);
+              $end_date = strtotime((string) $event['enddate']);
+              $current_date = strtotime($verif_date);
+
+              if ($start_date !== false && $end_date !== false && $current_date >= $start_date && $current_date <= $end_date) {
+                $outDays .= generateIndicator($event);
+              }
             }
           }
         }
@@ -217,6 +258,29 @@ function showCalendarFull(): string
 ?>
 
 <div class="BoxContent" style="background-image:url(https://static.tibia.com/images/global/content/scroll.gif);">
+  <div class="TableContainer" style="margin-bottom: 16px;">
+    <div class="CaptionContainer">
+      <div class="CaptionInnerContainer">
+        <span class="CaptionEdgeLeftTop" style="background-image:url(https://static.tibia.com/images/global/content/box-frame-edge.gif);"></span>
+        <span class="CaptionEdgeRightTop" style="background-image:url(https://static.tibia.com/images/global/content/box-frame-edge.gif);"></span>
+        <span class="CaptionBorderTop" style="background-image:url(https://static.tibia.com/images/global/content/table-headline-border.gif);"></span>
+        <span class="CaptionVerticalLeft" style="background-image:url(https://static.tibia.com/images/global/content/box-frame-vertical.gif);"></span>
+        <div class="Text"><?= t('event.alpha.title') ?></div>
+        <span class="CaptionVerticalRight" style="background-image:url(https://static.tibia.com/images/global/content/box-frame-vertical.gif);"></span>
+        <span class="CaptionBorderBottom" style="background-image:url(https://static.tibia.com/images/global/content/table-headline-border.gif);"></span>
+        <span class="CaptionEdgeLeftBottom" style="background-image:url(https://static.tibia.com/images/global/content/box-frame-edge.gif);"></span>
+        <span class="CaptionEdgeRightBottom" style="background-image:url(https://static.tibia.com/images/global/content/box-frame-edge.gif);"></span>
+      </div>
+    </div>
+    <table class="Table1" cellpadding="0" cellspacing="0" style="width:100%; background-color: rgb(241, 224, 197);">
+      <tbody><tr><td><div class="InnerTableContainer" style="padding: 12px 16px;">
+        <p style="margin-top: 0;"><?= t('event.alpha.intro') ?></p>
+        <?php foreach ($alphaProgram as $item): ?>
+          <p><strong><?= $item['title'] ?></strong><br><?= $item['description'] ?></p>
+        <?php endforeach; ?>
+      </div></td></tr></tbody>
+    </table>
+  </div>
   <div id="eventscheduletablecontainer">
     <div class="TableContainer">
       <div class="CaptionContainer">
