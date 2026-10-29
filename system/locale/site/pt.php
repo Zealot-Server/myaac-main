@@ -55,7 +55,7 @@ return [
     'footer.copyright' => 'Copyright por Myaac',
     'footer.rights' => 'Todos os direitos reservados.',
     'account.login.title' => 'Entrar na conta',
-    'account.password' => 'Senha do Tibia:',
+    'account.password' => 'Senha:',
     'account.remember_me' => 'Lembrar de mim',
     'account.new_to' => 'Novo no {server}?',
     'account.new_player' => 'Novo jogador',
@@ -194,6 +194,8 @@ return [
     'character.create.worldwide' => 'Mundial',
     'character.create.world_copy' => 'Zealot possui um único mundo compartilhado por jogadores de toda a Terra. As regras de PvP e os modos de evento são definidos pelo evento atual do Zealot.',
     'character.create.rookgaard_copy' => 'Seu personagem começará em Rookgaard. Você escolherá uma vocação enquanto joga.',
+    'character.create.world_info_label' => 'Sobre o mundo Zealot',
+    'character.create.world_modal' => 'Um único mundo mundial. As regras de PvP e os modos de evento são definidos pelo evento atual do Zealot.',
     'legacy' => [
         'Frequently Asked Questions' => 'Perguntas frequentes',
         'Character Details' => 'Detalhes do personagem',

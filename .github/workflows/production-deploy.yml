@@ -50,6 +50,7 @@ jobs:
 
             rollback() {
               sudo git -C "$APP_DIR" reset --hard "$PREVIOUS_SHA"
+              sudo rm -rf "$APP_DIR/system/cache/twig"
               sudo docker compose -f "$STACK_DIR/docker-compose.yml" -f "$STACK_DIR/docker-compose.production.yml" restart myaac
             }
 
@@ -59,6 +60,10 @@ jobs:
             sudo git -C "$APP_DIR" reset --hard
             sudo git -C "$APP_DIR" checkout --detach "$TARGET_SHA"
             sudo git -C "$APP_DIR" reset --hard "$TARGET_SHA"
+
+            # Twig compilation is disabled in production. Remove only the generated
+            # template cache so a deployed template is rendered immediately.
+            sudo rm -rf "$APP_DIR/system/cache/twig"
 
             if ! sudo "$APP_DIR/deploy/apply-migrations.sh"; then
               rollback

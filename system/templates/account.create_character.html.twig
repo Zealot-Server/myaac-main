@@ -45,9 +45,16 @@
           <table class="TableContent" width="100%" style="border:1px solid #faf0d7;"><tbody>
             <tr class="LabelH"><td>{{ t('character.create.world_title', 'Game World') }}</td></tr>
             <tr class="Odd"><td style="padding: 1em; text-align: center">
-              <strong>{{ config.lua.serverName }} — {{ t('character.create.worldwide', 'Worldwide') }}</strong><br>
-              {{ t('character.create.world_copy', 'Zealot has one shared game world for players everywhere on Earth. PvP rules and event modes are defined by the current Zealot event.') }}<br><br>
-              {{ t('character.create.rookgaard_copy', 'Your character will begin in Rookgaard. You will choose a vocation while playing.') }}
+              <div class="zealot-world-card">
+                <img class="zealot-world-card__emblem" src="{{ template_path }}/images/content/icon_battleye.gif" alt="{{ config.lua.serverName }}">
+                <strong>{{ config.lua.serverName }}</strong>
+                <span>{{ t('character.create.worldwide', 'Worldwide') }}</span>
+                <button class="zealot-world-card__info HelperDivIndicator" type="button" aria-label="{{ t('character.create.world_info_label', 'About the Zealot world') }}"
+                        onmouseover="ActivateHelperDiv($(this), '{{ config.lua.serverName }}', '{{ t('character.create.world_modal', 'One worldwide game world. PvP rules and event modes are defined by the current Zealot event.') }}', '');"
+                        onmouseout="$('#HelperDivContainer').hide();">?</button>
+              </div>
+              <p class="zealot-world-card__copy">{{ t('character.create.world_copy', 'Zealot has one shared game world for players everywhere on Earth. PvP rules and event modes are defined by the current Zealot event.') }}</p>
+              <p class="zealot-world-card__copy">{{ t('character.create.rookgaard_copy', 'Your character will begin in Rookgaard. You will choose a vocation while playing.') }}</p>
             </td></tr>
           </tbody></table>
         </div></td></tr>

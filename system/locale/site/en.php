@@ -91,6 +91,7 @@ return [
     'footer.load_time' => 'Load time: {seconds} seconds.',
     'footer.copyright' => 'Copyright by Myaac',
     'footer.rights' => 'All rights reserved.',
+    'account.password' => 'Password:',
     'rules.title' => 'Server Rules',
     'rules.intro' => '{server} is an online role-playing game. To keep the game welcoming and enjoyable, every player must behave respectfully and responsibly.',
     'rules.intro_2' => '{server} may act against destructive behaviour in the game, on the website, or in any other service. The following list describes the most important violations.',
@@ -160,5 +161,7 @@ return [
     'character.create.worldwide' => 'Worldwide',
     'character.create.world_copy' => 'Zealot has one shared game world for players everywhere on Earth. PvP rules and event modes are defined by the current Zealot event.',
     'character.create.rookgaard_copy' => 'Your character will begin in Rookgaard. You will choose a vocation while playing.',
+    'character.create.world_info_label' => 'About the Zealot world',
+    'character.create.world_modal' => 'One worldwide game world. PvP rules and event modes are defined by the current Zealot event.',
     'legacy' => [],
 ];

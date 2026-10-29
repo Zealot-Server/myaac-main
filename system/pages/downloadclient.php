@@ -12,7 +12,9 @@ $downloads = [
         'sha256' => trim((string) ($config['client_macos_sha256'] ?? '')),
     ],
     'windows' => [
-        'url' => trim((string) ($config['client_link_windows'] ?? ($config['client_link'] ?? ''))),
+        // Do not fall back to the legacy generic URL: each published client must
+        // have an explicit platform build.
+        'url' => trim((string) ($config['client_link_windows'] ?? '')),
     ],
     'linux' => [
         'url' => trim((string) ($config['client_link_linux'] ?? '')),
