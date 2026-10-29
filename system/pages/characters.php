@@ -190,12 +190,16 @@ if ($player->isLoaded() && !$player->isDeleted()) {
 
     $player_HealthCurrent = $player->getHealth();
     $player_HealthMax = $player->getHealthMax();
-    $percent_Health = ($player_HealthCurrent / $player_HealthMax) * 100;
+    $percent_Health = $player_HealthMax > 0
+        ? ($player_HealthCurrent / $player_HealthMax) * 100
+        : 0;
     $percent_Health = number_format($percent_Health, 0, '.', '');
 
     $player_ManaMax = $player->getManaMax();
     $player_ManaCurrent = $player->getMana();
-    $percent_Mana = ($player_ManaCurrent / $player_ManaMax) * 100;
+    $percent_Mana = $player_ManaMax > 0
+        ? ($player_ManaCurrent / $player_ManaMax) * 100
+        : 0;
     $percent_Mana = number_format($percent_Mana, 0, '.', '');
 
     $player_cap = $player->getCap();
