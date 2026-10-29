@@ -165,7 +165,9 @@ $config = array(
 
 	// vocations
 	'vocations' => array(
-		0 => 'None',
+		// Vocation 0 is the neutral Rookgaard vocation. It is a valid game
+		// value for new characters, so never expose it as "None" to players.
+		0 => 'Rookgaard',
 		1 => 'Sorcerer',
 		2 => 'Druid',
 		3 => 'Paladin',

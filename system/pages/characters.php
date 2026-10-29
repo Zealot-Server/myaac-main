@@ -477,7 +477,13 @@ WHERE killers.death_id = '" . $death['id'] . "' ORDER BY killers.final_hit DESC,
     $expCurrent = Functions::getExpForLevel($player->getLevel());
     $expNext = Functions::getExpForLevel($player->getLevel() + 1);
     $expLeft = max(0, $expNext - (int)$player->getExperience());
-    $expLeftPercent = max(0, min(100, ($player->getExperience() - $expCurrent) / ($expNext - $expCurrent) * 100));
+    $expRange = $expNext - $expCurrent;
+    // Level 1 has no experience range in the legacy level formula. New
+    // Rookgaard characters are level 1, so render 0% instead of failing the
+    // public profile and character-search request with DivisionByZeroError.
+    $expLeftPercent = $expRange > 0
+        ? max(0, min(100, ($player->getExperience() - $expCurrent) / $expRange * 100))
+        : 0;
     $expLeftPercent = number_format($expLeftPercent, '2', '.', '');
 
     $achievementPoints = 0;
@@ -525,7 +531,7 @@ WHERE killers.death_id = '" . $death['id'] . "' ORDER BY killers.final_hit DESC,
         'experience' => $player_exp,
         'marriage_enabled' => $config['characters']['marriage_info'] && $db->hasColumn('players', 'marriage'),
         'marital_status' => $marital_status,
-        'vocation' => $player->getVocationName(),
+        'vocation' => $config['vocations'][$player->getVocation()] ?? $player->getVocationName(),
         'frags_enabled' => $frags_enabled,
         'frags_count' => $frags_count,
         'town' => isset($config['towns'][$player->getTownId()]) ? $config['towns'][$player->getTownId()] : null,

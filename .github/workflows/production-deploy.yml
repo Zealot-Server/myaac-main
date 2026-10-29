@@ -65,6 +65,15 @@ jobs:
             # template cache so a deployed template is rendered immediately.
             sudo rm -rf "$APP_DIR/system/cache/twig"
 
+            # OTClient assets are mounted read-only into MyAAC. They must still be
+            # readable by Apache's www-data user so profile and highscore outfit
+            # previews can be rendered from the canonical client catalogue.
+            ASSETS_DIR=/opt/zealot/otclient/data/things
+            if [ -d "$ASSETS_DIR" ]; then
+              sudo find "$ASSETS_DIR" -type d -exec chmod a+rx {} +
+              sudo find "$ASSETS_DIR" -type f -exec chmod a+r {} +
+            fi
+
             if ! sudo "$APP_DIR/deploy/apply-migrations.sh"; then
               rollback
               exit 1
