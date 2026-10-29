@@ -18,10 +18,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: overtrue/phplint@3.4.0
+      - uses: shivammathur/setup-php@v2
         with:
-          path: .
-          options: --exclude="system/libs/polyfill-mbstring/bootstrap80.php"
+          php-version: '8.3'
+      - name: Lint tracked PHP sources
+        run: |
+          git ls-files -z -- '*.php' ':(exclude)system/libs/polyfill-mbstring/bootstrap80.php' |
+            xargs -0 -r -n 1 php -d error_reporting='E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED' -l
 
   deploy:
     name: Deploy to Contabo
