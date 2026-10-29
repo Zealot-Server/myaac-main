@@ -452,6 +452,7 @@ def main():
     parser.add_argument('--feet', type=int, default=0)
     parser.add_argument('--addons', type=int, default=0)
     parser.add_argument('--animated', action='store_true', help='Export every official animation frame as a looping GIF')
+    parser.add_argument('--preserve-canvas', action='store_true', help='Keep the original sprite canvas instead of trimming transparent borders')
     args = parser.parse_args()
 
     catalog_file = args.assets / 'catalog-content.json'
@@ -519,7 +520,8 @@ def main():
         frames.append(output)
     if not frames:
         raise ValueError('Looktype {} contains no renderable initial sprite'.format(args.looktype))
-    frames, image_width, image_height = crop_frames_to_visible_bounds(frames, image_width, image_height)
+    if not args.preserve_canvas:
+        frames, image_width, image_height = crop_frames_to_visible_bounds(frames, image_width, image_height)
     if args.animated:
         if args.output.suffix.lower() != '.gif':
             raise ValueError('Animated exports must use a .gif output path')

@@ -719,6 +719,10 @@ class ZealotMarket
     private function outfitSpritePath(array $outfit): string
     {
         $signature = implode(':', [
+            // Keep website character previews on the original OTClient canvas.
+            // The old trimmed cache made small sprites appear larger than the
+            // rest of the highscore list.
+            'outfit-canvas-v2',
             (int) $outfit['looktype'], (int) $outfit['addons'], (int) $outfit['head'],
             (int) $outfit['body'], (int) $outfit['legs'], (int) $outfit['feet'],
         ]);
@@ -826,6 +830,7 @@ class ZealotMarket
             '--output', $outputPath, '--direction', '2', '--head', (string) (int) ($outfit['head'] ?? 0),
             '--body', (string) (int) ($outfit['body'] ?? 0), '--legs', (string) (int) ($outfit['legs'] ?? 0),
             '--feet', (string) (int) ($outfit['feet'] ?? 0), '--addons', (string) (int) ($outfit['addons'] ?? 0),
+            '--preserve-canvas',
         ];
         $command = implode(' ', array_map('escapeshellarg', $arguments));
         exec($command . ' 2>&1', $ignoredOutput, $status);
