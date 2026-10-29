@@ -181,6 +181,11 @@ if ($cache->enabled() && $cache->fetch('vocations', $tmp)) {
 }
 unset($tmp, $id, $vocation);
 
+// The game data calls vocation 0 "None", but it is the valid starting state
+// for every Zealot character in Rookgaard. Override the technical label only
+// for website presentation after loading the server vocation list/cache.
+$config['vocations'][0] = 'Rookgaard';
+
 $tmp = '';
 $towns = [];
 if ($cache->enabled() && $cache->fetch('towns', $tmp)) {
