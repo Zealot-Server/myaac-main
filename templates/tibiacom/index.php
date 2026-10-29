@@ -373,7 +373,7 @@ if (isset($config['boxes']))
                          style="background-image:url(<?= $template_path; ?>/images/global/general/chain.gif);"></div>
                     <div class="SmallBoxButtonContainer"
                          style="background-image:url(<?= $template_path; ?>/images/global/loginbox/loginbox-textfield-background.gif)">
-                        <a href="?subtopic=downloadclient&step=downloadagreement">
+                        <a href="?subtopic=downloadclient">
                             <div id="PlayNowContainer">
                                 <div class="MediumButtonBackground zealot-medium-button--download" data-zealot-label="<?= htmlspecialchars(t('download.title', 'Download Client'), ENT_QUOTES, 'UTF-8'); ?>"
                                      style="background-image:url(<?= $template_path; ?>/images/global/buttons/mediumbutton.gif)"
