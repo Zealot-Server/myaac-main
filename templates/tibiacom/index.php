@@ -260,15 +260,7 @@ if (isset($config['boxes']))
     </script>
     <?= template_place_holder('head_end'); ?>
 </head>
-<body onBeforeUnLoad="SaveMenu();" onUnload="SaveMenu();" style="background-color:#0b1514;
-    background-image:url(<?= $template_path ?>/images/themeboxes/box_bg.png);
-    background-size: auto;
-    background-position: top left;
-    background-repeat: repeat;
-    background-attachment: fixed;
-    width: 100%;
-    height: 100%;
-    ">
+<body onBeforeUnLoad="SaveMenu();" onUnload="SaveMenu();">
 <?= template_place_holder('body_start'); ?>
 <?php if (!empty($config['network_facebook'])) { ?>
     <script type="text/javascript">

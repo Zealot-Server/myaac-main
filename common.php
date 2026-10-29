@@ -123,7 +123,13 @@ if (!IS_CLI) {
         }
     }
 
-    define('SERVER_URL', 'http' . (isset($_SERVER['HTTPS'][0]) && strtolower($_SERVER['HTTPS']) === 'on' ? 's' : '') . '://' . $baseHost);
+    $isHttps = isset($_SERVER['HTTPS'][0]) && strtolower($_SERVER['HTTPS']) === 'on';
+    if (!$isHttps && isset($_SERVER['HTTP_X_FORWARDED_PROTO'][0])) {
+        $forwardedProto = strtolower(trim(explode(',', $_SERVER['HTTP_X_FORWARDED_PROTO'])[0]));
+        $isHttps = $forwardedProto === 'https';
+    }
+
+    define('SERVER_URL', 'http' . ($isHttps ? 's' : '') . '://' . $baseHost);
     define('BASE_URL', SERVER_URL . BASE_DIR . '/');
     define('ADMIN_URL', SERVER_URL . BASE_DIR . '/admin/');
 
