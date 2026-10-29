@@ -46,19 +46,19 @@ jobs:
             APP_DIR=/opt/zealot/myaac-main
             STACK_DIR=/opt/zealot/canary/docker
             TARGET_SHA=${{ github.sha }}
-            PREVIOUS_SHA="$(git -C "$APP_DIR" rev-parse HEAD)"
+            PREVIOUS_SHA="$(sudo git -C "$APP_DIR" rev-parse HEAD)"
 
             rollback() {
-              git -C "$APP_DIR" reset --hard "$PREVIOUS_SHA"
+              sudo git -C "$APP_DIR" reset --hard "$PREVIOUS_SHA"
               sudo docker compose -f "$STACK_DIR/docker-compose.yml" -f "$STACK_DIR/docker-compose.production.yml" restart myaac
             }
 
-            git -C "$APP_DIR" fetch origin main
+            sudo git -C "$APP_DIR" fetch origin main
             # The only tracked production changes are versioned in this commit.
             # Keep ignored local configuration (for example config.local.php) intact.
-            git -C "$APP_DIR" reset --hard
-            git -C "$APP_DIR" checkout --detach "$TARGET_SHA"
-            git -C "$APP_DIR" reset --hard "$TARGET_SHA"
+            sudo git -C "$APP_DIR" reset --hard
+            sudo git -C "$APP_DIR" checkout --detach "$TARGET_SHA"
+            sudo git -C "$APP_DIR" reset --hard "$TARGET_SHA"
 
             if ! sudo "$APP_DIR/deploy/apply-migrations.sh"; then
               rollback
