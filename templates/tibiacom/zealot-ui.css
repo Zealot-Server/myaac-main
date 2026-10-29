@@ -1593,15 +1593,19 @@ body {
 .zealot-language-switcher {
   display: inline-flex;
   align-items: center;
+  flex: 0 0 auto;
   gap: 2px;
   margin-left: 2px;
   padding-left: 12px;
   border-left: 1px solid rgba(231, 196, 125, 0.32);
+  position: relative;
+  z-index: 2;
 }
 
 .Content .zealot-status-shell .zealot-language-option {
   display: inline-flex;
   align-items: center;
+  flex: 0 0 auto;
   gap: 3px;
   min-height: 24px;
   padding: 0 4px;
@@ -1612,6 +1616,9 @@ body {
   font-size: 7pt !important;
   font-weight: bold;
   line-height: 1;
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
   text-decoration: none !important;
 }
 
