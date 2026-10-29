@@ -129,6 +129,23 @@ if ($action == '') {
     $account_players = $account_logged->getPlayersList();
     $account_players->orderBy('id');
 
+    $characterDeletionGracePeriod = 30 * 24 * 60 * 60;
+    $deletedCharacters = [];
+    if ($db->hasColumn('players', 'deletion')) {
+        foreach ($account_players as $accountPlayer) {
+            if (!$accountPlayer->isDeleted()) {
+                continue;
+            }
+
+            $deletedAt = (int) $accountPlayer->getCustomField('deletion');
+            $restoreUntil = $deletedAt + $characterDeletionGracePeriod;
+            $deletedCharacters[$accountPlayer->getId()] = [
+                'restorable' => $deletedAt > 1 && $restoreUntil >= time(),
+                'restore_until' => date('Y-m-d H:i', $restoreUntil),
+            ];
+        }
+    }
+
     $expiresIn = $account_logged->getExpirePremiumTime();
     $accountExpire = $expiresIn > 0 && $expiresIn > time()
         ? [t('account.vip_expires', 'Your VIP Time will expire in {date}', ['date' => date("M d Y, G:i:s", $expiresIn)]), false]
@@ -159,6 +176,7 @@ if ($action == '') {
         'tag' => $tag,
         'actions' => $actions,
         'players' => $account_players,
+        'deleted_characters' => $deletedCharacters,
         'account_update_info_on_register' => $config['account_update_info_on_register'],
     ));
 } else {

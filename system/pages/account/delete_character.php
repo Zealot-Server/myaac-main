@@ -45,7 +45,7 @@ if (isset($_POST['deletecharactersave']) && $_POST['deletecharactersave'] == 1) 
                                     $show_form = false;
                                     //delete player
                                     if ($db->hasColumn('players', 'deletion'))
-                                        $player->setCustomField('deletion', 1);
+                                        $player->setCustomField('deletion', time());
                                     else
                                         $player->setCustomField('deleted', 1);
                                     $account_logged->logAction('Deleted character <b>' . $player->getName() . '</b>.');

@@ -379,7 +379,21 @@
                             <span style="font-weight:normal;">{% if not player.isDeleted() %}[<a
                                 href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}">Edit</a>]{% endif %}</span>
                             <br>
-                            <span style="font-weight:normal;">[<a href="{{ getLink('account/character/delete') }}">Delete</a>]</span>
+                            {% if player.isDeleted() %}
+                              {% set deletion = deleted_characters[player.getId()] ?? null %}
+                              {% if deletion and deletion.restorable %}
+                                <small style="display:block; margin: 3px 0;">{{ t('character.restore.until', 'Restore available until {date}.', {date: deletion.restore_until}) }}</small>
+                                <form action="{{ getLink('account/character/restore') }}" method="post" style="display:inline;">
+                                  <input type="hidden" name="restorecharactersave" value="1">
+                                  <input type="hidden" name="restore_name" value="{{ player.getName() }}">
+                                  <button type="submit" class="zealot-character-restore">{{ t('character.restore.action', 'Undo deletion') }}</button>
+                                </form>
+                              {% else %}
+                                <small style="display:block; margin: 3px 0; color:#8c2b15;">{{ t('character.restore.expired', 'The 30-day restoration period for this character has expired.') }}</small>
+                              {% endif %}
+                            {% else %}
+                              <span style="font-weight:normal;">[<a href="{{ getLink('account/character/delete') }}">Delete</a>]</span>
+                            {% endif %}
                           </span>
                         </td>
                       </tr>

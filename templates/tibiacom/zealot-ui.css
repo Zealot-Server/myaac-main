@@ -71,6 +71,20 @@
   gap: 15px;
 }
 
+.zealot-character-restore {
+  border: 1px solid #b58a2a;
+  background: #164634;
+  color: #f9d67b;
+  cursor: pointer;
+  font: inherit;
+  font-weight: bold;
+  padding: 3px 8px;
+}
+
+.zealot-character-restore:hover {
+  background: #1e6348;
+}
+
 .zealot-donations__wallet {
   display: flex;
   min-width: 0;

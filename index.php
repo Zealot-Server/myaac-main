@@ -100,6 +100,7 @@ if (empty($uri) || isset($_REQUEST['template'])) {
             '/^account\/character\/sex\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_sex'),
             '/^account\/character\/main\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_main'),
             '/^account\/character\/delete\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'delete_character'),
+            '/^account\/character\/restore\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'restore_character'),
             '/^account\/character\/comment\/[A-Za-z0-9-_%+\']+\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_comment', 'name' => '$3'),
             '/^account\/character\/comment\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_comment'),
             '/^account\/confirm_email\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'confirm_email', 'v' => '$2'),
