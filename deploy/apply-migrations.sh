@@ -5,7 +5,7 @@ readonly DB_CONTAINER="${DB_CONTAINER:-otbr-db-1}"
 readonly MIGRATIONS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/migrations" && pwd)"
 
 run_sql() {
-  docker exec -i "$DB_CONTAINER" sh -lc 'exec mariadb -uroot -p"$MARIADB_ROOT_PASSWORD" "$MARIADB_DATABASE"'
+  docker exec -i "$DB_CONTAINER" sh -lc 'exec mariadb --batch --skip-column-names -uroot -p"$MARIADB_ROOT_PASSWORD" "$MARIADB_DATABASE"'
 }
 
 run_sql <<'SQL'
