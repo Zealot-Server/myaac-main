@@ -10,8 +10,11 @@
   .payment-package { background: #f1e0c6; border: 1px solid #9b7b55; padding: 10px; min-height: 92px; }
   .payment-package strong { display: block; font-size: 17px; margin-bottom: 5px; }
   .payment-price { font-size: 20px; font-weight: bold; margin-top: 8px; }
-  .payment-methods { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-bottom: 14px; }
+  .payment-methods { display: grid; grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr); gap: 12px; margin-bottom: 14px; }
   .payment-method { background: #d4c0a1; border: 1px solid #7a5a3a; padding: 12px; min-width: 0; }
+  .payment-method--primary { background: #e0cfb1; border-color: #9d7133; box-shadow: inset 0 0 0 1px #f4e4c8; }
+  .payment-method--secondary { background: #ceb998; }
+  .payment-method__eyebrow { color: #80551e; font-size: 11px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
   .payment-method h3 { margin: 0 0 8px; font-size: 18px; }
   .payment-method form { max-width: 100%; }
   .payment-method select { box-sizing: border-box; display: block; width: 100%; max-width: 100%; margin-top: 6px; }
@@ -24,6 +27,7 @@
   .payment-note { font-size: 12px; margin-top: 8px; }
   .payment-table-title { background: #143c30 !important; color: #fff1c8 !important; }
   .payment-table-title td, .payment-table-title th { color: #fff1c8 !important; }
+  @media (max-width: 650px) { .payment-methods { grid-template-columns: 1fr; } }
 </style>
 
 <div class="payment-center">
@@ -101,7 +105,8 @@
         <td>
           <div class="InnerTableContainer">
             <div class="payment-methods">
-              <div class="payment-method">
+              <div class="payment-method payment-method--primary">
+                <div class="payment-method__eyebrow">{{ t('payment.primary_method', 'Primary payment method') }}</div>
                 <h3>{{ t('payment.card_title', 'Credit / Debit Card') }}</h3>
                 <div>{{ t('payment.card_copy', 'Pay securely with Stripe Checkout.') }}</div>
                 {% if stripe_enabled and packages|length > 0 %}
@@ -122,7 +127,8 @@
                   <span>{{ t('payment.no_packages', 'No packages configured.') }}</span>
                 {% endif %}
               </div>
-              <div class="payment-method">
+              <div class="payment-method payment-method--secondary">
+                <div class="payment-method__eyebrow">{{ t('payment.alternative_method', 'Alternative payment method') }}</div>
                 <h3>{{ t('payment.crypto', 'Crypto') }}</h3>
                 <div>{{ t('payment.crypto_copy', 'Use one of the same wallets listed on the Donate page. Send only through the exact asset and network shown.') }}</div>
                 <div class="payment-note">{{ t('payment.crypto_review_notice', 'Crypto payments are reviewed manually. Credit may take longer after confirmation.') }}</div>

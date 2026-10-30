@@ -41,30 +41,21 @@ return [
   'payment.crypto_copy' =>
     'Usa una de las mismas carteras mostradas en la página de donaciones. Envía solo mediante el activo y la red exactos.',
   'payment.send_confirmation' => 'Enviar confirmación',
-  'payment.bank_transfer' => 'Transferencia bancaria',
-  'payment.bank_transfer_copy' =>
-    'Contacta con el soporte antes de enviar una transferencia bancaria.',
-  'payment.send_receipt' => 'Enviar comprobante',
-  'payment.manual_approval' => 'Solo aprobación manual',
   'payment.crypto_wallets' => 'Carteras cripto',
   'payment.asset' => 'Activo',
   'payment.network' => 'Red',
   'payment.wallet_address' => 'Dirección de la cartera',
   'payment.no_wallets' => 'Aún no hay carteras cripto configuradas.',
-  'payment.manual_confirmation' => 'Confirmación de pago manual',
   'payment.account' => 'Cuenta',
   'payment.product' => 'Producto',
   'payment.package' => 'Paquete',
-  'payment.method' => 'Método de pago',
-  'payment.network_bank' => 'Red / Banco',
-  'payment.network_bank_placeholder' => 'USDT TRC20, BTC, nombre del banco',
   'payment.transaction_reference' => 'Hash de transacción / ID de comprobante',
   'payment.note' => 'Nota',
   'payment.note_placeholder' =>
     'Opcional: importe enviado, cartera, Discord o detalles para el equipo',
   'payment.submit_confirmation' => 'Enviar confirmación de pago',
-  'payment.manual_review_notice' =>
-    'El equipo revisa las confirmaciones manuales antes de entregar monedas o tiempo Premium.',
+  'payment.primary_method' => 'Método de pago principal',
+  'payment.alternative_method' => 'Método de pago alternativo',
   'payment.card_unavailable' =>
     'El checkout con tarjeta no está disponible temporalmente. Inténtalo más tarde o usa la confirmación en cripto.',
   'payment.crypto_review_notice' =>
