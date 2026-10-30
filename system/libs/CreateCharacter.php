@@ -155,6 +155,8 @@ class CreateCharacter
 
         global $db;
 
+        $rookgaardMode = config('character_creation_mode') === 'rookgaard';
+
         if ($sex == "0")
             $char_to_copy->setLookType(136);
 
@@ -163,7 +165,7 @@ class CreateCharacter
         $player->setAccount($account);
         $player->setGroupId(1);
         $player->setSex($sex);
-        $player->setVocation($char_to_copy->getVocation());
+        $player->setVocation($rookgaardMode ? 0 : $char_to_copy->getVocation());
         if ($db->hasColumn('players', 'promotion'))
             $player->setPromotion($char_to_copy->getPromotion());
 
@@ -180,8 +182,11 @@ class CreateCharacter
             $player->setLookAddons($char_to_copy->getLookAddons());
 
         $player->setTownId($town);
-        $player->setExperience($char_to_copy->getExperience());
-        $player->setLevel($char_to_copy->getLevel());
+        // A character created for Rookgaard must always start at the engine's
+        // minimum playable level with zero experience. This prevents an edited
+        // sample character from accidentally skipping the island progression.
+        $player->setExperience($rookgaardMode ? 0 : $char_to_copy->getExperience());
+        $player->setLevel($rookgaardMode ? 1 : $char_to_copy->getLevel());
         $player->setMagLevel($char_to_copy->getMagLevel());
         $player->setHealth($char_to_copy->getHealth());
         $player->setHealthMax($char_to_copy->getHealthMax());
