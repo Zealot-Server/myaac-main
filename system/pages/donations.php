@@ -2,43 +2,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = t('donations.title');
-$wallets = [
-    [
-        'network' => 'BNB Smart Chain (BEP20)',
-        'asset' => 'BTC',
-        'address' => '0xbb85c1d32067f1f5f25f6f0c285cba093133921e',
-    ],
-    [
-        'network' => 'Solana',
-        'asset' => 'SOL',
-        'address' => 'FD4y8XSQMaNaNRjgCFUB3FJniNswejLvkdJyQSmzPMtg',
-    ],
-    [
-        'network' => 'BNB Smart Chain (BEP20)',
-        'asset' => 'SOL',
-        'address' => '0xbb85c1d32067f1f5f25f6f0c285cba093133921e',
-    ],
-    [
-        'network' => 'TRON (TRC20)',
-        'asset' => 'USDT (TRC20)',
-        'address' => 'TJvcyJdFgbL9ipuPJRb4fei1xPJ2kjkN4W',
-    ],
-    [
-        'network' => 'BNB Smart Chain (BEP20)',
-        'asset' => 'USDT',
-        'address' => '0xbb85c1d32067f1f5f25f6f0c285cba093133921e',
-    ],
-    [
-        'network' => 'Ethereum (ERC20)',
-        'asset' => 'ETH',
-        'address' => '0xbb85c1d32067f1f5f25f6f0c285cba093133921e',
-    ],
-    [
-        'network' => 'BNB Smart Chain (BEP20)',
-        'asset' => 'ETH',
-        'address' => '0xbb85c1d32067f1f5f25f6f0c285cba093133921e',
-    ],
-];
+$wallets = require SYSTEM . 'donation-wallets.php';
 ?>
 
 <section class="zealot-donations" aria-labelledby="zealot-donations-title">
@@ -62,7 +26,11 @@ $wallets = [
         </header>
         <p class="zealot-donations__address-label"><?= t('donations.address') ?></p>
         <code><?= htmlspecialchars($wallet['address'], ENT_QUOTES, 'UTF-8') ?></code>
-        <button type="button" class="zealot-donations__copy" data-address="<?= htmlspecialchars($wallet['address'], ENT_QUOTES, 'UTF-8') ?>">
+        <button type="button" class="zealot-donations__copy" data-address="<?= htmlspecialchars(
+          $wallet['address'],
+          ENT_QUOTES,
+          'UTF-8'
+        ) ?>">
           <?= t('donations.copy') ?>
         </button>
       </article>
@@ -70,7 +38,9 @@ $wallets = [
   </div>
 
   <p class="zealot-donations__footer">
-    <?= t('donations.footer') ?> <a href="mailto:server.zealot@gmail.com">server.zealot@gmail.com</a>
+    <?= t(
+      'donations.footer'
+    ) ?> <a href="mailto:server.zealot@gmail.com">server.zealot@gmail.com</a>
   </p>
 </section>
 
@@ -80,7 +50,9 @@ document.querySelectorAll('.zealot-donations__copy').forEach((button) => {
     try {
       await navigator.clipboard.writeText(button.dataset.address);
       button.textContent = <?= json_encode(t('donations.copied')) ?>;
-      window.setTimeout(() => { button.textContent = <?= json_encode(t('donations.copy')) ?>; }, 1800);
+      window.setTimeout(() => { button.textContent = <?= json_encode(
+        t('donations.copy')
+      ) ?>; }, 1800);
     } catch (error) {
       window.prompt(<?= json_encode(t('donations.copy_prompt')) ?>, button.dataset.address);
     }
