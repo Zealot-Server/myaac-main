@@ -3,7 +3,7 @@ global $config, $twig, $logged, $account_logged, $db, $title, $action;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
-$title = 'Payment Center';
+$title = t('payment.title', 'Payment Center');
 
 require_once PLUGINS . 'pagseguro/config.php';
 
@@ -12,11 +12,11 @@ $defaults = [
     'support_contact' => 'support@numenor.global',
     'stripe_checkout_url' => '',
     'bank_transfer_enabled' => false,
-    'bank_transfer_instructions' => 'Contact support before sending a bank transfer.',
+    'bank_transfer_instructions' => t('payment.bank_transfer_copy', 'Contact support before sending a bank transfer.'),
     'coins_packages' => $config['pagSeguro']['donates'] ?? [],
     'premium_packages' => [
-        'premium_30' => ['label' => '30 Days Premium', 'days' => 30, 'price' => 9.99],
-        'premium_90' => ['label' => '90 Days Premium', 'days' => 90, 'price' => 24.99],
+        'premium_30' => ['label' => t('payment.premium_days', '{days} Days Premium', ['days' => 30]), 'days' => 30, 'price' => 9.99],
+        'premium_90' => ['label' => t('payment.premium_days', '{days} Days Premium', ['days' => 90]), 'days' => 90, 'price' => 24.99],
     ],
     'crypto_wallets' => [],
 ];
@@ -138,8 +138,10 @@ function paymentCenterNormalizeCoinPackage($key, $package)
     return [
         'key' => $key,
         'type' => 'coins',
-        'label' => $package['label'] ?? (($coins + $bonus) . ' Coins'),
-        'reward' => $coins . ' Coins' . ($bonus > 0 ? ' +' . $bonus . ' bonus' : ''),
+        'label' => $package['label'] ?? t('payment.coin_amount', '{amount} Coins', ['amount' => $coins + $bonus]),
+        'reward' => $bonus > 0
+            ? t('payment.coins_with_bonus', '{coins} Coins +{bonus} bonus', ['coins' => $coins, 'bonus' => $bonus])
+            : t('payment.coin_amount', '{amount} Coins', ['amount' => $coins]),
         'coins' => $coins,
         'bonus' => $bonus,
         'price' => $price,
@@ -153,8 +155,8 @@ function paymentCenterNormalizePremiumPackage($key, $package)
     return [
         'key' => $key,
         'type' => 'premium',
-        'label' => $package['label'] ?? ($days . ' Days Premium'),
-        'reward' => $days . ' premium days',
+        'label' => $package['label'] ?? t('payment.premium_days', '{days} Days Premium', ['days' => $days]),
+        'reward' => t('payment.premium_days_reward', '{days} Premium days', ['days' => $days]),
         'days' => $days,
         'price' => (float)($package['price'] ?? 0),
     ];

@@ -3,8 +3,9 @@
   .payment-hero { background: #d4c0a1; border: 1px solid #7a5a3a; padding: 14px; margin-bottom: 14px; }
   .payment-hero h2 { margin: 0 0 6px; font-size: 24px; }
   .payment-tabs { display: flex; gap: 6px; margin: 10px 0 14px; flex-wrap: wrap; }
-  .payment-tabs a { background: #6b4f3f; color: #fff; padding: 8px 14px; font-weight: bold; text-decoration: none; border: 1px solid #2f221b; }
-  .payment-tabs a.active { background: #0f4d3f; }
+  .payment-tabs a { background: #174938; color: #fff4d6; padding: 8px 14px; font-weight: bold; text-decoration: none; border: 1px solid #b58d44; text-shadow: 1px 1px #09251c; }
+  .payment-tabs a:hover, .payment-tabs a:focus-visible { background: #205e48; color: #fff9e9; }
+  .payment-tabs a.active { background: #0c3428; color: #ffe3a0; }
   .payment-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 10px; margin-bottom: 14px; }
   .payment-package { background: #f1e0c6; border: 1px solid #9b7b55; padding: 10px; min-height: 92px; }
   .payment-package strong { display: block; font-size: 17px; margin-bottom: 5px; }
@@ -14,18 +15,21 @@
   .payment-method h3 { margin: 0 0 8px; font-size: 18px; }
   .payment-method form { max-width: 100%; }
   .payment-method select { box-sizing: border-box; display: block; width: 100%; max-width: 100%; margin-top: 6px; }
-  .payment-button { display: inline-block; background: #0f4d3f; color: #fff !important; border: 1px solid #092f26; padding: 8px 12px; font-weight: bold; text-decoration: none; margin-top: 6px; }
+  .payment-button { display: inline-block; background: #174938; color: #fff4d6 !important; border: 1px solid #b58d44; padding: 8px 12px; font-weight: bold; text-decoration: none; margin-top: 6px; text-shadow: 1px 1px #09251c; }
+  .payment-button:hover, .payment-button:focus-visible { background: #205e48; color: #fff9e9 !important; }
   .wallet-table code { word-break: break-all; white-space: normal; }
   .payment-message { padding: 10px; margin-bottom: 12px; border: 1px solid #7a5a3a; font-weight: bold; }
   .payment-message.success { background: #d7ead2; color: #1f5d23; }
   .payment-message.error { background: #efd0d0; color: #8a1c1c; }
   .payment-note { font-size: 12px; margin-top: 8px; }
+  .payment-table-title { background: #143c30 !important; color: #fff2ca; }
+  .payment-table-title td, .payment-table-title th { color: inherit; }
 </style>
 
 <div class="payment-center">
   <div class="payment-hero">
-    <h2>Payment Center</h2>
-    <div>Buy coins or Premium time using international cards, crypto, or manual transfer review.</div>
+    <h2>{{ t('payment.center_heading', 'Payment Center') }}</h2>
+    <div>{{ t('payment.center_intro', 'Buy coins or Premium time using international cards, crypto, or manual transfer review.') }}</div>
   </div>
 
   {% if message %}
@@ -33,8 +37,8 @@
   {% endif %}
 
   <div class="payment-tabs">
-    <a class="{% if selected_type == 'coins' %}active{% endif %}" href="?subtopic=donate&type=coins">Coins</a>
-    <a class="{% if selected_type == 'premium' %}active{% endif %}" href="?subtopic=donate&type=premium">Premium</a>
+    <a class="{% if selected_type == 'coins' %}active{% endif %}" href="?subtopic=donate&type=coins">{{ t('payment.coins', 'Coins') }}</a>
+    <a class="{% if selected_type == 'premium' %}active{% endif %}" href="?subtopic=donate&type=premium">{{ t('payment.premium', 'Premium') }}</a>
   </div>
 
   {% set packages = selected_type == 'premium' ? premium_packages : coins_packages %}
@@ -45,7 +49,7 @@
         <span class="CaptionEdgeRightTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
         <span class="CaptionBorderTop" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);"></span>
         <span class="CaptionVerticalLeft" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);"></span>
-        <div class="Text">{% if selected_type == 'premium' %}Premium Packages{% else %}Coin Packages{% endif %}</div>
+        <div class="Text">{% if selected_type == 'premium' %}{{ t('payment.premium_packages', 'Premium Packages') }}{% else %}{{ t('payment.coin_packages', 'Coin Packages') }}{% endif %}</div>
         <span class="CaptionVerticalRight" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);"></span>
         <span class="CaptionBorderBottom" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);"></span>
         <span class="CaptionEdgeLeftBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
@@ -64,7 +68,7 @@
                   <div class="payment-price">{{ payment.currency }} {{ package.price|number_format(2, '.', ',') }}</div>
                 </div>
               {% else %}
-                <div class="payment-package"><strong>No packages configured.</strong></div>
+                <div class="payment-package"><strong>{{ t('payment.no_packages', 'No packages configured.') }}</strong></div>
               {% endfor %}
             </div>
           </div>
@@ -82,7 +86,7 @@
         <span class="CaptionEdgeRightTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
         <span class="CaptionBorderTop" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);"></span>
         <span class="CaptionVerticalLeft" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);"></span>
-        <div class="Text">Payment Methods</div>
+        <div class="Text">{{ t('payment.methods', 'Payment Methods') }}</div>
         <span class="CaptionVerticalRight" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);"></span>
         <span class="CaptionBorderBottom" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);"></span>
         <span class="CaptionEdgeLeftBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
@@ -95,8 +99,8 @@
           <div class="InnerTableContainer">
             <div class="payment-methods">
               <div class="payment-method">
-                <h3>Credit / Debit Card</h3>
-                <div>Pay securely with Stripe Checkout.</div>
+                <h3>{{ t('payment.card_title', 'Credit / Debit Card') }}</h3>
+                <div>{{ t('payment.card_copy', 'Pay securely with Stripe Checkout.') }}</div>
                 {% if packages|length > 0 %}
                   <form method="post" action="?subtopic=donate&type={{ selected_type }}">
                     <input type="hidden" name="payment_action" value="stripe_checkout">
@@ -107,24 +111,24 @@
                       {% endfor %}
                     </select>
                     <br>
-                    <input class="payment-button" type="submit" value="Open Stripe Checkout">
+                    <input class="payment-button" type="submit" value="{{ t('payment.open_stripe', 'Open Stripe Checkout') }}">
                   </form>
                 {% else %}
-                  <span>No packages configured.</span>
+                  <span>{{ t('payment.no_packages', 'No packages configured.') }}</span>
                 {% endif %}
               </div>
               <div class="payment-method">
-                <h3>Crypto</h3>
-                <div>Send only through the exact network shown below. Wrong network payments may be lost.</div>
-                <a class="payment-button" href="#manual-confirmation">Send Confirmation</a>
+                <h3>{{ t('payment.crypto', 'Crypto') }}</h3>
+                <div>{{ t('payment.crypto_copy', 'Send only through the exact network shown below. Wrong network payments may be lost.') }}</div>
+                <a class="payment-button" href="#manual-confirmation">{{ t('payment.send_confirmation', 'Send Confirmation') }}</a>
               </div>
               <div class="payment-method">
-                <h3>Bank Transfer</h3>
+                <h3>{{ t('payment.bank_transfer', 'Bank Transfer') }}</h3>
                 <div>{{ payment.bank_transfer_instructions }}</div>
                 {% if payment.bank_transfer_enabled %}
-                  <a class="payment-button" href="#manual-confirmation">Send Receipt</a>
+                  <a class="payment-button" href="#manual-confirmation">{{ t('payment.send_receipt', 'Send Receipt') }}</a>
                 {% else %}
-                  <span>Manual approval only</span>
+                  <span>{{ t('payment.manual_approval', 'Manual approval only') }}</span>
                 {% endif %}
               </div>
             </div>
@@ -137,13 +141,13 @@
   <br>
 
   <table class="wallet-table" width="100%" border="0" cellpadding="4" cellspacing="1">
-    <tr bgcolor="{{ config.vdarkborder }}" class="white">
-      <td colspan="3"><b>Crypto Wallets</b></td>
+    <tr class="payment-table-title">
+      <td colspan="3"><b>{{ t('payment.crypto_wallets', 'Crypto Wallets') }}</b></td>
     </tr>
     <tr bgcolor="{{ config.darkborder }}">
-      <td><b>Asset</b></td>
-      <td><b>Network</b></td>
-      <td><b>Wallet Address</b></td>
+      <td><b>{{ t('payment.asset', 'Asset') }}</b></td>
+      <td><b>{{ t('payment.network', 'Network') }}</b></td>
+      <td><b>{{ t('payment.wallet_address', 'Wallet Address') }}</b></td>
     </tr>
     {% for wallet in payment.crypto_wallets %}
       <tr bgcolor="{{ getStyle(loop.index) }}">
@@ -153,7 +157,7 @@
       </tr>
     {% else %}
       <tr bgcolor="{{ config.lightborder }}">
-        <td colspan="3">No crypto wallets configured yet.</td>
+        <td colspan="3">{{ t('payment.no_wallets', 'No crypto wallets configured yet.') }}</td>
       </tr>
     {% endfor %}
   </table>
@@ -164,24 +168,24 @@
   <form method="post" action="?subtopic=donate&type={{ selected_type }}#manual-confirmation">
     <input type="hidden" name="payment_action" value="manual_request">
     <table border="0" cellpadding="4" cellspacing="1" width="100%">
-      <tr bgcolor="{{ config.vdarkborder }}" class="white">
-        <th colspan="2"><strong>Manual Payment Confirmation</strong></th>
+    <tr class="payment-table-title">
+      <th colspan="2"><strong>{{ t('payment.manual_confirmation', 'Manual Payment Confirmation') }}</strong></th>
       </tr>
       <tr bgcolor="{{ config.darkborder }}">
-        <td width="28%">Account</td>
+        <td width="28%">{{ t('payment.account', 'Account') }}</td>
         <td><strong>{{ account_name }}</strong></td>
       </tr>
       <tr bgcolor="{{ config.lightborder }}">
-        <td>Product</td>
+        <td>{{ t('payment.product', 'Product') }}</td>
         <td>
           <select name="product_type" onchange="window.location='?subtopic=donate&type=' + this.value + '#manual-confirmation'">
-            <option value="coins"{% if selected_type == 'coins' %} selected{% endif %}>Coins</option>
-            <option value="premium"{% if selected_type == 'premium' %} selected{% endif %}>Premium</option>
+            <option value="coins"{% if selected_type == 'coins' %} selected{% endif %}>{{ t('payment.coins', 'Coins') }}</option>
+            <option value="premium"{% if selected_type == 'premium' %} selected{% endif %}>{{ t('payment.premium', 'Premium') }}</option>
           </select>
         </td>
       </tr>
       <tr bgcolor="{{ config.darkborder }}">
-        <td>Package</td>
+        <td>{{ t('payment.package', 'Package') }}</td>
         <td>
           <select name="package_key" required>
             {% for package in packages %}
@@ -191,30 +195,30 @@
         </td>
       </tr>
       <tr bgcolor="{{ config.lightborder }}">
-        <td>Payment Method</td>
+        <td>{{ t('payment.method', 'Payment Method') }}</td>
         <td>
           <select name="payment_method">
-            <option value="crypto">Crypto</option>
-            <option value="bank_transfer">Bank Transfer</option>
+            <option value="crypto">{{ t('payment.crypto', 'Crypto') }}</option>
+            <option value="bank_transfer">{{ t('payment.bank_transfer', 'Bank Transfer') }}</option>
           </select>
         </td>
       </tr>
       <tr bgcolor="{{ config.darkborder }}">
-        <td>Network / Bank</td>
-        <td><input type="text" name="payment_network" maxlength="40" style="width: 260px" placeholder="USDT TRC20, BTC, bank name"></td>
+        <td>{{ t('payment.network_bank', 'Network / Bank') }}</td>
+        <td><input type="text" name="payment_network" maxlength="40" style="width: 260px" placeholder="{{ t('payment.network_bank_placeholder', 'USDT TRC20, BTC, bank name') }}"></td>
       </tr>
       <tr bgcolor="{{ config.lightborder }}">
-        <td>TX Hash / Receipt ID</td>
+        <td>{{ t('payment.transaction_reference', 'TX Hash / Receipt ID') }}</td>
         <td><input type="text" name="transaction_id" maxlength="190" required style="width: 420px"></td>
       </tr>
       <tr bgcolor="{{ config.darkborder }}">
-        <td>Note</td>
-        <td><textarea name="payer_note" rows="3" style="width: 420px" placeholder="Optional: amount sent, wallet, Discord, or details for staff"></textarea></td>
+        <td>{{ t('payment.note', 'Note') }}</td>
+        <td><textarea name="payer_note" rows="3" style="width: 420px" placeholder="{{ t('payment.note_placeholder', 'Optional: amount sent, wallet, Discord, or details for staff') }}"></textarea></td>
       </tr>
       <tr bgcolor="{{ config.lightborder }}">
         <td colspan="2" style="text-align:center">
-          <input type="submit" value="Submit Payment Confirmation">
-          <div class="payment-note">Manual confirmations are reviewed by staff before coins or premium time are delivered.</div>
+          <input class="payment-button" type="submit" value="{{ t('payment.submit_confirmation', 'Submit Payment Confirmation') }}">
+          <div class="payment-note">{{ t('payment.manual_review_notice', 'Manual confirmations are reviewed by staff before coins or premium time are delivered.') }}</div>
         </td>
       </tr>
     </table>

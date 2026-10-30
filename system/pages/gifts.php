@@ -12,7 +12,7 @@ function shopTableExists($table)
 }
 
 $isHistory = $action === 'show_history' || $action === 'history';
-$title = $isHistory ? 'Shop History' : 'Shop Offer';
+$title = $isHistory ? t('shop.history.title', 'Shop History') : t('shop.offer.title', 'Shop Offer');
 
 // The legacy Shop Offer was coupled to PagSeguro, which only settles in BRL.
 // The live storefront uses the USD Payment Center instead, so never expose a
@@ -26,8 +26,8 @@ require_once PLUGINS . 'pagseguro/config.php';
 
 if ($isHistory) {
     if (!$logged || !$account_logged || !$account_logged->isLoaded()) {
-        echo '<p>To view your shop history you need to be logged in. ' .
-            generateLink(getLink('account/manage'), 'Login') . ' first.</p>';
+        echo '<p>' . t('shop.history.login_required', 'To view your shop history you need to be logged in.') . ' ' .
+            generateLink(getLink('account/manage'), t('shop.login', 'Login')) . '.</p>';
         return;
     }
 
@@ -52,10 +52,10 @@ if ($isHistory) {
     }
 
     echo '<table width="100%" border="0" cellpadding="4" cellspacing="1">';
-    echo '<tr bgcolor="' . $config['vdarkborder'] . '" class="white"><td colspan="6"><b>Point Purchases</b></td></tr>';
-    echo '<tr bgcolor="' . $config['darkborder'] . '"><td><b>Date</b></td><td><b>Transaction</b></td><td><b>Coins</b></td><td><b>Status</b></td><td><b>Delivered</b></td><td><b>Method</b></td></tr>';
+    echo '<tr bgcolor="' . $config['vdarkborder'] . '" class="white"><td colspan="6"><b>' . t('shop.history.point_purchases', 'Coin Purchases') . '</b></td></tr>';
+    echo '<tr bgcolor="' . $config['darkborder'] . '"><td><b>' . t('shop.history.date', 'Date') . '</b></td><td><b>' . t('shop.history.transaction', 'Transaction') . '</b></td><td><b>' . t('shop.history.coins', 'Coins') . '</b></td><td><b>' . t('shop.history.status', 'Status') . '</b></td><td><b>' . t('shop.history.delivered', 'Delivered') . '</b></td><td><b>' . t('shop.history.method', 'Method') . '</b></td></tr>';
     if (count($transactions) === 0) {
-        echo '<tr bgcolor="' . $config['lightborder'] . '"><td colspan="6">No point purchases were found for this account.</td></tr>';
+        echo '<tr bgcolor="' . $config['lightborder'] . '"><td colspan="6">' . t('shop.history.no_points', 'No coin purchases were found for this account.') . '</td></tr>';
     } else {
         $i = 0;
         foreach ($transactions as $transaction) {
@@ -65,7 +65,7 @@ if ($isHistory) {
             echo '<td>' . htmlspecialchars($transaction['transaction_code']) . '</td>';
             echo '<td>' . (int)$transaction['coins_amount'] . '</td>';
             echo '<td>' . htmlspecialchars($transaction['payment_status']) . '</td>';
-            echo '<td>' . ($transaction['delivered'] === '1' ? 'Yes' : 'No') . '</td>';
+            echo '<td>' . ($transaction['delivered'] === '1' ? t('shop.history.yes', 'Yes') : t('shop.history.no', 'No')) . '</td>';
             echo '<td>' . htmlspecialchars($transaction['payment_method']) . '</td>';
             echo '</tr>';
         }
@@ -73,12 +73,12 @@ if ($isHistory) {
     echo '</table><br />';
 
     echo '<table width="100%" border="0" cellpadding="4" cellspacing="1">';
-    echo '<tr bgcolor="' . $config['vdarkborder'] . '" class="white"><td colspan="7"><b>Item Purchases</b></td></tr>';
-    echo '<tr bgcolor="' . $config['darkborder'] . '"><td><b>Date</b></td><td><b>Transaction</b></td><td><b>Item</b></td><td><b>Count</b></td><td><b>Status</b></td><td><b>Delivery</b></td><td><b>Method</b></td></tr>';
+    echo '<tr bgcolor="' . $config['vdarkborder'] . '" class="white"><td colspan="7"><b>' . t('shop.history.item_purchases', 'Item Purchases') . '</b></td></tr>';
+    echo '<tr bgcolor="' . $config['darkborder'] . '"><td><b>' . t('shop.history.date', 'Date') . '</b></td><td><b>' . t('shop.history.transaction', 'Transaction') . '</b></td><td><b>' . t('shop.history.item', 'Item') . '</b></td><td><b>' . t('shop.history.count', 'Count') . '</b></td><td><b>' . t('shop.history.status', 'Status') . '</b></td><td><b>' . t('shop.history.delivery', 'Delivery') . '</b></td><td><b>' . t('shop.history.method', 'Method') . '</b></td></tr>';
     if (count($items) === 0) {
-        echo '<tr bgcolor="' . $config['lightborder'] . '"><td colspan="7">No item purchases were found for this account.</td></tr>';
+        echo '<tr bgcolor="' . $config['lightborder'] . '"><td colspan="7">' . t('shop.history.no_items', 'No item purchases were found for this account.') . '</td></tr>';
     } else {
-        $statusMap = ['0' => 'Pending', '1' => 'Approved', '2' => 'Delivered', '3' => 'Canceled'];
+        $statusMap = ['0' => t('shop.history.pending', 'Pending'), '1' => t('shop.history.approved', 'Approved'), '2' => t('shop.history.delivered', 'Delivered'), '3' => t('shop.history.canceled', 'Canceled')];
         $i = 0;
         foreach ($items as $item) {
             $bg = getStyle($i++);

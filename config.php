@@ -50,8 +50,10 @@ $config = array(
 	'backward_support' => true,
 
 	// head options (html)
-	'meta_description' => 'Tibia is a free massive multiplayer online role playing game (MMORPG).', // description of the site
-	'meta_keywords' => 'free online game, free multiplayer game, ots, open tibia server', // keywords list separated by commas
+	'meta_description' => 'Zealot Server is a 1x PvP MMORPG in public alpha. Create your account, download the official client, and begin your journey in Rookgaard.', // description of the site
+	'meta_keywords' => 'zealot server, mmorpg, online role playing game, pvp server, rookgaard', // keywords list separated by commas
+	'share_title' => 'Zealot Server', // title used when the website is shared on social platforms
+	'share_description' => 'Zealot Server is a 1x PvP MMORPG in public alpha. Create your account, download the official client, and begin your journey in Rookgaard.',
 	'title_separator' => ' - ',
 
 	// footer

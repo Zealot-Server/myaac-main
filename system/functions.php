@@ -875,6 +875,10 @@ function template_header($is_admin = false)
 {
   global $title_full, $config;
   $charset = isset($config['charset']) ? $config['charset'] : 'utf-8';
+  $shareTitle = $config['share_title'] ?? 'Zealot Server';
+  $shareDescription = $config['share_description'] ?? $config['meta_description'];
+  $shareTitle = htmlspecialchars($shareTitle, ENT_QUOTES, $charset);
+  $shareDescription = htmlspecialchars($shareDescription, ENT_QUOTES, $charset);
 
   $ret =
     '
@@ -901,8 +905,15 @@ function template_header($is_admin = false)
   $ret .=
     '
 	<meta name="description" content="' .
-    $config['meta_description'] .
+    $shareDescription .
     '" />
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="Zealot Server" />
+	<meta property="og:title" content="' . $shareTitle . '" />
+	<meta property="og:description" content="' . $shareDescription . '" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="' . $shareTitle . '" />
+	<meta name="twitter:description" content="' . $shareDescription . '" />
 	<meta name="keywords" content="' .
     $config['meta_keywords'] .
     ', myaac, wodzaac" />

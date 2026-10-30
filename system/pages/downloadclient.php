@@ -8,8 +8,17 @@ $platform = $_GET['platform'] ?? '';
 
 $downloads = [
     'macos' => [
-        'url' => trim((string) ($config['client_link_macos'] ?? '')),
-        'sha256' => trim((string) ($config['client_macos_sha256'] ?? '')),
+        // Keep the legacy keys as the Apple Silicon fallback during the
+        // migration, while Intel always requires its own explicitly published
+        // package.
+        'arm64' => [
+            'url' => trim((string) ($config['client_link_macos_arm64'] ?? $config['client_link_macos'] ?? '')),
+            'sha256' => trim((string) ($config['client_macos_arm64_sha256'] ?? $config['client_macos_sha256'] ?? '')),
+        ],
+        'x86_64' => [
+            'url' => trim((string) ($config['client_link_macos_x86_64'] ?? '')),
+            'sha256' => trim((string) ($config['client_macos_x86_64_sha256'] ?? '')),
+        ],
     ],
     'windows' => [
         // Do not fall back to the legacy generic URL: each published client must
@@ -22,25 +31,42 @@ $downloads = [
 ];
 
 if ($platform === 'macos') {
-    $macDownloadUrl = $downloads['macos']['url'];
-    $macSha256 = $downloads['macos']['sha256'];
+    $macDownloads = [
+        'arm64' => [
+            'label' => t('download.macos.arm64.label', 'Apple Silicon'),
+            'description' => t('download.macos.arm64.description', 'Macs with Apple Silicon'),
+            'button' => t('download.macos.arm64.download', 'Download for Apple Silicon'),
+        ],
+        'x86_64' => [
+            'label' => t('download.macos.x86_64.label', 'Intel'),
+            'description' => t('download.macos.x86_64.description', 'Macs with an Intel processor'),
+            'button' => t('download.macos.x86_64.download', 'Download for Intel'),
+        ],
+    ];
     ?>
     <div class="zealot-download-platform">
         <p class="zealot-download-platform__back"><a href="?subtopic=downloadclient">&larr; <?= t('download.macos.back', 'Choose another system') ?></a></p>
         <h1><?= t('download.macos.title', 'Zealot Client for macOS') ?></h1>
-        <p class="zealot-download-platform__lead"><?= t('download.macos.lead', 'For Macs with Apple Silicon (M1, M2, M3, and M4), running macOS 11 or later.') ?></p>
+        <p class="zealot-download-platform__lead"><?= t('download.macos.lead', 'Choose the package for your Mac processor. Both versions require macOS 13.3 or later.') ?></p>
 
-        <div class="zealot-download-platform__download">
-            <?php if ($macDownloadUrl !== ''): ?>
-                <a class="zealot-download-platform__button" href="<?= htmlspecialchars($macDownloadUrl, ENT_QUOTES, 'UTF-8') ?>"><?= t('download.macos.download', 'Download Zealot Client for macOS') ?></a>
-                <p><?= t('download.version', 'Version') ?> <?= htmlspecialchars((string) (config('client') / 100), ENT_QUOTES, 'UTF-8') ?> &middot; <?= t('download.macos.archive', 'ZIP archive') ?></p>
-                <?php if ($macSha256 !== ''): ?>
-                    <p class="zealot-download-platform__checksum"><strong>SHA-256:</strong> <code><?= htmlspecialchars($macSha256, ENT_QUOTES, 'UTF-8') ?></code></p>
-                <?php endif; ?>
-            <?php else: ?>
-                <span class="zealot-download-platform__button zealot-download-platform__button--disabled"><?= t('download.macos.preparing', 'macOS download in preparation') ?></span>
-                <p><?= t('download.macos.preparing_copy', 'The installer will be published on this page once the first version has finished validation.') ?></p>
-            <?php endif; ?>
+        <div class="zealot-download-platform__architectures">
+            <?php foreach ($macDownloads as $architecture => $metadata): ?>
+                <?php $download = $downloads['macos'][$architecture]; ?>
+                <section id="<?= $architecture === 'arm64' ? 'apple-silicon' : 'intel' ?>" class="zealot-download-platform__download">
+                    <h2><?= htmlspecialchars($metadata['label'], ENT_QUOTES, 'UTF-8') ?></h2>
+                    <p><?= htmlspecialchars($metadata['description'], ENT_QUOTES, 'UTF-8') ?></p>
+                    <?php if ($download['url'] !== ''): ?>
+                        <a class="zealot-download-platform__button" href="<?= htmlspecialchars($download['url'], ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($metadata['button'], ENT_QUOTES, 'UTF-8') ?></a>
+                        <p><?= t('download.version', 'Version') ?> 1.0.0 &middot; <?= t('download.macos.archive', 'ZIP archive') ?></p>
+                        <?php if ($download['sha256'] !== ''): ?>
+                            <p class="zealot-download-platform__checksum"><strong>SHA-256:</strong> <code><?= htmlspecialchars($download['sha256'], ENT_QUOTES, 'UTF-8') ?></code></p>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <span class="zealot-download-platform__button zealot-download-platform__button--disabled"><?= t('download.macos.preparing', 'macOS download in preparation') ?></span>
+                        <p><?= t('download.macos.preparing_copy', 'The installer will be published on this page once the first version has finished validation.') ?></p>
+                    <?php endif; ?>
+                </section>
+            <?php endforeach; ?>
         </div>
 
         <section class="zealot-download-platform__notice" aria-labelledby="mac-security-notice">
@@ -82,9 +108,14 @@ if ($platform === 'macos') {
                                                     <h1><?= t('download.official_client', 'Official {server} Client', ['server' => configLua('serverName')]) ?></h1>
                                                     <p class="zealot-client-download__intro"><?= t('download.intro', 'Choose your operating system to see the download and installation instructions.') ?></p>
                                                     <div class="zealot-client-download__platforms">
-                                                        <a class="zealot-client-download__platform-card" href="?subtopic=downloadclient&amp;platform=macos">
+                                                        <a class="zealot-client-download__platform-card" href="?subtopic=downloadclient&amp;platform=macos#apple-silicon">
                                                             <strong>macOS</strong>
-                                                            <span>Apple Silicon (M1/M2/M3/M4)</span>
+                                                            <span><?= t('download.macos.arm64.label', 'Apple Silicon') ?></span>
+                                                            <small><?= t('download.macos.instructions', 'View instructions') ?></small>
+                                                        </a>
+                                                        <a class="zealot-client-download__platform-card" href="?subtopic=downloadclient&amp;platform=macos#intel">
+                                                            <strong>macOS</strong>
+                                                            <span><?= t('download.macos.x86_64.label', 'Intel') ?></span>
                                                             <small><?= t('download.macos.instructions', 'View instructions') ?></small>
                                                         </a>
                                                         <?php if ($downloads['windows']['url'] !== ''): ?>

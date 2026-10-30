@@ -440,7 +440,7 @@ body {
 
 .Content .zealot-client-download__platforms {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
   margin: 0 auto 14px;
   max-width: 620px;
@@ -537,6 +537,16 @@ body {
   text-align: center;
 }
 
+.Content .zealot-download-platform__architectures {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.Content .zealot-download-platform__architectures .zealot-download-platform__download {
+  margin-top: 0;
+}
+
 .Content .zealot-download-platform__button {
   display: inline-block;
   border: 1px solid #614519;
@@ -581,6 +591,12 @@ body {
   text-align: left;
 }
 
+@media (max-width: 980px) {
+  .Content .zealot-client-download__platforms {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 620px) {
   .Content .zealot-client-download__platforms {
     grid-template-columns: 1fr;
@@ -588,6 +604,10 @@ body {
 
   .Content .zealot-client-download__platform-card {
     min-height: 78px;
+  }
+
+  .Content .zealot-download-platform__architectures {
+    grid-template-columns: 1fr;
   }
 }
 
