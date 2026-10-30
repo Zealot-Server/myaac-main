@@ -8,13 +8,12 @@ $title = t('payment.title', 'Payment Center');
 require_once PLUGINS . 'pagseguro/config.php';
 
 $coinCatalog = require SYSTEM . 'payment-catalog.php';
+$donationWallets = require SYSTEM . 'donation-wallets.php';
 
 $defaults = [
     'currency' => $coinCatalog['currency'],
-    'support_contact' => 'support@numenor.global',
+    'support_contact' => 'server.zealot@gmail.com',
     'stripe_checkout_url' => '',
-    'bank_transfer_enabled' => false,
-    'bank_transfer_instructions' => t('payment.bank_transfer_copy', 'Contact support before sending a bank transfer.'),
     'coins_packages' => $coinCatalog['coins_packages'],
     'premium_packages' => [
         'premium_30' => ['label' => t('payment.premium_days', '{days} Days Premium', ['days' => 30]), 'days' => 30, 'price' => 9.99],
@@ -27,6 +26,7 @@ $paymentCenter = array_replace_recursive($defaults, $config['payment_center'] ??
 // checkout; local payment settings must not be able to create a mismatch.
 $paymentCenter['currency'] = $coinCatalog['currency'];
 $paymentCenter['coins_packages'] = $coinCatalog['coins_packages'];
+$paymentCenter['crypto_wallets'] = $donationWallets;
 $twig->addGlobal('config', $config);
 
 function paymentCenterTableExists($table)
@@ -198,6 +198,11 @@ function paymentCenterStripeEnabled($stripeConfig)
         && strpos($stripeConfig['secret_key'], 'PASTE_YOUR') === false;
 }
 
+function paymentCenterWalletReference($wallet)
+{
+    return trim(($wallet['asset'] ?? '') . ' — ' . ($wallet['network'] ?? ''));
+}
+
 function paymentCenterStripeRequest($endpoint, $params)
 {
     global $config;
@@ -243,6 +248,9 @@ foreach ($paymentCenter['premium_packages'] as $key => $package) {
     $premiumPackages[$key] = paymentCenterNormalizePremiumPackage($key, $package);
 }
 
+$cryptoWalletOptions = array_map('paymentCenterWalletReference', $paymentCenter['crypto_wallets']);
+$stripeEnabled = paymentCenterStripeEnabled($config['stripe'] ?? []);
+
 if ($action === 'final') {
     echo $twig->render('donate-final.html.twig');
     return;
@@ -262,7 +270,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['payment_action'] ?? '') ==
 
     $productType = ($_POST['product_type'] ?? '') === 'premium' ? 'premium' : 'coins';
     $packageKey = trim((string)($_POST['package_key'] ?? ''));
-    $method = ($_POST['payment_method'] ?? '') === 'bank_transfer' ? 'bank_transfer' : 'crypto';
+    $method = 'crypto';
     $network = trim((string)($_POST['payment_network'] ?? ''));
     $transactionId = trim((string)($_POST['transaction_id'] ?? ''));
     $payerNote = trim((string)($_POST['payer_note'] ?? ''));
@@ -271,8 +279,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['payment_action'] ?? '') ==
 
     if (!paymentCenterIsValidPackage($package, $productType)) {
         $message = ['type' => 'error', 'text' => 'Please select a valid package.'];
+    } elseif (!in_array($network, $cryptoWalletOptions, true)) {
+        $message = ['type' => 'error', 'text' => t('payment.select_crypto_network', 'Please select the exact asset and network used.')];
     } elseif ($transactionId === '' || strlen($transactionId) < 6) {
-        $message = ['type' => 'error', 'text' => 'Please enter the transaction hash, payment ID, or bank receipt reference.'];
+        $message = ['type' => 'error', 'text' => t('payment.transaction_required', 'Please enter the transaction hash or payment ID.')];
     } else {
         $reference = 'NMR-' . (int)$account_logged->getId() . '-' . time() . '-' . random_int(1000, 9999);
         $db->query(
@@ -291,7 +301,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['payment_action'] ?? '') ==
             $db->quote($payerNote) . ', ' .
             $db->quote('manual_review') . ', NOW())'
         );
-        $message = ['type' => 'success', 'text' => 'Donation com sucesso! Reference: ' . $reference . '. Your order will be reviewed by staff.'];
+        $message = ['type' => 'success', 'text' => t('payment.crypto_request_created', 'Crypto payment confirmation received. Reference: {reference}. Coins or Premium time are credited manually after review and may take longer.', ['reference' => $reference])];
     }
 }
 
@@ -306,8 +316,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['payment_action'] ?? '') ==
 
     if (!paymentCenterIsValidPackage($package, $productType)) {
         $message = ['type' => 'error', 'text' => 'Please select a valid package.'];
-    } elseif (!paymentCenterStripeEnabled($stripeConfig)) {
-        $message = ['type' => 'error', 'text' => 'Stripe test keys are not configured yet.'];
+    } elseif (!$stripeEnabled) {
+        $message = ['type' => 'error', 'text' => t('payment.card_unavailable', 'Card checkout is temporarily unavailable. Please try again later or use crypto confirmation.')];
     } else {
         try {
             $coinsAmount = $productType === 'coins' ? (int)($package['coins'] + ($package['bonus'] ?? 0)) : 0;
@@ -372,4 +382,6 @@ echo $twig->render('donate.html.twig', [
     'selected_type' => $selectedType,
     'message' => $message,
     'account_name' => $account_logged->getName(),
+    'stripe_enabled' => $stripeEnabled,
+    'crypto_wallet_options' => $cryptoWalletOptions,
 ]);

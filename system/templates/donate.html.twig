@@ -29,7 +29,7 @@
 <div class="payment-center">
   <div class="payment-hero">
     <h2>{{ t('payment.center_heading', 'Payment Center') }}</h2>
-    <div>{{ t('payment.center_intro', 'Buy coins or Premium time using international cards, crypto, or manual transfer review.') }}</div>
+    <div>{{ t('payment.center_intro', 'Buy Coins or Premium time securely by credit or debit card. Crypto payments are verified manually.') }}</div>
   </div>
 
   {% if message %}
@@ -104,7 +104,7 @@
               <div class="payment-method">
                 <h3>{{ t('payment.card_title', 'Credit / Debit Card') }}</h3>
                 <div>{{ t('payment.card_copy', 'Pay securely with Stripe Checkout.') }}</div>
-                {% if packages|length > 0 %}
+                {% if stripe_enabled and packages|length > 0 %}
                   <form method="post" action="?subtopic=donate&type={{ selected_type }}">
                     <input type="hidden" name="payment_action" value="stripe_checkout">
                     <input type="hidden" name="product_type" value="{{ selected_type }}">
@@ -116,23 +116,17 @@
                     <br>
                     <input class="payment-button" type="submit" value="{{ t('payment.open_stripe', 'Open Stripe Checkout') }}">
                   </form>
+                {% elseif not stripe_enabled %}
+                  <div class="payment-note">{{ t('payment.card_unavailable', 'Card checkout is temporarily unavailable. Please try again later or use crypto confirmation.') }}</div>
                 {% else %}
                   <span>{{ t('payment.no_packages', 'No packages configured.') }}</span>
                 {% endif %}
               </div>
               <div class="payment-method">
                 <h3>{{ t('payment.crypto', 'Crypto') }}</h3>
-                <div>{{ t('payment.crypto_copy', 'Send only through the exact network shown below. Wrong network payments may be lost.') }}</div>
+                <div>{{ t('payment.crypto_copy', 'Use one of the same wallets listed on the Donate page. Send only through the exact asset and network shown.') }}</div>
+                <div class="payment-note">{{ t('payment.crypto_review_notice', 'Crypto payments are reviewed manually. Credit may take longer after confirmation.') }}</div>
                 <a class="payment-button" href="#manual-confirmation">{{ t('payment.send_confirmation', 'Send Confirmation') }}</a>
-              </div>
-              <div class="payment-method">
-                <h3>{{ t('payment.bank_transfer', 'Bank Transfer') }}</h3>
-                <div>{{ payment.bank_transfer_instructions }}</div>
-                {% if payment.bank_transfer_enabled %}
-                  <a class="payment-button" href="#manual-confirmation">{{ t('payment.send_receipt', 'Send Receipt') }}</a>
-                {% else %}
-                  <span>{{ t('payment.manual_approval', 'Manual approval only') }}</span>
-                {% endif %}
               </div>
             </div>
           </div>
@@ -172,7 +166,7 @@
     <input type="hidden" name="payment_action" value="manual_request">
     <table border="0" cellpadding="4" cellspacing="1" width="100%">
     <tr class="payment-table-title">
-      <th colspan="2"><strong>{{ t('payment.manual_confirmation', 'Manual Payment Confirmation') }}</strong></th>
+      <th colspan="2"><strong>{{ t('payment.crypto_confirmation', 'Crypto Payment Confirmation') }}</strong></th>
       </tr>
       <tr bgcolor="{{ config.darkborder }}">
         <td width="28%">{{ t('payment.account', 'Account') }}</td>
@@ -198,17 +192,15 @@
         </td>
       </tr>
       <tr bgcolor="{{ config.lightborder }}">
-        <td>{{ t('payment.method', 'Payment Method') }}</td>
+        <td>{{ t('payment.crypto_network', 'Asset and network used') }}</td>
         <td>
-          <select name="payment_method">
-            <option value="crypto">{{ t('payment.crypto', 'Crypto') }}</option>
-            <option value="bank_transfer">{{ t('payment.bank_transfer', 'Bank Transfer') }}</option>
+          <select name="payment_network" required>
+            <option value="">{{ t('payment.select_crypto_network', 'Please select the exact asset and network used.') }}</option>
+            {% for wallet_reference in crypto_wallet_options %}
+              <option value="{{ wallet_reference }}">{{ wallet_reference }}</option>
+            {% endfor %}
           </select>
         </td>
-      </tr>
-      <tr bgcolor="{{ config.darkborder }}">
-        <td>{{ t('payment.network_bank', 'Network / Bank') }}</td>
-        <td><input type="text" name="payment_network" maxlength="40" style="width: 260px" placeholder="{{ t('payment.network_bank_placeholder', 'USDT TRC20, BTC, bank name') }}"></td>
       </tr>
       <tr bgcolor="{{ config.lightborder }}">
         <td>{{ t('payment.transaction_reference', 'TX Hash / Receipt ID') }}</td>
@@ -221,7 +213,7 @@
       <tr bgcolor="{{ config.lightborder }}">
         <td colspan="2" style="text-align:center">
           <input class="payment-button" type="submit" value="{{ t('payment.submit_confirmation', 'Submit Payment Confirmation') }}">
-          <div class="payment-note">{{ t('payment.manual_review_notice', 'Manual confirmations are reviewed by staff before coins or premium time are delivered.') }}</div>
+          <div class="payment-note">{{ t('payment.crypto_review_notice', 'Crypto payments are reviewed manually. Credit may take longer after confirmation.') }}</div>
         </td>
       </tr>
     </table>
