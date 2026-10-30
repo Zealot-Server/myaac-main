@@ -5,19 +5,18 @@ $title = t('download.title', 'Download Client');
 $getpage_download = $_GET['step'] ?? '';
 $download_subtopic = $_GET['subtopic'] ?? PAGE;
 $platform = $_GET['platform'] ?? '';
+$clientRelease = require BASE . 'system/client-release.php';
+$releaseVersion = (string) ($clientRelease['version'] ?? '');
 
 $downloads = [
     'macos' => [
-        // Keep the legacy keys as the Apple Silicon fallback during the
-        // migration, while Intel always requires its own explicitly published
-        // package.
         'arm64' => [
-            'url' => trim((string) ($config['client_link_macos_arm64'] ?? $config['client_link_macos'] ?? '')),
-            'sha256' => trim((string) ($config['client_macos_arm64_sha256'] ?? $config['client_macos_sha256'] ?? '')),
+            'url' => trim((string) ($clientRelease['macos']['arm64']['url'] ?? '')),
+            'sha256' => trim((string) ($clientRelease['macos']['arm64']['sha256'] ?? '')),
         ],
         'x86_64' => [
-            'url' => trim((string) ($config['client_link_macos_x86_64'] ?? '')),
-            'sha256' => trim((string) ($config['client_macos_x86_64_sha256'] ?? '')),
+            'url' => trim((string) ($clientRelease['macos']['x86_64']['url'] ?? '')),
+            'sha256' => trim((string) ($clientRelease['macos']['x86_64']['sha256'] ?? '')),
         ],
     ],
     'windows' => [
@@ -57,7 +56,7 @@ if ($platform === 'macos') {
                     <p><?= htmlspecialchars($metadata['description'], ENT_QUOTES, 'UTF-8') ?></p>
                     <?php if ($download['url'] !== ''): ?>
                         <a class="zealot-download-platform__button" href="<?= htmlspecialchars($download['url'], ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($metadata['button'], ENT_QUOTES, 'UTF-8') ?></a>
-                        <p><?= t('download.version', 'Version') ?> 1.0.0 &middot; <?= t('download.macos.archive', 'ZIP archive') ?></p>
+                        <p><?= t('download.version', 'Version') ?> <?= htmlspecialchars($releaseVersion, ENT_QUOTES, 'UTF-8') ?> &middot; <?= t('download.macos.archive', 'ZIP archive') ?></p>
                         <?php if ($download['sha256'] !== ''): ?>
                             <p class="zealot-download-platform__checksum"><strong>SHA-256:</strong> <code><?= htmlspecialchars($download['sha256'], ENT_QUOTES, 'UTF-8') ?></code></p>
                         <?php endif; ?>
