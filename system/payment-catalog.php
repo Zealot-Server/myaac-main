@@ -9,7 +9,8 @@
 return [
     'currency' => 'USD',
     'coins_packages' => [
-        'coins_25' => ['coins' => 25, 'bonus' => 0, 'price' => 0.23],
+        // Stripe requires card payments in USD to be at least USD 0.50.
+        'coins_25' => ['coins' => 25, 'bonus' => 0, 'price' => 0.50],
         'coins_100' => ['coins' => 100, 'bonus' => 0, 'price' => 0.92],
         'coins_250' => ['coins' => 250, 'bonus' => 0, 'price' => 2.30],
         'coins_500' => ['coins' => 500, 'bonus' => 0, 'price' => 4.60],

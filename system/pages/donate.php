@@ -172,6 +172,17 @@ function paymentCenterCheckoutCurrency($paymentCenter)
   return $currency;
 }
 
+function paymentCenterMinimumAmountCents($currency)
+{
+  // Stripe's card-payment floor is currency-specific. Keep this validation
+  // server-side so a catalog edit cannot result in an opaque Stripe error.
+  $minimums = [
+    'USD' => 50,
+  ];
+
+  return $minimums[$currency] ?? 1;
+}
+
 function paymentCenterStripeEnabled($stripeConfig)
 {
   return !empty($stripeConfig['enabled']) &&
@@ -275,6 +286,16 @@ if (
         throw new RuntimeException('Invalid package amount.');
       }
       $checkoutCurrency = paymentCenterCheckoutCurrency($paymentCenter);
+      $minimumAmountCents = paymentCenterMinimumAmountCents($checkoutCurrency);
+      if ($amountCents < $minimumAmountCents) {
+        throw new RuntimeException(
+          sprintf(
+            'This card payment is below Stripe\'s minimum of %s %.2f.',
+            $checkoutCurrency,
+            $minimumAmountCents / 100
+          )
+        );
+      }
       $coinField = $stripeConfig['coin_field'] ?? 'coins_transferable';
       if (!in_array($coinField, ['coins', 'coins_transferable'], true)) {
         $coinField = 'coins_transferable';
