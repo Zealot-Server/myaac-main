@@ -31,6 +31,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Setup Node.js
         if: ${{ github.ref != 'refs/heads/main' }}
@@ -47,7 +48,6 @@ jobs:
         env:
           BASE_REF: ${{ github.event.pull_request.base.ref }}
         run: |
-          git fetch origin "$BASE_REF" --depth=1
           changed_files="$(git diff --name-only "origin/$BASE_REF"...HEAD -- '*.php' '*.js' '*.css')"
           if [ -z "$changed_files" ]; then
             exit 0
