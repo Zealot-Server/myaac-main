@@ -26,7 +26,11 @@ $wallets = require SYSTEM . 'donation-wallets.php';
         </header>
         <p class="zealot-donations__address-label"><?= t('donations.address') ?></p>
         <code><?= htmlspecialchars($wallet['address'], ENT_QUOTES, 'UTF-8') ?></code>
-        <button type="button" class="zealot-donations__copy" data-address="<?= htmlspecialchars($wallet['address'], ENT_QUOTES, 'UTF-8') ?>">
+        <button type="button" class="zealot-donations__copy" data-address="<?= htmlspecialchars(
+          $wallet['address'],
+          ENT_QUOTES,
+          'UTF-8'
+        ) ?>">
           <?= t('donations.copy') ?>
         </button>
       </article>
@@ -34,7 +38,9 @@ $wallets = require SYSTEM . 'donation-wallets.php';
   </div>
 
   <p class="zealot-donations__footer">
-    <?= t('donations.footer') ?> <a href="mailto:server.zealot@gmail.com">server.zealot@gmail.com</a>
+    <?= t(
+      'donations.footer'
+    ) ?> <a href="mailto:server.zealot@gmail.com">server.zealot@gmail.com</a>
   </p>
 </section>
 
@@ -44,7 +50,9 @@ document.querySelectorAll('.zealot-donations__copy').forEach((button) => {
     try {
       await navigator.clipboard.writeText(button.dataset.address);
       button.textContent = <?= json_encode(t('donations.copied')) ?>;
-      window.setTimeout(() => { button.textContent = <?= json_encode(t('donations.copy')) ?>; }, 1800);
+      window.setTimeout(() => { button.textContent = <?= json_encode(
+        t('donations.copy')
+      ) ?>; }, 1800);
     } catch (error) {
       window.prompt(<?= json_encode(t('donations.copy_prompt')) ?>, button.dataset.address);
     }
