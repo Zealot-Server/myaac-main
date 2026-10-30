@@ -43,6 +43,8 @@
 
   {% set packages = selected_type == 'premium' ? premium_packages : coins_packages %}
   {% set currency_symbol = payment.currency == 'BRL' ? 'R$' : payment.currency %}
+  {% set decimal_separator = payment.currency == 'BRL' ? ',' : '.' %}
+  {% set thousands_separator = payment.currency == 'BRL' ? '.' : ',' %}
   <div class="TableContainer">
     <div class="CaptionContainer">
       <div class="CaptionInnerContainer">
@@ -66,7 +68,7 @@
                 <div class="payment-package">
                   <strong>{{ package.label }}</strong>
                   <div>{{ package.reward }}</div>
-                  <div class="payment-price">{{ currency_symbol }} {{ package.price|number_format(2, ',', '.') }}</div>
+                  <div class="payment-price">{{ currency_symbol }} {{ package.price|number_format(2, decimal_separator, thousands_separator) }}</div>
                 </div>
               {% else %}
                 <div class="payment-package"><strong>{{ t('payment.no_packages', 'No packages configured.') }}</strong></div>
@@ -108,7 +110,7 @@
                     <input type="hidden" name="product_type" value="{{ selected_type }}">
                     <select name="package_key">
                       {% for package in packages %}
-                        <option value="{{ package.key }}">{{ package.label }} - {{ currency_symbol }} {{ package.price|number_format(2, ',', '.') }}</option>
+                        <option value="{{ package.key }}">{{ package.label }} - {{ currency_symbol }} {{ package.price|number_format(2, decimal_separator, thousands_separator) }}</option>
                       {% endfor %}
                     </select>
                     <br>
@@ -190,7 +192,7 @@
         <td>
           <select name="package_key" required>
             {% for package in packages %}
-              <option value="{{ package.key }}">{{ package.label }} - {{ payment.currency }} {{ package.price|number_format(2, '.', ',') }}</option>
+              <option value="{{ package.key }}">{{ package.label }} - {{ currency_symbol }} {{ package.price|number_format(2, decimal_separator, thousands_separator) }}</option>
             {% endfor %}
           </select>
         </td>

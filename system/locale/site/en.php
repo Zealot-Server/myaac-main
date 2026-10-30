@@ -21,7 +21,7 @@ return [
     'download.macos.back' => 'Choose another system',
     'download.macos.title' => 'Zealot Client for macOS',
     'download.macos.lead' => 'Choose the package for your Mac processor. Both versions require macOS 13.3 or later.',
-    'download.macos.platforms' => 'Apple Silicon and Intel',
+    'download.macos.platforms' => 'Apple Silicon (ARM64) / Intel (x86_64)',
     'download.macos.arm64.label' => 'Apple Silicon',
     'download.macos.arm64.description' => 'Macs with Apple Silicon',
     'download.macos.arm64.download' => 'Download for Apple Silicon',

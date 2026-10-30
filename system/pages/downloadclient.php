@@ -107,14 +107,9 @@ if ($platform === 'macos') {
                                                     <h1><?= t('download.official_client', 'Official {server} Client', ['server' => configLua('serverName')]) ?></h1>
                                                     <p class="zealot-client-download__intro"><?= t('download.intro', 'Choose your operating system to see the download and installation instructions.') ?></p>
                                                     <div class="zealot-client-download__platforms">
-                                                        <a class="zealot-client-download__platform-card" href="?subtopic=downloadclient&amp;platform=macos#apple-silicon">
+                                                        <a class="zealot-client-download__platform-card" href="?subtopic=downloadclient&amp;platform=macos">
                                                             <strong>macOS</strong>
-                                                            <span><?= t('download.macos.arm64.label', 'Apple Silicon') ?></span>
-                                                            <small><?= t('download.macos.instructions', 'View instructions') ?></small>
-                                                        </a>
-                                                        <a class="zealot-client-download__platform-card" href="?subtopic=downloadclient&amp;platform=macos#intel">
-                                                            <strong>macOS</strong>
-                                                            <span><?= t('download.macos.x86_64.label', 'Intel') ?></span>
+                                                            <span><?= t('download.macos.platforms', 'Apple Silicon (ARM64) / Intel (x86_64)') ?></span>
                                                             <small><?= t('download.macos.instructions', 'View instructions') ?></small>
                                                         </a>
                                                         <?php if ($downloads['windows']['url'] !== ''): ?>
