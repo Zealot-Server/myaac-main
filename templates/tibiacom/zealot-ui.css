@@ -94,6 +94,7 @@
 .zealot-character-restore-panel {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   flex-direction: column;
   gap: 6px;
   min-width: 160px;
@@ -2330,6 +2331,7 @@ body {
 
 .Content .account-character-actions {
   min-width: 185px;
+  text-align: center;
   vertical-align: middle;
 }
 

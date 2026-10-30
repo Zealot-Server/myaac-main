@@ -376,11 +376,8 @@
                             {% endif %}
                           </div>
                         </td>
-                        <td class="account-character-actions" align="center">
+                        <td class="account-character-actions">
                           <span id="CharacterOptionsOf_0">
-                            <span style="font-weight:normal;">{% if not player.isDeleted() %}[<a
-                                href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}">Edit</a>]{% endif %}</span>
-                            <br>
                             {% if player.isDeleted() %}
                               {% set deletion = deleted_characters[player.getId()] ?? null %}
                               {% if deletion and deletion.restorable %}
@@ -396,6 +393,9 @@
                                 <small style="display:block; margin: 3px 0; color:#8c2b15;">{{ t('character.restore.expired', 'The 30-day restoration period for this character has expired.') }}</small>
                               {% endif %}
                             {% else %}
+                              <span style="font-weight:normal;">[<a
+                                  href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}">Edit</a>]</span>
+                              <br>
                               <span style="font-weight:normal;">[<a href="{{ getLink('account/character/delete') }}">Delete</a>]</span>
                             {% endif %}
                           </span>
