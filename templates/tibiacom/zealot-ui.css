@@ -440,16 +440,17 @@ body {
 
 .Content .zealot-client-download__platforms {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
   margin: 0 auto 14px;
-  max-width: 620px;
+  max-width: 660px;
 }
 
 .Content .zealot-client-download__platform-card {
   display: flex;
   min-height: 108px;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
   box-sizing: border-box;
   border: 1px solid #826843;
@@ -459,6 +460,7 @@ body {
   box-shadow: inset 0 0 0 1px #fff6df;
   color: #51341d;
   text-decoration: none;
+  text-align: center;
 }
 
 .Content .zealot-client-download__platform-card:hover,
