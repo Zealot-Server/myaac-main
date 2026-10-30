@@ -7,13 +7,15 @@ $title = t('payment.title', 'Payment Center');
 
 require_once PLUGINS . 'pagseguro/config.php';
 
+$coinCatalog = require SYSTEM . 'payment-catalog.php';
+
 $defaults = [
-    'currency' => 'USD',
+    'currency' => $coinCatalog['currency'],
     'support_contact' => 'support@numenor.global',
     'stripe_checkout_url' => '',
     'bank_transfer_enabled' => false,
     'bank_transfer_instructions' => t('payment.bank_transfer_copy', 'Contact support before sending a bank transfer.'),
-    'coins_packages' => $config['pagSeguro']['donates'] ?? [],
+    'coins_packages' => $coinCatalog['coins_packages'],
     'premium_packages' => [
         'premium_30' => ['label' => t('payment.premium_days', '{days} Days Premium', ['days' => 30]), 'days' => 30, 'price' => 9.99],
         'premium_90' => ['label' => t('payment.premium_days', '{days} Days Premium', ['days' => 90]), 'days' => 90, 'price' => 24.99],
@@ -21,6 +23,10 @@ $defaults = [
     'crypto_wallets' => [],
 ];
 $paymentCenter = array_replace_recursive($defaults, $config['payment_center'] ?? []);
+// The public catalog and its currency must be the same values shown at
+// checkout; local payment settings must not be able to create a mismatch.
+$paymentCenter['currency'] = $coinCatalog['currency'];
+$paymentCenter['coins_packages'] = $coinCatalog['coins_packages'];
 $twig->addGlobal('config', $config);
 
 function paymentCenterTableExists($table)
@@ -162,6 +168,29 @@ function paymentCenterNormalizePremiumPackage($key, $package)
     ];
 }
 
+function paymentCenterIsValidPackage($package, $productType)
+{
+    if (!is_array($package) || (float)($package['price'] ?? 0) <= 0) {
+        return false;
+    }
+
+    if ($productType === 'coins') {
+        return (int)($package['coins'] ?? 0) + (int)($package['bonus'] ?? 0) > 0;
+    }
+
+    return (int)($package['days'] ?? 0) > 0;
+}
+
+function paymentCenterCheckoutCurrency($paymentCenter)
+{
+    $currency = strtoupper((string)($paymentCenter['currency'] ?? ''));
+    if (!preg_match('/^[A-Z]{3}$/', $currency)) {
+        throw new RuntimeException('Invalid checkout currency.');
+    }
+
+    return $currency;
+}
+
 function paymentCenterStripeEnabled($stripeConfig)
 {
     return !empty($stripeConfig['enabled'])
@@ -240,7 +269,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['payment_action'] ?? '') ==
     $packages = $productType === 'premium' ? $premiumPackages : $coinsPackages;
     $package = paymentCenterFindPackage($packages, $packageKey);
 
-    if ($package === null) {
+    if (!paymentCenterIsValidPackage($package, $productType)) {
         $message = ['type' => 'error', 'text' => 'Please select a valid package.'];
     } elseif ($transactionId === '' || strlen($transactionId) < 6) {
         $message = ['type' => 'error', 'text' => 'Please enter the transaction hash, payment ID, or bank receipt reference.'];
@@ -255,7 +284,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['payment_action'] ?? '') ==
             $db->quote($package['key']) . ', ' .
             $db->quote($package['label']) . ', ' .
             (float)$package['price'] . ', ' .
-            $db->quote($paymentCenter['currency']) . ', ' .
+            $db->quote(paymentCenterCheckoutCurrency($paymentCenter)) . ', ' .
             $db->quote($method) . ', ' .
             $db->quote($network) . ', ' .
             $db->quote($transactionId) . ', ' .
@@ -275,17 +304,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['payment_action'] ?? '') ==
     $package = paymentCenterFindPackage($packages, $packageKey);
     $stripeConfig = $config['stripe'] ?? [];
 
-    if ($package === null) {
+    if (!paymentCenterIsValidPackage($package, $productType)) {
         $message = ['type' => 'error', 'text' => 'Please select a valid package.'];
     } elseif (!paymentCenterStripeEnabled($stripeConfig)) {
         $message = ['type' => 'error', 'text' => 'Stripe test keys are not configured yet.'];
-    } elseif ((float)$package['price'] < 1) {
-        $message = ['type' => 'error', 'text' => 'The minimum Stripe payment is USD 1.00.'];
     } else {
         try {
             $coinsAmount = $productType === 'coins' ? (int)($package['coins'] + ($package['bonus'] ?? 0)) : 0;
             $premiumDays = $productType === 'premium' ? (int)($package['days'] ?? 0) : 0;
             $amountCents = (int)round(((float)$package['price']) * 100);
+            if ($amountCents <= 0) {
+                throw new RuntimeException('Invalid package amount.');
+            }
+            $checkoutCurrency = paymentCenterCheckoutCurrency($paymentCenter);
             $coinField = $stripeConfig['coin_field'] ?? 'coins_transferable';
             if (!in_array($coinField, ['coins', 'coins_transferable'], true)) {
                 $coinField = 'coins_transferable';
@@ -293,12 +324,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['payment_action'] ?? '') ==
 
             $session = paymentCenterStripeRequest('checkout/sessions', [
                 'mode' => 'payment',
-                'payment_method_types[0]' => 'card',
-                'wallet_options[link][display]' => 'never',
-                'success_url' => BASE_URL . '?subtopic=donate&action=final&provider=stripe',
+                'success_url' => BASE_URL . '?subtopic=donate&action=final&provider=stripe&session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url' => BASE_URL . '?subtopic=donate&type=' . $productType . '&payment=cancelled',
+                'integration_identifier' => 'zealot_checkout_' . bin2hex(random_bytes(4)),
                 'client_reference_id' => (string)$account_logged->getId(),
-                'line_items[0][price_data][currency]' => strtolower($stripeConfig['currency'] ?? $paymentCenter['currency']),
+                'line_items[0][price_data][currency]' => strtolower($checkoutCurrency),
                 'line_items[0][price_data][unit_amount]' => $amountCents,
                 'line_items[0][price_data][product_data][name]' => $package['label'],
                 'line_items[0][quantity]' => 1,
@@ -320,7 +350,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['payment_action'] ?? '') ==
                 $coinsAmount . ', ' .
                 $premiumDays . ', ' .
                 $amountCents . ', ' .
-                $db->quote(strtolower($stripeConfig['currency'] ?? $paymentCenter['currency'])) . ', ' .
+                $db->quote(strtolower($checkoutCurrency)) . ', ' .
                 $db->quote($coinField) . ', ' .
                 $db->quote('created') . ', NOW())'
             );

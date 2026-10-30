@@ -168,15 +168,16 @@ try {
     stripeRespond(400, 'Invalid webhook.');
 }
 
-if (($event['type'] ?? '') !== 'checkout.session.completed') {
+$eventType = $event['type'] ?? '';
+if (!in_array($eventType, [
+    'checkout.session.completed',
+    'checkout.session.async_payment_succeeded',
+    'checkout.session.async_payment_failed',
+], true)) {
     stripeRespond(200, 'Ignored.');
 }
 
 $session = $event['data']['object'] ?? [];
-if (($session['payment_status'] ?? '') !== 'paid') {
-    stripeRespond(200, 'Unpaid session ignored.');
-}
-
 $sessionId = $session['id'] ?? '';
 if ($sessionId === '') {
     stripeRespond(400, 'Missing session id.');
@@ -185,49 +186,70 @@ if ($sessionId === '') {
 stripeEnsureTransactionsTable();
 stripeEnsureTransactionColumns();
 
-$transaction = $db->query(
-    'SELECT * FROM `myaac_stripe_transactions` WHERE `checkout_session_id` = ' . $db->quote($sessionId) . ' LIMIT 1'
-)->fetch();
-
-if (!$transaction) {
-    stripeRespond(404, 'Transaction not found.');
+if ($eventType === 'checkout.session.async_payment_failed') {
+    $db->exec(
+        'UPDATE `myaac_stripe_transactions` SET `status` = ' . $db->quote('failed') .
+        ' WHERE `checkout_session_id` = ' . $db->quote($sessionId) .
+        ' AND `delivered_at` IS NULL'
+    );
+    stripeRespond(200, 'Marked as failed.');
 }
 
-if (!empty($transaction['delivered_at'])) {
-    stripeRespond(200, 'Already delivered.');
-}
-
-$amountTotal = (int)($session['amount_total'] ?? 0);
-$currency = strtolower((string)($session['currency'] ?? ''));
-if ($amountTotal !== (int)$transaction['amount_total'] || $currency !== strtolower($transaction['currency'])) {
-    stripeRespond(400, 'Amount mismatch.');
-}
-
-$accountId = (int)$transaction['account_id'];
-$productType = $transaction['product_type'] ?? 'coins';
-$coins = (int)$transaction['coins'];
-$premiumDays = (int)($transaction['premium_days'] ?? 0);
-$coinField = $transaction['coin_field'];
-$paymentIntent = $session['payment_intent'] ?? null;
-
-if ($productType === 'coins' && !in_array($coinField, ['coins', 'coins_transferable'], true)) {
-    stripeRespond(400, 'Invalid coin field.');
-}
-
-if (!in_array($productType, ['coins', 'premium'], true)) {
-    stripeRespond(400, 'Invalid product type.');
-}
-
-if ($productType === 'coins' && $coins <= 0) {
-    stripeRespond(400, 'Invalid coins amount.');
-}
-
-if ($productType === 'premium' && $premiumDays <= 0) {
-    stripeRespond(400, 'Invalid premium days.');
+if (($session['payment_status'] ?? '') !== 'paid') {
+    stripeRespond(200, 'Unpaid session ignored.');
 }
 
 $db->beginTransaction();
 try {
+    // A row lock makes Stripe retries and concurrent deliveries idempotent.
+    $transaction = $db->query(
+        'SELECT * FROM `myaac_stripe_transactions` WHERE `checkout_session_id` = ' .
+        $db->quote($sessionId) . ' LIMIT 1 FOR UPDATE'
+    )->fetch();
+
+    if (!$transaction) {
+        throw new RuntimeException('Transaction not found.');
+    }
+
+    if (!empty($transaction['delivered_at'])) {
+        $db->commit();
+        stripeRespond(200, 'Already delivered.');
+    }
+
+    $amountTotal = (int)($session['amount_total'] ?? 0);
+    $currency = strtolower((string)($session['currency'] ?? ''));
+    if ($amountTotal !== (int)$transaction['amount_total'] || $currency !== strtolower($transaction['currency'])) {
+        throw new RuntimeException('Amount mismatch.');
+    }
+
+    $accountId = (int)$transaction['account_id'];
+    $productType = $transaction['product_type'] ?? 'coins';
+    $coins = (int)$transaction['coins'];
+    $premiumDays = (int)($transaction['premium_days'] ?? 0);
+    $coinField = $transaction['coin_field'];
+    $paymentIntent = $session['payment_intent'] ?? null;
+
+    if ($productType === 'coins' && !in_array($coinField, ['coins', 'coins_transferable'], true)) {
+        throw new RuntimeException('Invalid coin field.');
+    }
+
+    if (!in_array($productType, ['coins', 'premium'], true)) {
+        throw new RuntimeException('Invalid product type.');
+    }
+
+    if ($productType === 'coins' && $coins <= 0) {
+        throw new RuntimeException('Invalid coins amount.');
+    }
+
+    if ($productType === 'premium' && $premiumDays <= 0) {
+        throw new RuntimeException('Invalid premium days.');
+    }
+
+    $account = $db->query('SELECT `id` FROM `accounts` WHERE `id` = ' . $accountId . ' LIMIT 1 FOR UPDATE')->fetch();
+    if (!$account) {
+        throw new RuntimeException('Account not found.');
+    }
+
     if ($productType === 'premium') {
         stripeDeliverPremium($accountId, $premiumDays);
     } else {
@@ -242,9 +264,20 @@ try {
     );
     $db->commit();
 } catch (Exception $e) {
-    $db->rollBack();
+    if ($db->inTransaction()) {
+        $db->rollBack();
+    }
     log_append('stripe_webhook_errors.log', date('Y-m-d H:i:s') . ': ' . $e->getMessage());
-    stripeRespond(500, 'Delivery failed.');
+    $clientErrors = [
+        'Transaction not found.',
+        'Amount mismatch.',
+        'Invalid coin field.',
+        'Invalid product type.',
+        'Invalid coins amount.',
+        'Invalid premium days.',
+        'Account not found.',
+    ];
+    stripeRespond(in_array($e->getMessage(), $clientErrors, true) ? 400 : 500, 'Delivery failed.');
 }
 
 stripeRespond(200, 'Delivered.');
