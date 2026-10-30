@@ -3,8 +3,6 @@ name: Format Prettier
 on:
   pull_request:
     types: [ opened, synchronize, reopened, ready_for_review ]
-permissions:
-  contents: write
 jobs:
   cancel-runs:
     if: github.event_name == 'pull_request' && github.ref != 'refs/heads/main'
@@ -41,7 +39,7 @@ jobs:
 
       - name: Install Dependencies
         if: ${{ github.ref != 'refs/heads/main' }}
-        run: npm install prettier @prettier/plugin-php stylelint-prettier
+        run: npm ci
 
       - name: Run prettier code format
         if: ${{ github.ref != 'refs/heads/main' }}
@@ -52,15 +50,5 @@ jobs:
           if [ -z "$changed_files" ]; then
             exit 0
           fi
-          printf '%s\n' "$changed_files" | grep -E '\.(php|js)$' | xargs -r npx prettier --write --plugin=@prettier/plugin-php --ignore-unknown
-          printf '%s\n' "$changed_files" | grep -E '\.css$' | xargs -r npx stylelint --fix
-
-      - name: Run add and commit
-        if: ${{ github.ref != 'refs/heads/main' }}
-        uses: EndBug/add-and-commit@v9
-        with:
-          author_name: GitHub Actions
-          author_email: 41898282+github-actions[bot]@users.noreply.github.com
-          message: 'PHP code format - (prettier)'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          printf '%s\n' "$changed_files" | grep -E '\.(php|js)$' | xargs -r npx prettier --check --plugin=@prettier/plugin-php --ignore-unknown
+          printf '%s\n' "$changed_files" | grep -E '\.css$' | xargs -r npx stylelint
