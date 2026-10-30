@@ -8,7 +8,6 @@ $title = t('payment.title', 'Payment Center');
 require_once PLUGINS . 'pagseguro/config.php';
 
 $coinCatalog = require SYSTEM . 'payment-catalog.php';
-$donationWallets = require SYSTEM . 'donation-wallets.php';
 
 $defaults = [
   'currency' => $coinCatalog['currency'],
@@ -27,14 +26,12 @@ $defaults = [
       'price' => 24.99,
     ],
   ],
-  'crypto_wallets' => [],
 ];
 $paymentCenter = array_replace_recursive($defaults, $config['payment_center'] ?? []);
 // The public catalog and its currency must be the same values shown at
 // checkout; local payment settings must not be able to create a mismatch.
 $paymentCenter['currency'] = $coinCatalog['currency'];
 $paymentCenter['coins_packages'] = $coinCatalog['coins_packages'];
-$paymentCenter['crypto_wallets'] = $donationWallets;
 $twig->addGlobal('config', $config);
 
 function paymentCenterTableExists($table)
@@ -42,43 +39,6 @@ function paymentCenterTableExists($table)
   global $db;
 
   return (bool) $db->query('SHOW TABLES LIKE ' . $db->quote($table))->fetch();
-}
-
-function paymentCenterEnsureTable()
-{
-  global $db;
-
-  if (paymentCenterTableExists('myaac_payment_requests')) {
-    if (!paymentCenterTableExists('myaac_stripe_transactions')) {
-      paymentCenterEnsureStripeTable();
-    }
-    return;
-  }
-
-  $db->query("CREATE TABLE `myaac_payment_requests` (
-        `id` INT(11) NOT NULL AUTO_INCREMENT,
-        `reference` VARCHAR(40) NOT NULL,
-        `account_id` INT(11) UNSIGNED NOT NULL,
-        `product_type` VARCHAR(20) NOT NULL,
-        `package_key` VARCHAR(80) NOT NULL,
-        `package_label` VARCHAR(120) NOT NULL,
-        `amount` DECIMAL(10,2) NOT NULL,
-        `currency` VARCHAR(10) NOT NULL,
-        `payment_method` VARCHAR(30) NOT NULL,
-        `payment_network` VARCHAR(40) DEFAULT NULL,
-        `transaction_id` VARCHAR(190) DEFAULT NULL,
-        `payer_note` TEXT DEFAULT NULL,
-        `status` VARCHAR(30) NOT NULL DEFAULT 'manual_review',
-        `created_at` DATETIME NOT NULL,
-        `updated_at` DATETIME DEFAULT NULL,
-        PRIMARY KEY (`id`),
-        UNIQUE KEY `reference` (`reference`),
-        KEY `account_id` (`account_id`),
-        KEY `status` (`status`),
-        KEY `product_type` (`product_type`)
-    ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;");
-
-  paymentCenterEnsureStripeTable();
 }
 
 function paymentCenterEnsureStripeTable()
@@ -219,11 +179,6 @@ function paymentCenterStripeEnabled($stripeConfig)
     strpos($stripeConfig['secret_key'], 'PASTE_YOUR') === false;
 }
 
-function paymentCenterWalletReference($wallet)
-{
-  return trim(($wallet['asset'] ?? '') . ' — ' . ($wallet['network'] ?? ''));
-}
-
 function paymentCenterStripeRequest($endpoint, $params)
 {
   global $config;
@@ -269,7 +224,6 @@ foreach ($paymentCenter['premium_packages'] as $key => $package) {
   $premiumPackages[$key] = paymentCenterNormalizePremiumPackage($key, $package);
 }
 
-$cryptoWalletOptions = array_map('paymentCenterWalletReference', $paymentCenter['crypto_wallets']);
 $stripeEnabled = paymentCenterStripeEnabled($config['stripe'] ?? []);
 
 if ($action === 'final') {
@@ -291,84 +245,9 @@ $message = null;
 
 if (
   $_SERVER['REQUEST_METHOD'] === 'POST' &&
-  ($_POST['payment_action'] ?? '') === 'manual_request'
-) {
-  paymentCenterEnsureTable();
-
-  $productType = ($_POST['product_type'] ?? '') === 'premium' ? 'premium' : 'coins';
-  $packageKey = trim((string) ($_POST['package_key'] ?? ''));
-  $method = 'crypto';
-  $network = trim((string) ($_POST['payment_network'] ?? ''));
-  $transactionId = trim((string) ($_POST['transaction_id'] ?? ''));
-  $payerNote = trim((string) ($_POST['payer_note'] ?? ''));
-  $packages = $productType === 'premium' ? $premiumPackages : $coinsPackages;
-  $package = paymentCenterFindPackage($packages, $packageKey);
-
-  if (!paymentCenterIsValidPackage($package, $productType)) {
-    $message = ['type' => 'error', 'text' => 'Please select a valid package.'];
-  } elseif (!in_array($network, $cryptoWalletOptions, true)) {
-    $message = [
-      'type' => 'error',
-      'text' => t(
-        'payment.select_crypto_network',
-        'Please select the exact asset and network used.'
-      ),
-    ];
-  } elseif ($transactionId === '' || strlen($transactionId) < 6) {
-    $message = [
-      'type' => 'error',
-      'text' => t(
-        'payment.transaction_required',
-        'Please enter the transaction hash or payment ID.'
-      ),
-    ];
-  } else {
-    $reference =
-      'NMR-' . (int) $account_logged->getId() . '-' . time() . '-' . random_int(1000, 9999);
-    $db->query(
-      'INSERT INTO `myaac_payment_requests` ' .
-        '(`reference`, `account_id`, `product_type`, `package_key`, `package_label`, `amount`, `currency`, `payment_method`, `payment_network`, `transaction_id`, `payer_note`, `status`, `created_at`) VALUES (' .
-        $db->quote($reference) .
-        ', ' .
-        (int) $account_logged->getId() .
-        ', ' .
-        $db->quote($productType) .
-        ', ' .
-        $db->quote($package['key']) .
-        ', ' .
-        $db->quote($package['label']) .
-        ', ' .
-        (float) $package['price'] .
-        ', ' .
-        $db->quote(paymentCenterCheckoutCurrency($paymentCenter)) .
-        ', ' .
-        $db->quote($method) .
-        ', ' .
-        $db->quote($network) .
-        ', ' .
-        $db->quote($transactionId) .
-        ', ' .
-        $db->quote($payerNote) .
-        ', ' .
-        $db->quote('manual_review') .
-        ', NOW())'
-    );
-    $message = [
-      'type' => 'success',
-      'text' => t(
-        'payment.crypto_request_created',
-        'Crypto payment confirmation received. Reference: {reference}. Coins or Premium time are credited manually after review and may take longer.',
-        ['reference' => $reference]
-      ),
-    ];
-  }
-}
-
-if (
-  $_SERVER['REQUEST_METHOD'] === 'POST' &&
   ($_POST['payment_action'] ?? '') === 'stripe_checkout'
 ) {
-  paymentCenterEnsureTable();
+  paymentCenterEnsureStripeTable();
 
   $productType = ($_POST['product_type'] ?? '') === 'premium' ? 'premium' : 'coins';
   $packageKey = trim((string) ($_POST['package_key'] ?? ''));
@@ -383,7 +262,7 @@ if (
       'type' => 'error',
       'text' => t(
         'payment.card_unavailable',
-        'Card checkout is temporarily unavailable. Please try again later or use crypto confirmation.'
+        'Card checkout is temporarily unavailable. Please try again later.'
       ),
     ];
   } else {
@@ -459,6 +338,12 @@ if (
 
 $selectedType =
   ($_GET['type'] ?? ($_POST['product_type'] ?? 'coins')) === 'premium' ? 'premium' : 'coins';
+$selectedPackages = $selectedType === 'premium' ? $premiumPackages : $coinsPackages;
+$requestedPackageKey = trim((string) ($_GET['package'] ?? ($_POST['package_key'] ?? '')));
+$selectedPackageKey = array_key_first($selectedPackages);
+if (isset($selectedPackages[$requestedPackageKey])) {
+  $selectedPackageKey = $requestedPackageKey;
+}
 
 echo $twig->render('donate.html.twig', [
   'payment' => $paymentCenter,
@@ -468,5 +353,5 @@ echo $twig->render('donate.html.twig', [
   'message' => $message,
   'account_name' => $account_logged->getName(),
   'stripe_enabled' => $stripeEnabled,
-  'crypto_wallet_options' => $cryptoWalletOptions,
+  'selected_package_key' => $selectedPackageKey,
 ]);
