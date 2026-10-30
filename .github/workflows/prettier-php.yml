@@ -3,6 +3,8 @@ name: Format Prettier
 on:
   pull_request:
     types: [ opened, synchronize, reopened, ready_for_review ]
+permissions:
+  contents: write
 jobs:
   cancel-runs:
     if: github.event_name == 'pull_request' && github.ref != 'refs/heads/main'
@@ -42,7 +44,16 @@ jobs:
 
       - name: Run prettier code format
         if: ${{ github.ref != 'refs/heads/main' }}
-        run: npx prettier --write **/*.{php,js} --plugin=@prettier/plugin-php --ignore-unknown && npx stylelint **/*.css --fix
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          git fetch origin "$BASE_REF" --depth=1
+          changed_files="$(git diff --name-only "origin/$BASE_REF"...HEAD -- '*.php' '*.js' '*.css')"
+          if [ -z "$changed_files" ]; then
+            exit 0
+          fi
+          printf '%s\n' "$changed_files" | grep -E '\.(php|js)$' | xargs -r npx prettier --write --plugin=@prettier/plugin-php --ignore-unknown
+          printf '%s\n' "$changed_files" | grep -E '\.css$' | xargs -r npx stylelint --fix
 
       - name: Run add and commit
         if: ${{ github.ref != 'refs/heads/main' }}
