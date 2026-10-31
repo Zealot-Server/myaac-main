@@ -74,8 +74,9 @@
         color: #d5c3af;
         border: 1px solid #d5c3af;
         border-radius: 3px;
-        line-height: 26px;
-        white-space: nowrap;
+        line-height: 1.15;
+        overflow-wrap: anywhere !important;
+        white-space: normal !important;
     }
 </style>
 <?php
@@ -89,7 +90,7 @@ $serverSaveTime = new DateTime();
 $serverSaveTime->setTime($hours_ServerSave, $minutes_ServerSave, $seconds_ServerSave);
 
 if ($now > $serverSaveTime) {
-    $serverSaveTime->modify('+1 day');
+  $serverSaveTime->modify('+1 day');
 }
 
 $interval = $now->diff($serverSaveTime);
@@ -114,15 +115,22 @@ $interval = $now->diff($serverSaveTime);
 
         if (distance < 0) {
             clearInterval(x);
-            document.getElementById("timerServerSave").innerHTML = <?= json_encode(t('server_save.now'), JSON_UNESCAPED_UNICODE); ?>;
+            document.getElementById("timerServerSave").innerHTML = <?= json_encode(
+              t('server_save.now'),
+              JSON_UNESCAPED_UNICODE
+            ) ?>;
         }
     }, 1000);
 </script>
 <div class="serversave">
-    <div class="serversave_header"><?= htmlspecialchars(t('server_save.title'), ENT_QUOTES, 'UTF-8'); ?></div>
+    <div class="serversave_header"><?= htmlspecialchars(
+      t('server_save.title'),
+      ENT_QUOTES,
+      'UTF-8'
+    ) ?></div>
     <div class="serversave_content">
         <div class="serversave_text">
-            <small><?= htmlspecialchars(t('server_save.countdown'), ENT_QUOTES, 'UTF-8'); ?></small>
+            <small><?= htmlspecialchars(t('server_save.countdown'), ENT_QUOTES, 'UTF-8') ?></small>
         </div>
         <div class="serversave_countdown" id="timerServerSave"></div>
     </div>
