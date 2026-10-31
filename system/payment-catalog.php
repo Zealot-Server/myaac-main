@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Public Zealot Coins catalog.
+ * Public Zealot payment catalog.
  *
  * Prices are stored in the currency's major unit. The Checkout flow converts
  * them to the integer minor unit required by Stripe.
@@ -21,5 +21,12 @@ return [
     'coins_2500' => ['coins' => 2500, 'bonus' => 0, 'price' => 25.0],
     'coins_5000' => ['coins' => 5000, 'bonus' => 0, 'price' => 50.0],
     'coins_10000' => ['coins' => 10000, 'bonus' => 0, 'price' => 100.0],
+  ],
+  // Matches the in-game Game Store: 250 Coins for 30 premium days.
+  'premium_packages' => [
+    'premium_30' => ['days' => 30, 'price' => 2.5],
+    'premium_90' => ['days' => 90, 'price' => 7.5],
+    'premium_180' => ['days' => 180, 'price' => 15.0],
+    'premium_360' => ['days' => 360, 'price' => 30.0],
   ],
 ];

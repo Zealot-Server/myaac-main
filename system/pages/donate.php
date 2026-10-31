@@ -14,24 +14,14 @@ $defaults = [
   'support_contact' => 'server.zealot@gmail.com',
   'stripe_checkout_url' => '',
   'coins_packages' => $coinCatalog['coins_packages'],
-  'premium_packages' => [
-    'premium_30' => [
-      'label' => t('payment.premium_days', '{days} Days Premium', ['days' => 30]),
-      'days' => 30,
-      'price' => 9.99,
-    ],
-    'premium_90' => [
-      'label' => t('payment.premium_days', '{days} Days Premium', ['days' => 90]),
-      'days' => 90,
-      'price' => 24.99,
-    ],
-  ],
+  'premium_packages' => $coinCatalog['premium_packages'],
 ];
 $paymentCenter = array_replace_recursive($defaults, $config['payment_center'] ?? []);
 // The public catalog and its currency must be the same values shown at
 // checkout; local payment settings must not be able to create a mismatch.
 $paymentCenter['currency'] = $coinCatalog['currency'];
 $paymentCenter['coins_packages'] = $coinCatalog['coins_packages'];
+$paymentCenter['premium_packages'] = $coinCatalog['premium_packages'];
 $twig->addGlobal('config', $config);
 
 function paymentCenterTableExists($table)
