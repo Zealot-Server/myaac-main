@@ -241,6 +241,25 @@ return [
     'Confirme em <strong>Abrir</strong>. Nas próximas execuções, o cliente abrirá normalmente.',
   'download.macos.ready' =>
     'O cliente já vem configurado para o Zealot: basta informar seu e-mail e senha para jogar.',
+  'download.windows.title' => 'Zealot Client para Windows',
+  'download.windows.lead' => 'Esta versão é para computadores Windows de 64 bits.',
+  'download.windows.step_1' =>
+    'Baixe o arquivo ZIP e abra-o pela pasta <strong>Downloads</strong>.',
+  'download.windows.step_2' => 'Extraia todos os arquivos para uma pasta de sua escolha.',
+  'download.windows.step_3' =>
+    'Abra a pasta extraída e execute <strong>Zealot Client.exe</strong>.',
+  'download.windows.step_4' =>
+    'Se o Windows exibir um aviso de segurança, confirme que o arquivo foi baixado por este site antes de continuar.',
+  'download.linux.title' => 'Zealot Client para Linux',
+  'download.linux.lead' => 'Esta versão é um pacote portátil para computadores Linux de 64 bits.',
+  'download.linux.step_1' => 'Baixe o arquivo TAR.GZ e extraia-o para uma pasta de sua escolha.',
+  'download.linux.step_2' => 'Abra um terminal na pasta extraída.',
+  'download.linux.step_3' => 'Execute <strong>./run-zealot-client.sh</strong>.',
+  'download.linux.step_4' =>
+    'Se necessário, torne o inicializador executável antes com <strong>chmod +x run-zealot-client.sh</strong>.',
+  'download.install.steps_title' => 'Como instalar e abrir',
+  'download.install.ready' =>
+    'O cliente já vem configurado para o Zealot: basta informar seu e-mail e senha para jogar.',
   'download.client_alt' => 'Cliente do {server}',
   'download.download_client' => 'Baixar cliente do {server}',
   'download.platform.default' => 'Cliente para o seu dispositivo',

@@ -52,6 +52,26 @@ return [
     'Confirm by clicking <strong>Open</strong>. The client will open normally on subsequent launches.',
   'download.macos.ready' =>
     'The client is already configured for Zealot: enter your email and password to play.',
+  'download.windows.title' => 'Zealot Client for Windows',
+  'download.windows.lead' => 'This release is for 64-bit Windows computers.',
+  'download.windows.step_1' =>
+    'Download the ZIP file and open it from your <strong>Downloads</strong> folder.',
+  'download.windows.step_2' => 'Extract all files to a folder of your choice.',
+  'download.windows.step_3' =>
+    'Open the extracted folder and run <strong>Zealot Client.exe</strong>.',
+  'download.windows.step_4' =>
+    'If Windows shows a security prompt, verify that the file was downloaded from this site before continuing.',
+  'download.linux.title' => 'Zealot Client for Linux',
+  'download.linux.lead' => 'This release is a portable package for 64-bit Linux computers.',
+  'download.linux.step_1' =>
+    'Download the TAR.GZ archive and extract it to a folder of your choice.',
+  'download.linux.step_2' => 'Open a terminal in the extracted folder.',
+  'download.linux.step_3' => 'Run <strong>./run-zealot-client.sh</strong>.',
+  'download.linux.step_4' =>
+    'If needed, make the launcher executable first with <strong>chmod +x run-zealot-client.sh</strong>.',
+  'download.install.steps_title' => 'How to install and open',
+  'download.install.ready' =>
+    'The client is already configured for Zealot: enter your email and password to play.',
   'download.disclaimer' => 'Disclaimer',
   'download.disclaimer_copy' =>
     'The software and any related documentation is provided "as is" without warranty of any kind. The entire risk arising out of use of the software remains with you. In no event shall Zealot be liable for any damages to your computer or loss of data.',
