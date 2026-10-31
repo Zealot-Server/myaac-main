@@ -72,13 +72,6 @@ if ($platform === 'macos') {
    ENT_QUOTES,
    'UTF-8'
  ) ?> &middot; <?= t('download.macos.archive', 'ZIP archive') ?></p>
-                        <?php if ($download['sha256'] !== ''): ?>
-                            <p class="zealot-download-platform__checksum"><strong>SHA-256:</strong> <code><?= htmlspecialchars(
-                              $download['sha256'],
-                              ENT_QUOTES,
-                              'UTF-8'
-                            ) ?></code></p>
-                        <?php endif; ?>
                     <?php else: ?>
                         <span class="zealot-download-platform__button zealot-download-platform__button--disabled"><?= t(
                           'download.macos.preparing',
@@ -192,7 +185,7 @@ if ($platform === 'macos') {
         <p class="zealot-download-platform__lead"><?= $lead ?></p>
 
         <section class="zealot-download-platform__download">
-            <h2><?= $platformName ?> x86_64</h2>
+            <h2><?= $platformName ?> <?= t('download.platform.64bit', '64-bit') ?></h2>
             <p><?= t('download.version', 'Version') ?> <?= htmlspecialchars(
    $releaseVersion,
    ENT_QUOTES,
@@ -206,11 +199,6 @@ if ($platform === 'macos') {
   'download.platform.available',
   'Download client'
 ) ?></a>
-            <p class="zealot-download-platform__checksum"><strong>SHA-256:</strong> <code><?= htmlspecialchars(
-              $platformDownload['sha256'],
-              ENT_QUOTES,
-              'UTF-8'
-            ) ?></code></p>
         </section>
 
         <section class="zealot-download-platform__steps" aria-labelledby="<?= $platform ?>-install-steps">
@@ -277,9 +265,9 @@ if ($platform === 'macos') {
                                                                   'Windows Client'
                                                                 ) ?></span>
                                                                 <small><?= t(
-                                                                  'download.platform.available',
-                                                                  'Download client'
-                                                                ) ?> &middot; x86_64 &middot; ZIP</small>
+                                                                  'download.platform.windows_details',
+                                                                  'Windows 64-bit · View instructions'
+                                                                ) ?></small>
                                                             </a>
                                                         <?php else: ?>
                                                             <span class="zealot-client-download__platform-card zealot-client-download__platform-card--disabled">
@@ -304,9 +292,9 @@ if ($platform === 'macos') {
                                                                   'Linux Client'
                                                                 ) ?></span>
                                                                 <small><?= t(
-                                                                  'download.platform.available',
-                                                                  'Download client'
-                                                                ) ?> &middot; x86_64 &middot; TAR.GZ</small>
+                                                                  'download.platform.linux_details',
+                                                                  'Linux 64-bit · View instructions'
+                                                                ) ?></small>
                                                             </a>
                                                         <?php else: ?>
                                                             <span class="zealot-client-download__platform-card zealot-client-download__platform-card--disabled">
