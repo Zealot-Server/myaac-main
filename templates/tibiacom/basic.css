@@ -1,8 +1,7 @@
 body {
   margin: 0px;
   padding: 0px;
-  background: #06100d url(images/header/zealot-site-background.jpg) center top /
-    cover fixed no-repeat;
+  background: #06100d url(images/header/zealot-site-background.jpg) center top / cover fixed no-repeat;
 }
 
 img {
@@ -334,9 +333,7 @@ img {
   padding: 4px 4px 6px;
   border: 1px solid #706b60;
   background: rgba(18, 19, 17, 0.9);
-  box-shadow:
-    inset 0 0 0 1px rgba(0, 0, 0, 0.8),
-    0 1px 3px rgba(0, 0, 0, 0.7);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.7);
 }
 
 .DailyHighlightsTitle {
@@ -431,9 +428,7 @@ img {
   color: #baff00;
   cursor: pointer;
   text-decoration: none;
-  text-shadow:
-    1px 1px 2px #000,
-    0 0 4px #143800;
+  text-shadow: 1px 1px 2px #000, 0 0 4px #143800;
   white-space: nowrap;
 }
 
@@ -2263,15 +2258,6 @@ img {
   background-repeat: repeat-x;
   border-left: 1px solid #000000;
   border-right: 1px solid #000000;
-}
-
-/* Keep article headlines aligned with Zealot's green interface theme. */
-.Content #News .NewsHeadlineBackground,
-.Content #NewsArchive .NewsHeadlineBackground,
-.Content #FeaturedArticle .NewsHeadlineBackground {
-  background-color: #17462a;
-  background-image: url(images/content/title-background-green.gif) !important;
-  background-position: center;
 }
 
 .Content #News .NewsHeadlineIcon {
