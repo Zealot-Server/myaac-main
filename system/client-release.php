@@ -23,8 +23,8 @@ return [
   'windows' => [
     'x86_64' => [
       'url' =>
-        'https://github.com/Zealot-Server/otclient/releases/download/v1.0.0/zealot-client-1.0.0-windows-x86_64.zip',
-      'sha256' => '8b96033653001306c15d13330900ceada724032caa24adb24d59b17f75b30c01',
+        'https://github.com/Zealot-Server/otclient/releases/download/v1.0.0-8d698f3/zealot-client-1.0.0-windows-x86_64.zip',
+      'sha256' => '17e1a326c4e94ea849bb09542f71b51cded06e7840ac8b282b3c6add8ee20ca0',
     ],
   ],
   'linux' => [
