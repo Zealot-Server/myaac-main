@@ -20,12 +20,12 @@ $downloads = [
         ],
     ],
     'windows' => [
-        // Do not fall back to the legacy generic URL: each published client must
-        // have an explicit platform build.
-        'url' => trim((string) ($config['client_link_windows'] ?? '')),
+        'url' => trim((string) ($clientRelease['windows']['x86_64']['url'] ?? '')),
+        'sha256' => trim((string) ($clientRelease['windows']['x86_64']['sha256'] ?? '')),
     ],
     'linux' => [
-        'url' => trim((string) ($config['client_link_linux'] ?? '')),
+        'url' => trim((string) ($clientRelease['linux']['x86_64']['url'] ?? '')),
+        'sha256' => trim((string) ($clientRelease['linux']['x86_64']['sha256'] ?? '')),
     ],
 ];
 
@@ -116,7 +116,7 @@ if ($platform === 'macos') {
                                                             <a class="zealot-client-download__platform-card" href="<?= htmlspecialchars($downloads['windows']['url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
                                                                 <strong>Windows</strong>
                                                                 <span><?= t('download.platform.windows_label', 'Windows Client') ?></span>
-                                                                <small><?= t('download.platform.available', 'Download client') ?></small>
+                                                                <small><?= t('download.platform.available', 'Download client') ?> &middot; x86_64 &middot; ZIP</small>
                                                             </a>
                                                         <?php else: ?>
                                                             <span class="zealot-client-download__platform-card zealot-client-download__platform-card--disabled">
@@ -129,7 +129,7 @@ if ($platform === 'macos') {
                                                             <a class="zealot-client-download__platform-card" href="<?= htmlspecialchars($downloads['linux']['url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
                                                                 <strong>Linux</strong>
                                                                 <span><?= t('download.platform.linux_label', 'Linux Client') ?></span>
-                                                                <small><?= t('download.platform.available', 'Download client') ?></small>
+                                                                <small><?= t('download.platform.available', 'Download client') ?> &middot; x86_64 &middot; TAR.GZ</small>
                                                             </a>
                                                         <?php else: ?>
                                                             <span class="zealot-client-download__platform-card zealot-client-download__platform-card--disabled">
