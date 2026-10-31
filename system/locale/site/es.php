@@ -243,6 +243,25 @@ return [
     'Confirma haciendo clic en <strong>Abrir</strong>. El cliente se abrirá normalmente en las siguientes ejecuciones.',
   'download.macos.ready' =>
     'El cliente ya viene configurado para Zealot: solo tienes que introducir tu correo electrónico y contraseña para jugar.',
+  'download.windows.title' => 'Zealot Client para Windows',
+  'download.windows.lead' => 'Esta versión es para ordenadores Windows de 64 bits.',
+  'download.windows.step_1' =>
+    'Descarga el archivo ZIP y ábrelo desde la carpeta <strong>Descargas</strong>.',
+  'download.windows.step_2' => 'Extrae todos los archivos en una carpeta de tu elección.',
+  'download.windows.step_3' =>
+    'Abre la carpeta extraída y ejecuta <strong>Zealot Client.exe</strong>.',
+  'download.windows.step_4' =>
+    'Si Windows muestra un aviso de seguridad, confirma que el archivo fue descargado desde este sitio antes de continuar.',
+  'download.linux.title' => 'Zealot Client para Linux',
+  'download.linux.lead' => 'Esta versión es un paquete portátil para ordenadores Linux de 64 bits.',
+  'download.linux.step_1' => 'Descarga el archivo TAR.GZ y extráelo en una carpeta de tu elección.',
+  'download.linux.step_2' => 'Abre una terminal en la carpeta extraída.',
+  'download.linux.step_3' => 'Ejecuta <strong>./run-zealot-client.sh</strong>.',
+  'download.linux.step_4' =>
+    'Si es necesario, primero haz ejecutable el iniciador con <strong>chmod +x run-zealot-client.sh</strong>.',
+  'download.install.steps_title' => 'Cómo instalar y abrir',
+  'download.install.ready' =>
+    'El cliente ya viene configurado para Zealot: solo tienes que introducir tu correo electrónico y contraseña para jugar.',
   'download.client_alt' => 'Cliente de {server}',
   'download.download_client' => 'Descargar cliente de {server}',
   'download.platform.default' => 'Cliente para tu dispositivo',
