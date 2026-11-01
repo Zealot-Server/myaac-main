@@ -104,7 +104,7 @@ if ($platform === 'macos') {
         <section class="zealot-download-platform__steps" aria-labelledby="mac-silicon-install-steps">
             <h2 id="mac-silicon-install-steps"><?= t(
               'download.macos.arm64.steps_title',
-              'Apple Silicon: open with Terminal'
+              'Apple Silicon: launch from Terminal'
             ) ?></h2>
             <ol>
                 <li><?= t(
@@ -113,14 +113,15 @@ if ($platform === 'macos') {
                 ) ?></li>
                 <li><?= t(
                   'download.macos.arm64.step_2',
-                  'Open <strong>Terminal</strong> and run these two commands. They authorize only the Zealot app you installed and then open it.'
+                  'Open <strong>Terminal</strong> and run these commands in order. Keep Terminal open while you play.'
                 ) ?></li>
             </ol>
             <pre style="overflow-x:auto;margin:12px 0;padding:12px;background:#18372d;color:#fff3d4;text-align:left;"><code>xattr -dr com.apple.quarantine "/Applications/Zealot Client.app"
-open "/Applications/Zealot Client.app"</code></pre>
+cd "/Applications/Zealot Client.app/Contents/Resources"
+"../MacOS/Zealot Client"</code></pre>
             <p><?= t(
               'download.macos.arm64.step_3',
-              'Use these commands only for the client downloaded from the official Zealot site. If the app is still inside the ZIP, move it to Applications first.'
+              'Use these commands only for the client downloaded from the official Zealot site. The app must be extracted from the ZIP and placed in Applications first. If Terminal reports a permission error on the first command, run that command again with sudo.'
             ) ?></p>
         </section>
 
