@@ -234,13 +234,13 @@ return [
   'download.macos.security_source' =>
     'Baixe o cliente somente por este site. Não desative o Gatekeeper nem execute cópias recebidas por fontes desconhecidas.',
   'download.macos.steps_title' => 'Como instalar e abrir',
-  'download.macos.arm64.steps_title' => 'Apple Silicon: abrir pelo Terminal',
+  'download.macos.arm64.steps_title' => 'Apple Silicon: iniciar pelo Terminal',
   'download.macos.arm64.step_1' =>
     'Abra o ZIP para Apple Silicon na pasta <strong>Downloads</strong> e mova <strong>Zealot Client.app</strong> para <strong>Aplicativos</strong>.',
   'download.macos.arm64.step_2' =>
-    'Abra o <strong>Terminal</strong> e execute os dois comandos abaixo. Eles autorizam apenas o aplicativo Zealot instalado e depois o abrem.',
+    'Abra o <strong>Terminal</strong> e execute os comandos abaixo em ordem. Mantenha o Terminal aberto enquanto joga.',
   'download.macos.arm64.step_3' =>
-    'Use estes comandos somente para o cliente baixado do site oficial do Zealot. Se o aplicativo ainda estiver dentro do ZIP, mova-o para Aplicativos primeiro.',
+    'Use estes comandos somente para o cliente baixado do site oficial do Zealot. O aplicativo precisa estar extraído do ZIP e na pasta Aplicativos. Se o primeiro comando informar falta de permissão, repita-o com sudo no início.',
   'download.macos.x86_64.steps_title' => 'Intel: como instalar e abrir',
   'download.macos.step_1' => 'Abra o arquivo ZIP baixado na pasta <strong>Downloads</strong>.',
   'download.macos.step_2' =>
