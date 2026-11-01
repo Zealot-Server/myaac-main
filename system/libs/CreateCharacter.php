@@ -214,8 +214,11 @@ class CreateCharacter
     $player->setMagLevel($char_to_copy->getMagLevel());
     $player->setHealth($char_to_copy->getHealth());
     $player->setHealthMax($char_to_copy->getHealthMax());
-    $player->setMana($char_to_copy->getMana());
-    $player->setManaMax($char_to_copy->getManaMax());
+    // Existing Rook Sample characters may have zero mana. Give new players
+    // enough mana to use starter spells and recover it with mana potions.
+    $rookgaardMana = 55;
+    $player->setMana($rookgaardMode ? $rookgaardMana : $char_to_copy->getMana());
+    $player->setManaMax($rookgaardMode ? $rookgaardMana : $char_to_copy->getManaMax());
     $player->setManaSpent($char_to_copy->getManaSpent());
     $player->setSoul($char_to_copy->getSoul());
 
