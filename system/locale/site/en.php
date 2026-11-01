@@ -44,6 +44,14 @@ return [
   'download.macos.security_source' =>
     'Download the client only from this site. Do not disable Gatekeeper or run copies received from unknown sources.',
   'download.macos.steps_title' => 'How to install and open',
+  'download.macos.arm64.steps_title' => 'Apple Silicon: open with Terminal',
+  'download.macos.arm64.step_1' =>
+    'Open the Apple Silicon ZIP in <strong>Downloads</strong> and move <strong>Zealot Client.app</strong> to <strong>Applications</strong>.',
+  'download.macos.arm64.step_2' =>
+    'Open <strong>Terminal</strong> and run these two commands. They authorize only the Zealot app you installed and then open it.',
+  'download.macos.arm64.step_3' =>
+    'Use these commands only for the client downloaded from the official Zealot site. If the app is still inside the ZIP, move it to Applications first.',
+  'download.macos.x86_64.steps_title' => 'Intel: how to install and open',
   'download.macos.step_1' =>
     'Open the downloaded ZIP file in the <strong>Downloads</strong> folder.',
   'download.macos.step_2' =>
