@@ -101,10 +101,33 @@ if ($platform === 'macos') {
             ) ?></p>
         </section>
 
-        <section class="zealot-download-platform__steps" aria-labelledby="mac-install-steps">
-            <h2 id="mac-install-steps"><?= t(
-              'download.macos.steps_title',
-              'How to install and open'
+        <section class="zealot-download-platform__steps" aria-labelledby="mac-silicon-install-steps">
+            <h2 id="mac-silicon-install-steps"><?= t(
+              'download.macos.arm64.steps_title',
+              'Apple Silicon: open with Terminal'
+            ) ?></h2>
+            <ol>
+                <li><?= t(
+                  'download.macos.arm64.step_1',
+                  'Open the Apple Silicon ZIP in <strong>Downloads</strong> and move <strong>Zealot Client.app</strong> to <strong>Applications</strong>.'
+                ) ?></li>
+                <li><?= t(
+                  'download.macos.arm64.step_2',
+                  'Open <strong>Terminal</strong> and run these two commands. They authorize only the Zealot app you installed and then open it.'
+                ) ?></li>
+            </ol>
+            <pre style="overflow-x:auto;margin:12px 0;padding:12px;background:#18372d;color:#fff3d4;text-align:left;"><code>xattr -dr com.apple.quarantine "/Applications/Zealot Client.app"
+open "/Applications/Zealot Client.app"</code></pre>
+            <p><?= t(
+              'download.macos.arm64.step_3',
+              'Use these commands only for the client downloaded from the official Zealot site. If the app is still inside the ZIP, move it to Applications first.'
+            ) ?></p>
+        </section>
+
+        <section class="zealot-download-platform__steps" aria-labelledby="mac-intel-install-steps">
+            <h2 id="mac-intel-install-steps"><?= t(
+              'download.macos.x86_64.steps_title',
+              'Intel: how to install and open'
             ) ?></h2>
             <ol>
                 <li><?= t(
@@ -128,11 +151,11 @@ if ($platform === 'macos') {
                   'Confirm by clicking <strong>Open</strong>. The client will open normally on subsequent launches.'
                 ) ?></li>
             </ol>
-            <p><?= t(
-              'download.macos.ready',
-              'The client is already configured for Zealot: enter your email and password to play.'
-            ) ?></p>
         </section>
+        <p><?= t(
+          'download.macos.ready',
+          'The client is already configured for Zealot: enter your email and password to play.'
+        ) ?></p>
     </div>
     <?php
 } elseif ($platform === 'windows' || $platform === 'linux') {
