@@ -234,13 +234,13 @@ return [
   'download.macos.security_source' =>
     'Baixe o cliente somente por este site. Não desative o Gatekeeper nem execute cópias recebidas por fontes desconhecidas.',
   'download.macos.steps_title' => 'Como instalar e abrir',
-  'download.macos.arm64.steps_title' => 'Apple Silicon: iniciar pelo Terminal',
-  'download.macos.arm64.step_1' =>
-    'Abra o ZIP para Apple Silicon na pasta <strong>Downloads</strong> e mova <strong>Zealot Client.app</strong> para <strong>Aplicativos</strong>.',
-  'download.macos.arm64.step_2' =>
+  'download.macos.terminal.steps_title' => 'macOS: iniciar pelo Terminal',
+  'download.macos.terminal.step_1' =>
+    'Abra o ZIP do processador do seu Mac na pasta <strong>Downloads</strong> e mova <strong>Zealot Client.app</strong> para <strong>Aplicativos</strong>.',
+  'download.macos.terminal.step_2' =>
     'Abra o <strong>Terminal</strong> e execute os comandos abaixo em ordem. Mantenha o Terminal aberto enquanto joga.',
-  'download.macos.arm64.step_3' =>
-    'Use estes comandos somente para o cliente baixado do site oficial do Zealot. O aplicativo precisa estar extraído do ZIP e na pasta Aplicativos. Se o primeiro comando informar falta de permissão, repita-o com sudo no início.',
+  'download.macos.terminal.step_3' =>
+    'Esses comandos servem para Apple Silicon e Intel. Use-os somente com o cliente baixado do site oficial do Zealot. O aplicativo precisa estar extraído do ZIP e na pasta Aplicativos. Se o primeiro comando informar falta de permissão, repita-o com sudo no início.',
   'download.macos.x86_64.steps_title' => 'Intel: como instalar e abrir',
   'download.macos.step_1' => 'Abra o arquivo ZIP baixado na pasta <strong>Downloads</strong>.',
   'download.macos.step_2' =>
@@ -271,6 +271,9 @@ return [
   'download.install.steps_title' => 'Como instalar e abrir',
   'download.install.ready' =>
     'O cliente já vem configurado para o Zealot: basta informar seu e-mail e senha para jogar.',
+  'download.first_login.title' => 'Primeiro acesso',
+  'download.first_login.assets' =>
+    'No primeiro login, o cliente pode mostrar “Missing Assets” para a versão 15.11. Clique em <strong>Download</strong> e aguarde a instalação dos gráficos e sons do jogo. Mantenha o cliente aberto durante essa etapa. Se o login não continuar automaticamente, tente novamente e escolha seu personagem. Normalmente esse download é necessário apenas uma vez.',
   'download.client_alt' => 'Cliente do {server}',
   'download.download_client' => 'Baixar cliente do {server}',
   'download.platform.default' => 'Cliente para o seu dispositivo',

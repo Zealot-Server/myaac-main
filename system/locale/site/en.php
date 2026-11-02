@@ -44,13 +44,13 @@ return [
   'download.macos.security_source' =>
     'Download the client only from this site. Do not disable Gatekeeper or run copies received from unknown sources.',
   'download.macos.steps_title' => 'How to install and open',
-  'download.macos.arm64.steps_title' => 'Apple Silicon: launch from Terminal',
-  'download.macos.arm64.step_1' =>
-    'Open the Apple Silicon ZIP in <strong>Downloads</strong> and move <strong>Zealot Client.app</strong> to <strong>Applications</strong>.',
-  'download.macos.arm64.step_2' =>
+  'download.macos.terminal.steps_title' => 'macOS: launch from Terminal',
+  'download.macos.terminal.step_1' =>
+    'Open the ZIP for your Mac processor in <strong>Downloads</strong> and move <strong>Zealot Client.app</strong> to <strong>Applications</strong>.',
+  'download.macos.terminal.step_2' =>
     'Open <strong>Terminal</strong> and run these commands in order. Keep Terminal open while you play.',
-  'download.macos.arm64.step_3' =>
-    'Use these commands only for the client downloaded from the official Zealot site. The app must be extracted from the ZIP and placed in Applications first. If Terminal reports a permission error on the first command, run that command again with sudo.',
+  'download.macos.terminal.step_3' =>
+    'These commands apply to both Apple Silicon and Intel. Use them only for the client downloaded from the official Zealot site. The app must be extracted from the ZIP and placed in Applications first. If Terminal reports a permission error on the first command, run that command again with sudo.',
   'download.macos.x86_64.steps_title' => 'Intel: how to install and open',
   'download.macos.step_1' =>
     'Open the downloaded ZIP file in the <strong>Downloads</strong> folder.',
@@ -83,6 +83,9 @@ return [
   'download.install.steps_title' => 'How to install and open',
   'download.install.ready' =>
     'The client is already configured for Zealot: enter your email and password to play.',
+  'download.first_login.title' => 'First login',
+  'download.first_login.assets' =>
+    'When you first log in, the client may show “Missing Assets” for version 15.11. Click <strong>Download</strong> and wait for the game graphics and sounds to finish installing. Keep the client open during this step. If login does not continue automatically, try again and select your character. This download is normally needed only once.',
   'download.disclaimer' => 'Disclaimer',
   'download.disclaimer_copy' =>
     'The software and any related documentation is provided "as is" without warranty of any kind. The entire risk arising out of use of the software remains with you. In no event shall Zealot be liable for any damages to your computer or loss of data.',

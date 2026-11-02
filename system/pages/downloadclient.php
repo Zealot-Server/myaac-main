@@ -101,18 +101,18 @@ if ($platform === 'macos') {
             ) ?></p>
         </section>
 
-        <section class="zealot-download-platform__steps" aria-labelledby="mac-silicon-install-steps">
-            <h2 id="mac-silicon-install-steps"><?= t(
-              'download.macos.arm64.steps_title',
-              'Apple Silicon: launch from Terminal'
+        <section class="zealot-download-platform__steps" aria-labelledby="mac-install-steps">
+            <h2 id="mac-install-steps"><?= t(
+              'download.macos.terminal.steps_title',
+              'macOS: launch from Terminal'
             ) ?></h2>
             <ol>
                 <li><?= t(
-                  'download.macos.arm64.step_1',
-                  'Open the Apple Silicon ZIP in <strong>Downloads</strong> and move <strong>Zealot Client.app</strong> to <strong>Applications</strong>.'
+                  'download.macos.terminal.step_1',
+                  'Open the ZIP for your Mac processor in <strong>Downloads</strong> and move <strong>Zealot Client.app</strong> to <strong>Applications</strong>.'
                 ) ?></li>
                 <li><?= t(
-                  'download.macos.arm64.step_2',
+                  'download.macos.terminal.step_2',
                   'Open <strong>Terminal</strong> and run these commands in order. Keep Terminal open while you play.'
                 ) ?></li>
             </ol>
@@ -120,43 +120,18 @@ if ($platform === 'macos') {
 cd "/Applications/Zealot Client.app/Contents/Resources"
 "../MacOS/Zealot Client"</code></pre>
             <p><?= t(
-              'download.macos.arm64.step_3',
-              'Use these commands only for the client downloaded from the official Zealot site. The app must be extracted from the ZIP and placed in Applications first. If Terminal reports a permission error on the first command, run that command again with sudo.'
+              'download.macos.terminal.step_3',
+              'These commands apply to both Apple Silicon and Intel. Use them only for the client downloaded from the official Zealot site. The app must be extracted from the ZIP and placed in Applications first. If Terminal reports a permission error on the first command, run that command again with sudo.'
             ) ?></p>
-        </section>
-
-        <section class="zealot-download-platform__steps" aria-labelledby="mac-intel-install-steps">
-            <h2 id="mac-intel-install-steps"><?= t(
-              'download.macos.x86_64.steps_title',
-              'Intel: how to install and open'
-            ) ?></h2>
-            <ol>
-                <li><?= t(
-                  'download.macos.step_1',
-                  'Open the downloaded ZIP file in the <strong>Downloads</strong> folder.'
-                ) ?></li>
-                <li><?= t(
-                  'download.macos.step_2',
-                  'Drag <strong>Zealot Client.app</strong> to the <strong>Applications</strong> folder.'
-                ) ?></li>
-                <li><?= t(
-                  'download.macos.step_3',
-                  'Open the application from the Applications folder.'
-                ) ?></li>
-                <li><?= t(
-                  'download.macos.step_4',
-                  'If macOS blocks the first launch, go to <strong>System Settings &gt; Privacy &amp; Security</strong>, find the Zealot Client message, and click <strong>Open Anyway</strong>.'
-                ) ?></li>
-                <li><?= t(
-                  'download.macos.step_5',
-                  'Confirm by clicking <strong>Open</strong>. The client will open normally on subsequent launches.'
-                ) ?></li>
-            </ol>
         </section>
         <p><?= t(
           'download.macos.ready',
           'The client is already configured for Zealot: enter your email and password to play.'
         ) ?></p>
+        <section class="zealot-download-platform__steps" aria-labelledby="mac-first-login">
+            <h2 id="mac-first-login"><?= t('download.first_login.title', 'First login') ?></h2>
+            <p><?= t('download.first_login.assets', 'When you first log in, the client may show “Missing Assets” for version 15.11. Click <strong>Download</strong> and wait for the game graphics and sounds to finish installing. Keep the client open during this step. If login does not continue automatically, try again and select your character. This download is normally needed only once.') ?></p>
+        </section>
     </div>
     <?php
 } elseif ($platform === 'windows' || $platform === 'linux') {
@@ -239,6 +214,10 @@ cd "/Applications/Zealot Client.app/Contents/Resources"
               'download.install.ready',
               'The client is already configured for Zealot: enter your email and password to play.'
             ) ?></p>
+        </section>
+        <section class="zealot-download-platform__steps" aria-labelledby="<?= $platform ?>-first-login">
+            <h2 id="<?= $platform ?>-first-login"><?= t('download.first_login.title', 'First login') ?></h2>
+            <p><?= t('download.first_login.assets', 'When you first log in, the client may show “Missing Assets” for version 15.11. Click <strong>Download</strong> and wait for the game graphics and sounds to finish installing. Keep the client open during this step. If login does not continue automatically, try again and select your character. This download is normally needed only once.') ?></p>
         </section>
     </div>
     <?php
