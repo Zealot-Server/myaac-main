@@ -130,7 +130,10 @@ cd "/Applications/Zealot Client.app/Contents/Resources"
         ) ?></p>
         <section class="zealot-download-platform__steps" aria-labelledby="mac-first-login">
             <h2 id="mac-first-login"><?= t('download.first_login.title', 'First login') ?></h2>
-            <p><?= t('download.first_login.assets', 'When you first log in, the client may show “Missing Assets” for version 15.11. Click <strong>Download</strong> and wait for the game graphics and sounds to finish installing. Keep the client open during this step. If login does not continue automatically, try again and select your character. This download is normally needed only once.') ?></p>
+            <p><?= t(
+              'download.first_login.assets',
+              'When you first log in, the client may show “Missing Assets” for version 15.11. Click <strong>Download</strong> and wait for the game graphics and sounds to finish installing. Keep the client open during this step. If login does not continue automatically, try again and select your character. This download is normally needed only once.'
+            ) ?></p>
         </section>
     </div>
     <?php
@@ -216,8 +219,14 @@ cd "/Applications/Zealot Client.app/Contents/Resources"
             ) ?></p>
         </section>
         <section class="zealot-download-platform__steps" aria-labelledby="<?= $platform ?>-first-login">
-            <h2 id="<?= $platform ?>-first-login"><?= t('download.first_login.title', 'First login') ?></h2>
-            <p><?= t('download.first_login.assets', 'When you first log in, the client may show “Missing Assets” for version 15.11. Click <strong>Download</strong> and wait for the game graphics and sounds to finish installing. Keep the client open during this step. If login does not continue automatically, try again and select your character. This download is normally needed only once.') ?></p>
+            <h2 id="<?= $platform ?>-first-login"><?= t(
+  'download.first_login.title',
+  'First login'
+) ?></h2>
+            <p><?= t(
+              'download.first_login.assets',
+              'When you first log in, the client may show “Missing Assets” for version 15.11. Click <strong>Download</strong> and wait for the game graphics and sounds to finish installing. Keep the client open during this step. If login does not continue automatically, try again and select your character. This download is normally needed only once.'
+            ) ?></p>
         </section>
     </div>
     <?php
