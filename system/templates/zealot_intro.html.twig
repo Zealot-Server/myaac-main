@@ -1,0 +1,15 @@
+<section class="zealot-intro" aria-labelledby="zealot-intro-title">
+  <p class="zealot-intro__eyebrow">{{ t('intro.eyebrow') }}</p>
+  <h1 id="zealot-intro-title">{{ t('intro.title') }}</h1>
+  <p class="zealot-intro__lead">{{ t('intro.lead') }}</p>
+  <div class="zealot-intro__features">
+    <span>{{ t('intro.progression') }}</span>
+    <span>{{ t('intro.training') }}</span>
+    <span>{{ t('intro.platforms') }}</span>
+  </div>
+  <div class="zealot-intro__actions">
+    <a class="zealot-intro__primary" href="{{ getLink('createaccount') }}">{{ t('intro.create_account') }}</a>
+    <a href="{{ getLink('downloadclient') }}">{{ t('intro.download') }}</a>
+    <a href="{{ getLink('expstages') }}">{{ t('intro.rates') }}</a>
+  </div>
+</section>

@@ -146,6 +146,8 @@ if(isset($_GET['archive']))
 header('X-XSS-Protection: 0');
 $title = 'Latest News';
 
+$twig->display('zealot_intro.html.twig');
+
 $cache = Cache::getInstance();
 $canEdit = hasFlag(FLAG_CONTENT_NEWS) || superAdmin();
 

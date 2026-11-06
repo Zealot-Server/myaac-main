@@ -51,11 +51,11 @@ $config = [
 
   // head options (html)
   'meta_description' =>
-    'Zealot Server is a 1x PvP MMORPG in public alpha. Create your account, download the official client, and begin your journey in Rookgaard.', // description of the site
+    'Join Zealot, a PvP MMORPG in public alpha. Start in Rookgaard, explore progressive XP and the training area, and play on Windows, Linux or macOS.', // description of the site
   'meta_keywords' => 'zealot server, mmorpg, online role playing game, pvp server, rookgaard', // keywords list separated by commas
   'share_title' => 'Zealot Server', // title used when the website is shared on social platforms
   'share_description' =>
-    'Zealot Server is a 1x PvP MMORPG in public alpha. Create your account, download the official client, and begin your journey in Rookgaard.',
+    'Start in Rookgaard, train your skills and explore Zealot with progressive XP. Public PvP alpha for Windows, Linux and macOS.',
   'title_separator' => ' - ',
 
   // footer

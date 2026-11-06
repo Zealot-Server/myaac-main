@@ -47,11 +47,13 @@ if ($now > $serverSaveTime) {
 
 $twig->display('serverinfo.html.twig', [
     'serverSave' => $explodeServerSave,
-    'serverSaveTime' => $serverSaveTime->format('Y, n-1, j, G, i, s'),
+    'serverSaveTime' => $serverSaveTime->getTimestamp() * 1000,
     'rateUseStages' => $rateUseStages = getBoolean(configLua('rateUseStages')),
     'rateStages' => $rateUseStages && isset($config['lua']['rateStages']) ? $config['lua']['rateStages'] : [],
-    'serverIp' => str_replace(['http://', 'https://', '/'], '', configLua('url')),
+    'gameHost' => 'game.zealot.website',
+    'gamePort' => configLua('gameProtocolPort'),
     'clientVersion' => $status['clientVersion'] ?? null,
+    'uptimeReadable' => $status['uptimeReadable'] ?? null,
     'protectionLevel' => configLua('protectionLevel'),
     'houseRent' => $rent == 'never' ? 'disabled' : $rent,
     'houseOld' => $cleanOld ?? null, // in progressing
