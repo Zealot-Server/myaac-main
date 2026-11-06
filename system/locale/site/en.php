@@ -11,7 +11,8 @@ return [
   'quick.download_client' => 'Download Zealot Client',
   'intro.eyebrow' => 'Public alpha · PvP world',
   'intro.title' => 'Your adventure starts in Rookgaard',
-  'intro.lead' => 'Explore Zealot, choose your path to the mainland and help shape the world as it grows.',
+  'intro.lead' =>
+    'Explore Zealot, choose your path to the mainland and help shape the world as it grows.',
   'intro.progression' => 'Progressive XP: 50x in Rookgaard, 80x from level 9 to 50',
   'intro.training' => 'Training area for your skills',
   'intro.platforms' => 'Play on Windows, Linux and macOS',

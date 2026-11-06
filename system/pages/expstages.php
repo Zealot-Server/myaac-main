@@ -6,48 +6,14 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 $title = t('intro.rates');
 
-function myaac_parse_stages_block($content, $name)
-{
-	$stages = [];
-	$start = strpos($content, $name . ' = {');
-	if($start === false) {
-		return $stages;
-	}
-
-	$section = substr($content, $start);
-	if(preg_match('/\n\n[a-zA-Z]+Stages\s*=\s*\{/', $section, $next, PREG_OFFSET_CAPTURE, strlen($name))) {
-		$section = substr($section, 0, $next[0][1]);
-	}
-
-	if(preg_match_all('/\{\s*(.*?)\s*\}/s', $section, $rows)) {
-		foreach($rows[1] as $row) {
-			$stage = [
-				'minlevel' => null,
-				'maxlevel' => null,
-				'multiplier' => null,
-			];
-
-			foreach($stage as $key => $value) {
-				if(preg_match('/' . $key . '\s*=\s*([0-9.]+)/', $row, $field)) {
-					$stage[$key] = $field[1];
-				}
-			}
-
-			if($stage['minlevel'] !== null && $stage['multiplier'] !== null) {
-				$stages[] = $stage;
-			}
-		}
-	}
-
-	return $stages;
-}
+require_once LIBS . 'zealot_stages.php';
 
 $stagesFile = rtrim($config['server_path'], '/\\') . '/data/stages.lua';
 $stagesContent = is_readable($stagesFile) ? file_get_contents($stagesFile) : '';
 $groups = [
-	'Experience' => myaac_parse_stages_block($stagesContent, 'experienceStages'),
-	'Skills' => myaac_parse_stages_block($stagesContent, 'skillsStages'),
-	'Magic Level' => myaac_parse_stages_block($stagesContent, 'magicLevelStages'),
+  'Experience' => myaac_parse_stages_block($stagesContent, 'experienceStages'),
+  'Skills' => myaac_parse_stages_block($stagesContent, 'skillsStages'),
+  'Magic Level' => myaac_parse_stages_block($stagesContent, 'magicLevelStages'),
 ];
 ?>
 <div class="TableContainer">
@@ -70,8 +36,12 @@ $groups = [
 			<td>
 				<div class="InnerTableContainer">
 					<table style="width:100%;">
-						<?php foreach($groups as $label => $stages): ?>
-						<tr><td class="LabelV"><?= htmlspecialchars(t('intro.group.' . strtolower(str_replace(' ', '_', $label))), ENT_QUOTES, 'UTF-8') ?></td></tr>
+						<?php foreach ($groups as $label => $stages): ?>
+						<tr><td class="LabelV"><?= htmlspecialchars(
+        t('intro.group.' . strtolower(str_replace(' ', '_', $label))),
+        ENT_QUOTES,
+        'UTF-8'
+      ) ?></td></tr>
 							<tr>
 								<td>
 									<table class="TableContent" width="100%">
@@ -80,13 +50,19 @@ $groups = [
 										<td class="white"><b><?= htmlspecialchars(t('intro.to_level'), ENT_QUOTES, 'UTF-8') ?></b></td>
 										<td class="white"><b><?= htmlspecialchars(t('intro.rate'), ENT_QUOTES, 'UTF-8') ?></b></td>
 										</tr>
-										<?php if(empty($stages)): ?>
-											<tr bgcolor="<?= $config['lightborder'] ?>"><td colspan="3"><?= htmlspecialchars(t('intro.no_stages'), ENT_QUOTES, 'UTF-8') ?></td></tr>
+										<?php if (empty($stages)): ?>
+											<tr bgcolor="<?= $config['lightborder'] ?>"><td colspan="3"><?= htmlspecialchars(
+  t('intro.no_stages'),
+  ENT_QUOTES,
+  'UTF-8'
+) ?></td></tr>
 										<?php else: ?>
-											<?php foreach($stages as $index => $stage): ?>
+											<?php foreach ($stages as $index => $stage): ?>
 												<tr bgcolor="<?= getStyle($index + 1) ?>">
 													<td><?= htmlspecialchars($stage['minlevel']) ?></td>
-													<td><?= $stage['maxlevel'] === null ? htmlspecialchars(t('intro.and_above'), ENT_QUOTES, 'UTF-8') : htmlspecialchars($stage['maxlevel']) ?></td>
+													<td><?= $stage['maxlevel'] === null
+               ? htmlspecialchars(t('intro.and_above'), ENT_QUOTES, 'UTF-8')
+               : htmlspecialchars($stage['maxlevel']) ?></td>
 													<td><?= htmlspecialchars($stage['multiplier']) ?>x</td>
 												</tr>
 											<?php endforeach; ?>
