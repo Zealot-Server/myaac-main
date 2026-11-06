@@ -71,17 +71,16 @@
 
 .Content .zealot-server-overview {
   display: grid;
-  grid-template-columns: minmax(180px, 1fr) minmax(0, 2fr);
-  gap: 16px;
-  align-items: start;
+  gap: 12px;
 }
 
 .Content .zealot-server-save {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
-  padding: 16px 12px;
+  justify-content: center;
+  gap: 8px 20px;
+  padding: 10px 16px;
   border: 1px solid #9b7842;
   background: #d4c0a1;
   color: #542b0a;
@@ -93,14 +92,29 @@
 }
 
 .Content .zealot-server-save time {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
-@media (max-width: 650px) {
-  .Content .zealot-server-overview {
+.Content .zealot-server-sections {
+  display: grid;
+  gap: 16px;
+}
+
+.Content .zealot-server-sections > div {
+  min-width: 0;
+}
+
+.Content .zealot-xp-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 700px) {
+  .Content .zealot-xp-grid {
     grid-template-columns: 1fr;
   }
 }
