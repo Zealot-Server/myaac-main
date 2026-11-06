@@ -102,7 +102,7 @@
     <div class="donate_header"><?= htmlspecialchars(t('payment.title'), ENT_QUOTES, 'UTF-8'); ?></div>
     <div class="donate_content">
         <div class="donate_shop_icons" aria-label="<?= htmlspecialchars(t('payment.shop_icons'), ENT_QUOTES, 'UTF-8'); ?>">
-            <img src="<?= $template_path; ?>/images/menu/anim/icon-shops02.gif?v=<?= filemtime(__DIR__ . '/../images/menu/anim/icon-shops02.gif'); ?>" alt="<?= htmlspecialchars(t('payment.shop_alt'), ENT_QUOTES, 'UTF-8'); ?>">
+            <img src="<?= $template_path; ?>/images/menu/anim/icon-shops05.gif?v=<?= filemtime(__DIR__ . '/../images/menu/anim/icon-shops05.gif'); ?>" alt="<?= htmlspecialchars(t('payment.shop_alt'), ENT_QUOTES, 'UTF-8'); ?>">
         </div>
         <a href="<?php echo BASE_URL ?>?subtopic=donate&type=coins">
             <button type="button" class="donate_button"><?= htmlspecialchars(t('payment.buy_coins'), ENT_QUOTES, 'UTF-8'); ?></button>
