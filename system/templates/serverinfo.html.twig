@@ -1,23 +1,22 @@
+<link rel="stylesheet" href="{{ template_path }}/zealot-landing.css">
 <script>
-  var serverSaveTime = new Date({{ serverSaveTime }});
-  var x = setInterval(function() {
-    var now = new Date().getTime();
-    var distance = serverSaveTime - now;
-    var hours = Math.floor(distance / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    hours = hours < 10 ? "0" + hours : hours;
-    minutes = minutes < 10 ? "0" + minutes : minutes;
-    seconds = seconds < 10 ? "0" + seconds : seconds;
-    document.getElementById("timerServerSave_hour").innerHTML = hours + "h ";
-    document.getElementById("timerServerSave_minute").innerHTML = minutes + "m ";
-    document.getElementById("timerServerSave_second").innerHTML = seconds + "s ";
-
-    if (distance < 0) {
-      clearInterval(x);
-      document.getElementById("timerServerSave_hour").innerHTML = "Server save now!";
+  document.addEventListener('DOMContentLoaded', function() {
+    var nextSave = {{ serverSaveTime }};
+    var counter = document.getElementById('timerServerSaveInfo');
+    function updateServerSave() {
+      var now = Date.now();
+      while (nextSave <= now) nextSave += 86400000;
+      var remaining = Math.ceil((nextSave - now) / 1000);
+      var hours = Math.floor(remaining / 3600);
+      var minutes = Math.floor((remaining % 3600) / 60);
+      var seconds = remaining % 60;
+      counter.textContent = [hours, minutes, seconds].map(function(part) {
+        return String(part).padStart(2, '0');
+      }).join(':');
     }
-  }, 1000);
+    updateServerSave();
+    setInterval(updateServerSave, 1000);
+  });
 </script>
 
 <div style="text-align:center">
@@ -57,31 +56,14 @@
   </div>
 </div>
 <br>
-<div style="display: flex;">
-  <div
-    style="width: 100%; display: grid; justify-content: center; text-align: center; max-height: 120px; margin-top: 3%;">
-    <p style="font-size: 24px; font-weight: bold; margin: 0;">Server Save<br></p>
-    <small style="margin: 0 0 10px 0;">Every day {{ serverSave.0 }}:{{ serverSave.1 }}</small>
-    <div style="display: flex;">
-      <div
-        style="padding: 10px; box-shadow: 3px 3px 2px #875f3e; border: 1px solid #5f4d41; background-color: #d4c0a1; border-radius: 5px 0 0 5px;">
-        <label>hours</label>
-        <div id="timerServerSave_hour" style="font-size: 24px; font-weight: bold;"></div>
-      </div>
-      <div
-        style="padding: 10px; box-shadow: 3px 3px 2px #875f3e; border: 1px solid #5f4d41; background-color: #d4c0a1;">
-        <label>minutes</label>
-        <div id="timerServerSave_minute" style="font-size: 24px; font-weight: bold;"></div>
-      </div>
-      <div
-        style="padding: 10px; box-shadow: 3px 3px 2px #875f3e; border: 1px solid #5f4d41; background-color: #d4c0a1; border-radius: 0 5px 5px 0;">
-        <label>seconds</label>
-        <div id="timerServerSave_second" style="font-size: 24px; font-weight: bold;"></div>
-      </div>
-    </div>
+<div class="zealot-server-overview">
+  <div class="zealot-server-save">
+    <strong>{{ t('server_info.save_title') }}</strong>
+    <span>{{ t('server_info.save_daily') }} {{ serverSave.0 }}:{{ serverSave.1 }}</span>
+    <time id="timerServerSaveInfo" aria-live="off">--:--:--</time>
   </div>
 
-  <div style="width: 100%;">
+  <div class="zealot-server-overview__details">
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
       <tbody>
       <tr>
@@ -123,14 +105,18 @@
                             <table class="TableContent" width="100%">
                               <tbody>
                               <tr bgcolor="#D4C0A1">
-                                <td><b>IP:</b> {{ serverIp }} (Port: {{ config.lua.loginPort }})</td>
+                                <td><b>{{ t('server_info.game_address') }}:</b> {{ gameHost }}{% if gamePort %}:{{ gamePort }}{% endif %}</td>
                               </tr>
+                              {% if clientVersion %}
                               <tr bgcolor="#F1E0C6">
                                 <td><b>Client: </b> {{ clientVersion }}</td>
                               </tr>
+                              {% endif %}
+                              {% if uptimeReadable %}
                               <tr bgcolor="#D4C0A1">
-                                <td><b>Uptime:</b> {{ status.uptimeReadable }} </td>
+                                <td><b>Uptime:</b> {{ uptimeReadable }} </td>
                               </tr>
+                              {% endif %}
                               <tr bgcolor="#F1E0C6">
                                 <td><b>Global save: </b> {{ serverSave.0 }}:{{ serverSave.1 }}</td>
                               </tr>
@@ -268,7 +254,7 @@
                   <span class="CaptionVerticalLeft"
                         style="background-image:url(templates/tibiacom/images/global/content/box-frame-vertical.gif);"></span>
                   <div class="Text">
-                    <div style="height: 16px;">Rates Exp based on Level:</div>
+                    <div style="height: 16px;">{{ t('intro.rates') }}</div>
                   </div>
                   <span class="CaptionVerticalRight"
                         style="background-image:url(templates/tibiacom/images/global/content/box-frame-vertical.gif);"></span>
@@ -280,31 +266,24 @@
                         style="background-image:url(templates/tibiacom/images/global/content/box-frame-edge.gif);"></span>
                 </div>
               </div>
-              <div style="top: 15px;" id="ExpTableCollapse" class="BigToggleButton"
-                   onclick="CollapseTable('ExpTableCollapseContainer'); $('#labelshow').html($('#labelshow').html() === 'show' ? 'hide' : 'show');"
-                   onmouseover="ActivateHelperDiv($(this), '', 'Click here to expand the list of experience rates.', '');"
-                   onmouseout="$('#HelperDivContainer').hide();">
-                <div id="Indicator_ExpTableCollapseContainer" class="CircleSymbolMinus"
-                     style="position: absolute; height: 18px; width: 18px; top: -8px; right: -8px; z-index: 99; cursor: pointer; background-image: url({{ BASE_URL }}templates/tibiacom/images/global/content/circle-symbol-plus.gif);"></div>
-              </div>
               <table class="Table3" cellpadding="0" cellspacing="0" style="width: 100%">
                 <tbody>
                 <tr>
                   <td>
-                    <div class="InnerTableContainer" id="ExpTableCollapseContainer" style="display: none; margin: 0;">
+                    <div class="InnerTableContainer" id="ExpTableCollapseContainer" style="margin: 0;">
                       <table class="TableContent" width="100%">
                         <tbody>
                         <tr>
-                          <th>From level</th>
-                          <th>To level</th>
-                          <th>Exp rate</th>
+                          <th>{{ t('intro.from_level') }}</th>
+                          <th>{{ t('intro.to_level') }}</th>
+                          <th>{{ t('intro.exp_rate') }}</th>
                         </tr>
                         {% set i = 0 %}
                         {% for result in rateStages.experienceStages %}
                           {% set i = i + 1 %}
                           <tr bgcolor="{{ getStyle(i) }}">
                             <td>{{ result.minlevel }}</td>
-                            <td>{% if result.maxlevel is not empty %} {{ result.maxlevel }} {% else %} - {% endif %}</td>
+                            <td>{% if result.maxlevel is not empty %} {{ result.maxlevel }} {% else %} {{ t('intro.and_above') }} {% endif %}</td>
                             <td>{{ result.multiplier }}x</td>
                           </tr>
                         {% endfor %}
