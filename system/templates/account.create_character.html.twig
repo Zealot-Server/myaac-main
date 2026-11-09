@@ -1,5 +1,6 @@
 <p>{{ t('character.create.intro', 'Choose a name and sex for your character. Every new character begins in Rookgaard, where you will choose a vocation in-game.') }}</p>
 <p>{{ t('character.create.rules_notice', 'Character names must follow the {server} Rules.', {'server': config.lua.serverName}) }}</p>
+<p>{{ t('account.create.operating_system', 'Operating system') }}: <strong>{{ account_operating_system }}</strong></p>
 
 {% if account_logged.getPlayersList()|length >= config.characters_per_account %}
   <p><strong style="color: red">{{ t('character.create.limit', 'You have reached the maximum number of characters on this account. Delete one before creating another.') }}</strong></p>

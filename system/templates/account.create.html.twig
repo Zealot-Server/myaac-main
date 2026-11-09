@@ -65,6 +65,23 @@
 
 												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_EMAIL') }}
 
+                                                <tr>
+                                                    <td class="LabelV" style="width: 150px">
+                                                        <label for="operating_system"{% if errors.operating_system is defined %} class="red"{% endif %}>{{ t('account.create.operating_system', 'Operating system') }}:</label>
+                                                    </td>
+                                                    <td>
+                                                        <select name="operating_system" id="operating_system" required>
+                                                            <option value="">{{ t('account.create.operating_system_choose', 'Choose your system') }}</option>
+                                                            <option value="windows"{% if operating_system == 'windows' %} selected{% endif %}>Windows</option>
+                                                            <option value="linux"{% if operating_system == 'linux' %} selected{% endif %}>Linux</option>
+                                                            <option value="macos"{% if operating_system == 'macos' %} selected{% endif %}>macOS</option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                {% if errors.operating_system is defined %}
+                                                    <tr><td></td><td><span class="FormFieldError">{{ errors.operating_system }}</span></td></tr>
+                                                {% endif %}
+
                                                 {% if config.account_country %}
 													<tr>
 														<td class="LabelV" style="width: 150px">

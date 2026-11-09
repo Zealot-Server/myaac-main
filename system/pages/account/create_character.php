@@ -31,7 +31,11 @@ if(count($errors) > 0) {
 }
 
 if(!$character_created) {
+	$accountOperatingSystem = $account_logged->getCustomField('operating_system');
+	$accountOperatingSystem = array('windows' => 'Windows', 'linux' => 'Linux', 'macos' => 'macOS')[$accountOperatingSystem]
+		?? t('account.operating_system_unknown', 'Not specified');
 	$twig->display('account.create_character.html.twig', array(
+		'account_operating_system' => $accountOperatingSystem,
 		'name' => $character_name,
 		'sex' => $character_sex,
 		'vocation' => $character_vocation,

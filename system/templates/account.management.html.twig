@@ -113,15 +113,19 @@
         <td>{{ account_created|date("j F Y, G:i:s") }}</td>
       </tr>
       <tr style="background-color: {{ config.darkborder }};">
+        <td>{{ t('account.create.operating_system', 'Operating system') }}:</td>
+        <td>{{ account_operating_system }}</td>
+      </tr>
+      <tr style="background-color: {{ config.lightborder }};">
         <td>Last Login:</td>
         <td>{{ account_web_lastlogin|date("j F Y, G:i:s") }}</td>
       </tr>
       {% autoescape false %}
-        <tr style="background-color: {{ config.lightborder }};">
+        <tr style="background-color: {{ config.darkborder }};">
           <td>Account Status:</td>
           <td>{{ account_status }}</td>
         </tr>
-        <tr style="background-color: {{ config.darkborder }};">
+        <tr style="background-color: {{ config.lightborder }};">
           <td>Registered:</td>
           <td>{{ account_registered }}</td>
         </tr>

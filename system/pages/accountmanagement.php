@@ -87,6 +87,9 @@ if ($action == '') {
 
     $account_created = $account_logged->getCreated();
     $account_email = $account_logged->getEMail();
+    $accountOperatingSystem = $account_logged->getCustomField('operating_system');
+    $accountOperatingSystem = array('windows' => 'Windows', 'linux' => 'Linux', 'macos' => 'macOS')[$accountOperatingSystem]
+        ?? t('account.operating_system_unknown', 'Not specified');
     $email_new_time = $account_logged->getCustomField("email_new_time");
     if ($email_new_time > 1)
         $email_new = $account_logged->getCustomField("email_new");
@@ -163,6 +166,7 @@ if ($action == '') {
         'account_coins_transferable' => $acc_coins_transfer,
         'tournament_coins' => $tournament_coins,
         'account_email' => $account_email,
+        'account_operating_system' => $accountOperatingSystem,
         'account_created' => $account_created,
         'account_web_lastlogin' => $account_logged->getCustomField('web_lastlogin'),
         'account_status' => $account_status,

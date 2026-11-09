@@ -101,6 +101,9 @@ if ($save) {
     $email = $_POST['email'];
     $password = $_POST['password'];
     $password2 = $_POST['password2'];
+    $operating_system = $_POST['operating_system'] ?? '';
+    if (!in_array($operating_system, array('windows', 'linux', 'macos'), true))
+        $errors['operating_system'] = t('account.create.operating_system_error', 'Choose the operating system you will use to play.');
 
     // account
     if (isset($account_id)) {
@@ -213,6 +216,7 @@ if ($save) {
             $new_account->setCustomField('salt', $salt);
 
         $new_account->setCustomField('created', time());
+        $new_account->setCustomField('operating_system', $operating_system);
         $new_account->logAction('Account created.');
 
         if ($config['account_country']) {
@@ -349,6 +353,7 @@ $twig->display('account.create.js.html.twig');
 $params = array(
     'account' => $_POST['account'] ?? '',
     'email' => $_POST['email'] ?? '',
+    'operating_system' => $_POST['operating_system'] ?? '',
     'countries' => $countries ?? null,
     'accept_rules' => $_POST['accept_rules'] ?? false,
     'country_recognized' => $country_recognized,
