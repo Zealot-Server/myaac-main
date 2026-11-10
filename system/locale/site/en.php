@@ -222,6 +222,9 @@ return [
   'character.restore.expired' => 'The 30-day restoration period for this character has expired.',
   'character.restore.success_title' => 'Character Restored',
   'character.restore.success_description' => 'The character <b>{name}</b> is available again.',
+  'news.training.thais.title' => 'Free training area now open in Thais',
+  'news.training.thais.body' =>
+    '<p><strong>A new free training area is open in Thais.</strong> Free Account players can practice their skills with Training Monks without Premium time. Use the images below to recognize the entrance and the training rooms.</p><p>Bring your character to Thais and start training today.</p><div class="zealot-training-news-gallery"><figure><a href="/images/news/thais-training-entrance.webp" target="_blank" rel="noopener noreferrer"><img src="/images/news/thais-training-entrance.webp" alt="Entrance to the training area in Thais" loading="lazy" decoding="async"></a><figcaption>Find the entrance in Thais</figcaption></figure><figure><a href="/images/news/thais-training-area.webp" target="_blank" rel="noopener noreferrer"><img src="/images/news/thais-training-area.webp" alt="Training rooms with Training Monks" loading="lazy" decoding="async"></a><figcaption>Train with the Training Monks</figcaption></figure></div>',
   'news.alpha.welcome.title' => 'Welcome to Zealot Alpha',
   'news.alpha.welcome.body' =>
     '<p>Zealot has entered its first public alpha phase. The world is online for explorers who want to help shape its systems, balance and community from the beginning.</p><p>Create your account, make a character and begin your journey in Rookgaard. This phase is focused on stability, gameplay feedback and building a welcoming community.</p><p>Thank you for playing early and helping us make Zealot better with every update.</p>',

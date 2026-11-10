@@ -27,6 +27,7 @@ $(document).ready(function(){
  function localizeAlphaNews(array $news): array
  {
    $keys = [
+     'Free training area now open in Thais' => 'news.training.thais',
      'Welcome to Zealot Alpha' => 'news.alpha.welcome',
      'Alpha: what to expect' => 'news.alpha.expect',
      'How to help Zealot grow' => 'news.alpha.help',

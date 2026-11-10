@@ -130,6 +130,9 @@ return [
   'character.restore.success_title' => 'Personagem restaurado',
   'character.restore.success_description' =>
     'O personagem <b>{name}</b> está disponível novamente.',
+  'news.training.thais.title' => 'Nova área de treino gratuita em Thais',
+  'news.training.thais.body' =>
+    '<p><strong>Uma nova área de treino gratuita está aberta em Thais.</strong> Jogadores com conta gratuita podem treinar suas habilidades nos Training Monks sem precisar de Premium. Use as imagens abaixo para reconhecer a entrada e as salas de treino.</p><p>Leve seu personagem até Thais e comece a treinar hoje.</p><div class="zealot-training-news-gallery"><figure><a href="/images/news/thais-training-entrance.webp" target="_blank" rel="noopener noreferrer"><img src="/images/news/thais-training-entrance.webp" alt="Entrada da área de treino em Thais" loading="lazy" decoding="async"></a><figcaption>Encontre a entrada em Thais</figcaption></figure><figure><a href="/images/news/thais-training-area.webp" target="_blank" rel="noopener noreferrer"><img src="/images/news/thais-training-area.webp" alt="Salas de treino com Training Monks" loading="lazy" decoding="async"></a><figcaption>Treine com os Training Monks</figcaption></figure></div>',
   'news.alpha.welcome.title' => 'Bem-vindo ao Alfa do Zealot',
   'news.alpha.welcome.body' =>
     '<p>O Zealot entrou em sua primeira fase alfa pública. O mundo está online para exploradores que querem ajudar a moldar seus sistemas, balanceamento e comunidade desde o começo.</p><p>Crie sua conta, faça um personagem e comece sua jornada em Rookgaard. Esta fase é focada em estabilidade, feedback de jogabilidade e em formar uma comunidade acolhedora.</p><p>Obrigado por jogar desde cedo e nos ajudar a melhorar o Zealot a cada atualização.</p>',
