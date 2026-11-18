@@ -399,7 +399,8 @@ return [
   'account.create.account_number' => 'número da conta',
   'account.create.operating_system' => 'Sistema operacional',
   'account.create.operating_system_choose' => 'Escolha seu sistema',
-  'account.create.operating_system_error' => 'Escolha o sistema operacional que você usará para jogar.',
+  'account.create.operating_system_error' =>
+    'Escolha o sistema operacional que você usará para jogar.',
   'account.operating_system_unknown' => 'Não informado',
   'account.create.hint_recaptcha' => ', confirme o reCAPTCHA',
   'account.create.hint_country' => ' e selecione seu país',
