@@ -153,6 +153,9 @@ return [
     '<p>O Zealot está em fase alfa. Este é o início de um mundo construído com seus jogadores: teste o jogo, compartilhe sua experiência e acompanhe cada atualização conforme o servidor cresce.</p>',
   'news.alpha.featured.article_text' =>
     'Participe da primeira fase alfa pública e ajude a moldar o futuro do Zealot.',
+  'news.update.20261118.title' => 'Conversão de moedas ativa; cliente 1.0.4 a caminho',
+  'news.update.20261118.body' =>
+    '<p><strong>A conversão de moedas já está ativa.</strong> Você pode transformar uma pilha de 100 gold coins em 1 platinum coin, ou 100 platinum coins em 1 crystal coin. A nova moeda permanece no mesmo espaço do inventário.</p><p><strong>Como converter:</strong></p><ol><li>Junte exatamente 100 gold coins em uma única pilha.</li><li>Com Classic Control, clique com o botão direito na pilha. Em outro modo de controle, escolha Usar.</li><li>A pilha vira 1 platinum coin. Repita com uma pilha de 100 platinum coins para obter 1 crystal coin.</li></ol><p>Você também pode usar uma única platinum ou crystal coin para voltar a 100 moedas da denominação anterior, como já acontecia.</p><p>O mapa atualizado já está ativo no servidor, e a área de treino gratuita em Thais continua disponível.</p><p><strong>O cliente 1.0.4 está em validação final.</strong> Ele trará o minimapa completo do mundo atualizado, caminhada mais fluida em viagens longas pelo minimapa e verificação da versão no login. Também oferecerá duas opções nas próximas atualizações: abrir a página de download ou atualizar automaticamente. O atualizador verifica o pacote baixado e guarda uma cópia da instalação anterior.</p><p>O download público atual ainda é o 1.0.3. Quem usa essa versão precisará instalar o 1.0.4 pela <a href="/?subtopic=downloadclient">página de download</a> quando ele for publicado. As versões seguintes poderão usar a atualização automática.</p>',
   'server_save.title' => 'Próximo salvamento',
   'server_save.countdown' => 'Contagem regressiva para o salvamento',
   'server_save.now' => 'Salvamento em andamento!',
@@ -396,7 +399,8 @@ return [
   'account.create.account_number' => 'número da conta',
   'account.create.operating_system' => 'Sistema operacional',
   'account.create.operating_system_choose' => 'Escolha seu sistema',
-  'account.create.operating_system_error' => 'Escolha o sistema operacional que você usará para jogar.',
+  'account.create.operating_system_error' =>
+    'Escolha o sistema operacional que você usará para jogar.',
   'account.operating_system_unknown' => 'Não informado',
   'account.create.hint_recaptcha' => ', confirme o reCAPTCHA',
   'account.create.hint_country' => ' e selecione seu país',

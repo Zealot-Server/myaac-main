@@ -13,6 +13,10 @@ node_modules
 # Files
 login.php
 clientcreateaccount.php
+# Legacy mixed PHP and HTML page. The PHP plugin changes its output on each pass.
+system/pages/news.php
+# Legacy tab formatted library. Keep the cache key change scoped to one line.
+system/libs/news.php
 
 # Styles
 admin/bootstrap/pace/templates/pace-theme-loading-bar.tmpl.css
