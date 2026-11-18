@@ -35,6 +35,7 @@ $(document).ready(function(){
      'Alpha feedback channel' => 'news.alpha.feedback',
      'Zealot Alpha: the journey begins' => 'news.alpha.featured',
      'Coins are live, client 1.0.4 is next' => 'news.update.20261118',
+     'Zealot Client 1.0.4 is available' => 'news.update.20261118',
    ];
    $key = $keys[$news['title'] ?? ''] ?? null;
    if ($key === null) {

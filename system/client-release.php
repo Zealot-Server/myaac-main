@@ -7,31 +7,31 @@
  * produced by the matching GitHub release, together with their checksums.
  */
 return [
-  'version' => '1.0.3',
+  'version' => '1.0.4',
   'macos' => [
     'arm64' => [
       'url' =>
-        'https://github.com/Zealot-Server/otclient/releases/download/v1.0.3/zealot-client-1.0.3-macos-arm64.zip',
-      'sha256' => '8437aabed8a4ab8f41a70bd9491c5109566aa586778c3a8d53a7fbb5c44dcd0e',
+        'https://github.com/Zealot-Server/otclient/releases/download/v1.0.4/zealot-client-1.0.4-macos-arm64.zip',
+      'sha256' => 'a705ec756600fde761ac32766bd77cabbe84080545039e963df0cb1a95e93ad1',
     ],
     'x86_64' => [
       'url' =>
-        'https://github.com/Zealot-Server/otclient/releases/download/v1.0.3/zealot-client-1.0.3-macos-x86_64.zip',
-      'sha256' => 'c3b057b52eedbd732b687d4c4f7e2fccd2b42fd8917277c6476a806adb0cde9e',
+        'https://github.com/Zealot-Server/otclient/releases/download/v1.0.4/zealot-client-1.0.4-macos-x86_64.zip',
+      'sha256' => '5b64031048c3fc54a806a3b9a8360e9d1a148dba136fad50f67d7dd2ee09244f',
     ],
   ],
   'windows' => [
     'x86_64' => [
       'url' =>
-        'https://github.com/Zealot-Server/otclient/releases/download/v1.0.3/zealot-client-1.0.3-windows-x86_64.zip',
-      'sha256' => 'a3da54c30d453a48e2f058294befc5bba00b49dbf5639749d1fe5bdece6d9bd8',
+        'https://github.com/Zealot-Server/otclient/releases/download/v1.0.4/zealot-client-1.0.4-windows-x86_64.zip',
+      'sha256' => '0187ac27ca08f61af1ca1589b0c28af5167f2d830b3139eda21674b34ed4e867',
     ],
   ],
   'linux' => [
     'x86_64' => [
       'url' =>
-        'https://github.com/Zealot-Server/otclient/releases/download/v1.0.3/zealot-client-1.0.3-linux-x86_64.tar.gz',
-      'sha256' => '38f54a0a857af46261b3de08cf57293e7651018cf4f910ffbde5fdc8de3a2634',
+        'https://github.com/Zealot-Server/otclient/releases/download/v1.0.4/zealot-client-1.0.4-linux-x86_64.tar.gz',
+      'sha256' => '8465ab5d1d2998f510b3af7802d0d2fc98c3ce39e31a50040e06fe3cb1afe814',
     ],
   ],
 ];
