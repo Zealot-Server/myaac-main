@@ -388,6 +388,12 @@ img {
   image-rendering: pixelated;
 }
 
+/* Keep the creature smaller than the boss, matching their client appearance. */
+.DailyBoostStage:first-child .DailyBoostSprite img {
+  width: min(50px, var(--daily-boost-sprite-size, 54px));
+  height: min(50px, var(--daily-boost-sprite-size, 54px));
+}
+
 .DailyBoostName {
   display: -webkit-box;
   min-height: 19px;
