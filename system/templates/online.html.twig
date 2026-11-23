@@ -21,28 +21,22 @@
 							<div class="InnerTableContainer">
 								<table style="width: 100%">
 									<tbody>
-									{% if not status.online %}
-										<tr style="text-align: center">
-											<td>{{ config.lua.serverName }} Server is offline.</td>
-										</tr>
-									{% else %}
 										<tr>
 											<td width="25%" class="LabelV150">Status: </td>
-											<td>Online</td>
+											<td>{% if totalPlayers > 0 %}Players connected{% else %}No players connected{% endif %}</td>
 										</tr>
 										<tr>
 											<td width="25%" class="LabelV150">Players Online:</td>
-											<td>{{ players|length }} Players Online</td>
+											<td>{{ totalPlayers }} {% if totalPlayers == 1 %}Player{% else %}Players{% endif %} Online</td>
 										</tr>
 										<tr>
 											<td class="LabelV150">Online Record:</td>
-											<td>{{ record|raw }}</td>
+											<td>{{ record ? record|raw : 'Not available' }}</td>
 										</tr>
 										<tr>
-											<td class="LabelV150">Location Datacenter:</td>
-											<td>Brasil<br><small>(Server Date: UTC - {{ current_date }})</small></td>
+											<td class="LabelV150">Updated:</td>
+											<td>{{ current_date }}</td>
 										</tr>
-									{% endif %}
 									</tbody>
 								</table>
 							</div>
@@ -71,9 +65,11 @@
 							<div class="InnerTableContainer">
 								<table style="width: 100%; text-align: center">
 									<tbody>
-									<tr><td><img src="images/white_skull.gif"/> - 1 - 6 Frags</td></tr>
-									<tr><td><img src="images/red_skull.gif"/> - 6+ Frags or Red Skull</td></tr>
-									<tr><td><img src="images/black_skull.gif"/> - 10+ Frags or Black Skull</td></tr>
+									<tr><td><img src="images/white_skull.gif" alt=""/> White skull: recent PvP attack</td></tr>
+									{% if redSkullDay > 0 and redSkullWeek > 0 and redSkullMonth > 0 %}
+									<tr><td><img src="images/red_skull.gif" alt=""/> Red skull: {{ redSkullDay }} daily, {{ redSkullWeek }} weekly or {{ redSkullMonth }} monthly unjustified kills</td></tr>
+									<tr><td><img src="images/black_skull.gif" alt=""/> Black skull: {{ redSkullDay * 2 }} daily, {{ redSkullWeek * 2 }} weekly or {{ redSkullMonth * 2 }} monthly unjustified kills</td></tr>
+									{% else %}<tr><td>Frag limits are currently unavailable.</td></tr>{% endif %}
 									</tbody>
 								</table>
 							</div>
@@ -105,64 +101,13 @@
 					<tbody><tr>
 						<td>
 							<div class="InnerTableContainer">
-								<table style="width:100%;"><tbody><tr>
-									<td>
-										<div class="TableContentContainer">
-											<table class="TableContent" width="100%">
-												<tbody>
-													<tr style="text-align: center">
-														<td class="LabelV150">Sorcerers</td>
-													</tr>
-													<tr style="text-align: center">
-														<td>{{ vocs[1] }}</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-									</td>
-										<td>
-											<div class="TableContentContainer">
-												<table class="TableContent" width="100%">
-													<tbody>
-													<tr style="text-align: center">
-														<td class="LabelV150">Druids</td>
-													</tr>
-													<tr style="text-align: center">
-														<td>{{ vocs[2] }}</td>
-													</tr>
-													</tbody>
-												</table>
-											</div>
-										</td>
-										<td>
-											<div class="TableContentContainer">
-												<table class="TableContent" width="100%">
-													<tbody>
-													<tr style="text-align: center">
-														<td class="LabelV150">Paladins</td>
-													</tr>
-													<tr style="text-align: center">
-														<td>{{ vocs[3] }}</td>
-													</tr>
-													</tbody>
-												</table>
-											</div>
-										</td>
-										<td>
-											<div class="TableContentContainer">
-												<table class="TableContent" width="100%">
-													<tbody>
-													<tr style="text-align: center">
-														<td class="LabelV150">Knights</td>
-													</tr>
-													<tr style="text-align: center">
-														<td>{{ vocs[4] }}</td>
-													</tr>
-													</tbody>
-												</table>
-											</div>
-										</td>
-								</tr></tbody></table>
+								<div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">
+									{% for vocation in vocationFilters %}
+										<a href="{{ vocation.url }}" {% if selectedVocation == vocation.key %}aria-current="page"{% endif %} style="display:inline-block; min-width:110px; padding:8px 12px; text-align:center; border:1px solid #846435; background:{% if selectedVocation == vocation.key %}#174333{% else %}#d4c0a1{% endif %}; color:{% if selectedVocation == vocation.key %}#fff3cf{% else %}#59320c{% endif %}; text-decoration:none; font-weight:bold;">
+											{{ vocation.label }}<br><span style="font-weight:normal">{{ vocation.count }} online</span>
+										</a>
+									{% endfor %}
+								</div>
 							</div>
 						</td>
 					</tr></tbody>
@@ -199,7 +144,7 @@
 													<tbody>
 													{% if players|length == 0 %}
 													<tr style="text-align: center">
-														<td>Currently no one is playing on {{ config.lua.serverName }}.</td>
+														<td>{% if totalPlayers == 0 %}Currently no one is playing on {{ config.lua.serverName }}.{% else %}No online players match this vocation.{% endif %}</td>
 													</tr>
 													{% else %}
 													<tr bgcolor="#D4C0A1">
@@ -225,7 +170,7 @@
 																	<img src="{{ player.outfit }}" alt="" loading="lazy" onerror="this.onerror=null; this.src='{{ player.vocation_image }}';" style="display:block; width:64px; height:64px; object-fit:contain; margin:0 auto;" />
 																</td>
 															{% endif %}
-															<td width="50%">{{ player.name|raw }}{{ player.skull }}</td>
+											<td width="50%">{{ player.name|raw }}{{ player.skull|raw }}</td>
 															<td>{{ player.level }}</td>
 															<td>{{ player.vocation }}</td>
 														</tr>

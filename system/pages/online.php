@@ -15,16 +15,14 @@ $title = 'Who is online?';
 if($config['account_country'])
 	require SYSTEM . 'countries.conf.php';
 
-$promotion = '';
-if($db->hasColumn('players', 'promotion'))
-	$promotion = '`promotion`,';
+$promotion = $db->hasColumn('players', 'promotion') ? ', `players`.`promotion`' : '';
 $order = isset($_GET['order']) ? $_GET['order'] : 'name';
 if(!in_array($order, array('country', 'name', 'level', 'vocation')))
 	$order = $db->fieldName('name');
 else if($order == 'country')
 	$order = $db->tableName('accounts') . '.' . $db->fieldName('country');
 else if($order == 'vocation')
-	$order = $promotion . 'vocation ASC';
+	$order = '`players`.`vocation` ASC';
 
 $skull_type = 'skull';
 if($db->hasColumn('players', 'skull_type')) {
@@ -46,23 +44,36 @@ if($config['online_outfit']) {
 	}
 }
 
-$vocs = array();
-if($config['online_vocations']) {
-	foreach($config['vocations'] as $id => $name) {
-		$vocs[$id] = 0;
-	}
+$vocationGroups = [
+	'all' => ['label' => 'All', 'ids' => []],
+	'rookgaard' => ['label' => 'Rookgaard', 'ids' => [0]],
+	'sorcerer' => ['label' => 'Sorcerers', 'ids' => [1, 5]],
+	'druid' => ['label' => 'Druids', 'ids' => [2, 6]],
+	'paladin' => ['label' => 'Paladins', 'ids' => [3, 7]],
+	'knight' => ['label' => 'Knights', 'ids' => [4, 8]],
+	'monk' => ['label' => 'Monks', 'ids' => [9, 10]],
+];
+$selectedVocation = (string)($_GET['vocation'] ?? 'all');
+if (!isset($vocationGroups[$selectedVocation]))
+	$selectedVocation = 'all';
+$vocs = array_fill_keys(array_keys($vocationGroups), 0);
+$outfitRenderer = null;
+if ($config['online_outfit']) {
+	require_once LIBS . 'ZealotMarket.php';
+	$outfitRenderer = new ZealotMarket($db, $config);
 }
 
 if($db->hasTable('players_online')) // tfs 1.0
-	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `players`.`level`, `players`.`vocation`' . $outfit . ', `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players`, `players_online` WHERE `players`.`id` = `players_online`.`player_id` AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
+	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `players`.`level`, `players`.`vocation`' . $outfit . $promotion . ', `players`.`' . $skull_time . '` as `skulltime`, `players`.`' . $skull_type . '` as `skull` FROM `accounts`, `players`, `players_online` WHERE `players`.`id` = `players_online`.`player_id` AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
 else
-	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `players`.`level`, `players`.`vocation`' . $outfit . ', ' . $promotion . ' `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players` WHERE `players`.`online` > 0 AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
+	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `players`.`level`, `players`.`vocation`' . $outfit . $promotion . ', `players`.`' . $skull_time . '` as `skulltime`, `players`.`' . $skull_type . '` as `skull` FROM `accounts`, `players` WHERE `players`.`online` > 0 AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
 
 $players_data = array();
 $explodeFlags = array();
-$players = 0;
+$totalPlayers = 0;
 $data = '';
 foreach($playersOnline as $player){
+	++$totalPlayers;
 	$skull = '';
 	if($config['online_skulls'])
 	{
@@ -78,26 +89,53 @@ foreach($playersOnline as $player){
 	}
 
 	if(isset($player['promotion'])) {
-		if((int)$player['promotion'] > 0)
+		if((int)$player['promotion'] > 0 && (int)$player['vocation'] >= 1 && (int)$player['vocation'] <= 4)
 			$player['vocation'] += ($player['promotion'] * $config['vocations_amount']);
 	}
 
-	$base_vocation = $player['vocation'] > $config['vocations_amount'] ? $player['vocation'] - $config['vocations_amount'] : $player['vocation'];
-	$vocation_image = getVocationImage($player['vocation']);
+	$vocationId = (int)$player['vocation'];
+	$vocationGroup = null;
+	foreach ($vocationGroups as $key => $definition) {
+		if ($key !== 'all' && in_array($vocationId, $definition['ids'], true)) {
+			$vocationGroup = $key;
+			++$vocs[$key];
+			break;
+		}
+	}
+	if ($selectedVocation !== 'all' && $selectedVocation !== $vocationGroup)
+		continue;
+	$vocation_image = getVocationImage($vocationId);
+	$realOutfit = $config['online_outfit'] ? $outfitRenderer->currentOutfitUrl([
+		'looktype' => $player['looktype'] ?? 0,
+		'addons' => $player['lookaddons'] ?? 0,
+		'head' => $player['lookhead'] ?? 0,
+		'body' => $player['lookbody'] ?? 0,
+		'legs' => $player['looklegs'] ?? 0,
+		'feet' => $player['lookfeet'] ?? 0,
+	]) ?? $vocation_image : null;
 
 	$players_data[] = array(
 		'name' => getPlayerLink($player['name']),
 		'player' => $player,
 		'level' => $player['level'],
-		'vocation' => $config['vocations'][$player['vocation']],
+		'vocation' => $config['vocations'][$vocationId] ?? ([9 => 'Monk', 10 => 'Exalted Monk'][$vocationId] ?? 'Unknown'),
 		'country_image' => $config['account_country'] ? getFlagImage($player['country']) : null,
-		'outfit' => $config['online_outfit'] ? $vocation_image : null,
+		'outfit' => $realOutfit,
 		'vocation_image' => $vocation_image,
+		'skull' => $skull,
 	);
+}
 
-	if($config['online_vocations']) {
-		$vocs[$base_vocation]++;
-	}
+$vocs['all'] = $totalPlayers;
+$vocationFilters = [];
+foreach ($vocationGroups as $key => $definition) {
+	$query = $key === 'all' ? [] : ['vocation' => $key];
+	$vocationFilters[] = [
+		'key' => $key,
+		'label' => $definition['label'],
+		'count' => $vocs[$key],
+		'url' => getLinkWithQuery('online', $query),
+	];
 }
 
 $record = '';
@@ -130,9 +168,15 @@ if($config['online_record']){
 
 $twig->display('online.html.twig', array(
 	'players' => $players_data,
+	'totalPlayers' => $totalPlayers,
 	'record' => $record,
-	'current_date' => date('d/m/Y'),
+	'current_date' => date('d/m/Y, H:i'),
 	'vocs' => $vocs,
+	'vocationFilters' => $vocationFilters,
+	'selectedVocation' => $selectedVocation,
+	'redSkullDay' => (int)configLua('dayKillsToRedSkull'),
+	'redSkullWeek' => (int)configLua('weekKillsToRedSkull'),
+	'redSkullMonth' => (int)configLua('monthKillsToRedSkull'),
 ));
 
 //search bar
