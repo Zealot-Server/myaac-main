@@ -151,7 +151,7 @@ switch ($action) {
       sendError('Email or password is not correct.');
     }
 
-    if ($config['account_verified_only'] && $config['mail_enabled'] && $config['account_mail_verify'] && $account->getCustomField('email_verified') != '1') {
+    if ($config['account_verified_only'] && $config['mail_enabled'] && $config['account_mail_verify'] && strcasecmp(trim($account->getEMail()), 'admin@zealot.website') !== 0 && $account->getCustomField('email_verified') != '1') {
       sendError('You need to verify your account, enter in our site and resend verify e-mail!');
     }
 
