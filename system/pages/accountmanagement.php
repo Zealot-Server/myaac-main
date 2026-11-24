@@ -87,6 +87,8 @@ if ($action == '') {
 
     $account_created = $account_logged->getCreated();
     $account_email = $account_logged->getEMail();
+    $accountEmailVerified = $account_logged->getCustomField('email_verified') == '1';
+    $accountEmailVerificationExempt = strcasecmp(trim($account_email), 'admin@zealot.website') === 0;
     $accountOperatingSystem = $account_logged->getCustomField('operating_system');
     $accountOperatingSystem = array('windows' => 'Windows', 'linux' => 'Linux', 'macos' => 'macOS')[$accountOperatingSystem]
         ?? t('account.operating_system_unknown', 'Not specified');
@@ -166,6 +168,10 @@ if ($action == '') {
         'account_coins_transferable' => $acc_coins_transfer,
         'tournament_coins' => $tournament_coins,
         'account_email' => $account_email,
+        'account_email_verified' => $accountEmailVerified,
+        'account_email_verification_exempt' => $accountEmailVerificationExempt,
+        'account_email_can_resend' => !$accountEmailVerified && !$accountEmailVerificationExempt
+            && !empty($config['mail_enabled']) && !empty($config['account_mail_verify']),
         'account_operating_system' => $accountOperatingSystem,
         'account_created' => $account_created,
         'account_web_lastlogin' => $account_logged->getCustomField('web_lastlogin'),

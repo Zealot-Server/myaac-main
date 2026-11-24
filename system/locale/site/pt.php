@@ -223,6 +223,11 @@ return [
   'account.welcome' => 'Bem-vindo à sua conta do {server}!',
   'account.verification_required' =>
     'A verificação é {type}. Por favor, <b><a href="{link}">verifique</a></b> sua conta.',
+  'account.email_verification.status' => 'Verificação de e-mail',
+  'account.email_verification.verified' => 'Verificado',
+  'account.email_verification.exempt' => 'Isento (conta GM)',
+  'account.email_verification.pending' => 'Não verificado',
+  'account.email_verification.resend' => 'Reenviar e-mail de confirmação',
   'account.vip_expires' => 'Seu tempo VIP expirará em {date}',
   'account.no_vip' => 'Você não possui tempo VIP!',
   'account.create_server' => 'Criar conta do {server}',

@@ -102,6 +102,7 @@
       <tr style="background-color: {{ config.darkborder }};">
         <td style="width: 90px;">Email Address:</td>
         <td>{{ account_email ~ email_change }}
+          {% include 'account.email_verification_status.html.twig' %}
           <form action="{{ getLink('account/email') }}" method="post">
             {% set button_name = 'Change Email' %}
             {% include('buttons.base.html.twig') %}

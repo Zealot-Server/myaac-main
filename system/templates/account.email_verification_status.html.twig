@@ -1,0 +1,15 @@
+<div style="margin-top: 6px;">
+  {{ t('account.email_verification.status', 'Email verification') }}:
+  {% if account_email_verified %}
+    <strong style="color: green;">{{ t('account.email_verification.verified', 'Verified') }}</strong>
+  {% elseif account_email_verification_exempt %}
+    <strong>{{ t('account.email_verification.exempt', 'Exempt (GM account)') }}</strong>
+  {% else %}
+    <strong style="color: #a32d00;">{{ t('account.email_verification.pending', 'Not verified') }}</strong>
+    {% if account_email_can_resend %}
+      <a href="{{ getLink('account/resend/verify') }}" style="display: inline-block; margin-left: 8px; padding: 4px 8px; border: 1px solid #765a40; border-radius: 3px; background: #e6d2ad; color: #3b281a; text-decoration: none;">
+        {{ t('account.email_verification.resend', 'Resend confirmation email') }}
+      </a>
+    {% endif %}
+  {% endif %}
+</div>
