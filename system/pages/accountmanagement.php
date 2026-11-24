@@ -105,7 +105,7 @@ if ($action == '') {
         $welcome_message = t('account.welcome', 'Welcome to your {server} account!', ['server' => configLua('serverName')]);
 
     $verify_message = "";
-    if ($config['mail_enabled'] && $config['account_mail_verify'] && $account_logged->getCustomField('email_verified') != '1') {
+    if ($config['mail_enabled'] && $config['account_mail_verify'] && strcasecmp(trim($account_logged->getEMail()), 'admin@zealot.website') !== 0 && $account_logged->getCustomField('email_verified') != '1') {
       $verifyLink = getLink('account/resend/verify');
       $type = ($config['account_verified_only'] ?? false) ? 'required' : 'optional';
       $verify_message = "<span style='color: red'>" . t('account.verification_required', 'Verification is {type}! Please <b><a href="{link}">Verify</a></b> your Account!', ['type' => $type, 'link' => $verifyLink]) . "</span>";

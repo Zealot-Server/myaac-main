@@ -16,6 +16,25 @@ if (file_exists(BASE . 'config.local.php')) {
   // user customizations
   require BASE . 'config.local.php';
 }
+// Brevo credentials live outside the web root and are mounted with the Canary data.
+$brevoKeyFile = '/canary/docker/.zealot-brevo-smtp';
+if (is_readable($brevoKeyFile)) {
+  $brevoKey = trim((string) file_get_contents($brevoKeyFile));
+  if ($brevoKey !== '') {
+    $config['mail_enabled'] = true;
+    $config['account_mail_verify'] = true;
+    $config['account_verified_only'] = true;
+    $config['smtp_enabled'] = true;
+    $config['smtp_host'] = 'smtp-relay.brevo.com';
+    $config['smtp_port'] = 587;
+    $config['smtp_secure'] = 'tls';
+    $config['smtp_auth'] = true;
+    $config['smtp_user'] = 'c4fb84001@smtp-brevo.com';
+    $config['smtp_pass'] = $brevoKey;
+    $config['mail_address'] = 'contact@zealot.website';
+    unset($brevoKey);
+  }
+}
 require_once SYSTEM . 'i18n.php';
 siteLanguage();
 

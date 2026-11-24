@@ -241,7 +241,7 @@ if ($save) {
 
         $tmp_account = (USE_ACCOUNT_NAME ? $account_name : $account_id);
         if ($config['mail_enabled'] && $config['account_mail_verify']) {
-            $hash = md5(generateRandomString(16, true, true) . $email);
+            $hash = bin2hex(random_bytes(16));
             $new_account->setCustomField('email_hash', $hash);
 
             $verify_url = getLink('account/confirm_email/' . $hash);
@@ -251,7 +251,7 @@ if ($save) {
             ));
 
             if (_mail($email, 'New account on ' . $config['lua']['serverName'], $body_html)) {
-                echo 'Your account has been created.<br/><br/>';
+                echo 'Your account has been created. Please check your email and confirm your address before signing in to the game.<br/><br/>';
                 $twig->display('success.html.twig', array(
                     'title' => 'Account Created',
                     'description' => 'Your account ' . $account_type . ' is <b>' . $tmp_account . '</b><br/>You will need the account ' . $account_type . ' and your password to play on ' . configLua('serverName') . '.

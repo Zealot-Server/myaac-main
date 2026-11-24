@@ -2,6 +2,7 @@ Check your information and confirm to send verify e-mail.
 <br/><br/>
 <form action="{{ getLink('account/resend/verify') }}" method="post">
   <input type="hidden" name="confirmresend" value="1">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
   <div class="TableContainer">
     <table class="Table1" cellpadding="0" cellspacing="0">
       <div class="CaptionContainer">

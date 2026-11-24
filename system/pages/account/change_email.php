@@ -50,6 +50,8 @@ if($email_new_time < 10) {
 				$account_logged->setCustomField("email_new_time", 0);
 				$account_logged->setEMail($email_new);
 				$account_logged->save();
+				$account_logged->setCustomField("email_verified", 0);
+				$account_logged->setCustomField("email_hash", "");
 				$account_logged->logAction('Account email changed to <b>' . $email_new . '</b>');
 
 				$twig->display('success.html.twig', array(
@@ -103,6 +105,8 @@ else
 				$account_logged->setCustomField("email_new_time", 0);
 				$account_logged->setEMail($email_new);
 				$account_logged->save();
+				$account_logged->setCustomField("email_verified", 0);
+				$account_logged->setCustomField("email_hash", "");
 				$account_logged->logAction('Account email changed to <b>' . $email_new . '</b>');
 
 				$twig->display('success.html.twig', array(
