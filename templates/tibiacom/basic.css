@@ -2590,3 +2590,12 @@ body {
 .discord_button {
   color: var(--zealot-gold-light) !important;
 }
+
+.TableContainer .Table3 .AccountGeneralInformation td {
+  text-align: left;
+  vertical-align: middle;
+}
+
+.AccountGeneralInformation td img {
+  vertical-align: middle;
+}
