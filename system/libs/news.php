@@ -125,7 +125,7 @@ class News
 	static private function cacheKey($type)
 	{
 		global $template_name;
-		return 'news_' . $template_name . '_' . siteLanguage() . '_' . $type . '_20261119';
+		return 'news_' . $template_name . '_' . siteLanguage() . '_' . $type . '_20261125_client108';
 	}
 
 	static public function clearCache()

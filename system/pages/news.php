@@ -27,6 +27,10 @@ $(document).ready(function(){
  function localizeAlphaNews(array $news): array
  {
    $keys = [
+     'Zealot Client 1.0.5 released' => 'news.release.1.0.5',
+     'Zealot Client 1.0.6 released' => 'news.release.1.0.6',
+     'Zealot Client 1.0.7 released' => 'news.release.1.0.7',
+     'Zealot Client 1.0.8 released' => 'news.release.1.0.8',
      'Free training area now open in Thais' => 'news.training.thais',
      'Welcome to Zealot Alpha' => 'news.alpha.welcome',
      'Alpha: what to expect' => 'news.alpha.expect',
