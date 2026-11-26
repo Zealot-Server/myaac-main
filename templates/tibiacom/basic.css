@@ -383,8 +383,8 @@ img {
   z-index: 1;
   /* The exported image retains the exact client canvas, so scale the canvas
      here rather than changing/cropping individual creature GIFs. */
-  width: var(--daily-boost-sprite-size, 54px);
-  height: var(--daily-boost-sprite-size, 54px);
+  width: calc(var(--daily-boost-sprite-size, 54px) * 1.35);
+  height: calc(var(--daily-boost-sprite-size, 54px) * 1.35);
   object-fit: contain;
   object-position: center bottom;
   margin: 0 0 8px;
