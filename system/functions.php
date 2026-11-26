@@ -211,7 +211,7 @@ function getDailyBoostSpriteDisplaySize($relativePath)
   }
 
   $nativeSize = max((int) $dimensions[0], (int) $dimensions[1]);
-  return min(54, max(40, (int) ceil($nativeSize * 1.375)));
+  return min(54, max(1, (int) round($nativeSize * 54 / 64)));
 }
 
 function message($message, $type, $return)
